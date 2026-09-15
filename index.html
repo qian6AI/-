@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>试卷讲解 · 云端版</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#eef1f7;color:#1f2430;-webkit-font-smoothing:antialiased}
+body.bb-open{overflow:hidden}
+.topbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid #e1e6f0;box-shadow:0 2px 10px rgba(30,40,70,.05)}
+.bar-row{display:flex;align-items:center;gap:8px;padding:8px 16px;flex-wrap:wrap}
+.bar-row.tabs{padding-top:0;padding-bottom:10px;gap:8px;overflow-x:auto}
+.brand{display:flex;align-items:center;gap:7px;font-weight:700;font-size:16px;color:#23304d}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#3b6ef5,#7d9bf5);flex-shrink:0}
+.paper-name-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;background:#f4f7ff;border:1px solid #e0e8fb;cursor:pointer;transition:.15s;max-width:360px;font-weight:600;font-size:15px;color:#23304d}
+.paper-name-btn:hover{background:#eaf0ff;border-color:#b9caf7}
+.paper-name-btn .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 12px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:20px;font-size:13.5px;color:#3a4560}
+.user-chip b{color:#2a5ae0;font-weight:700}
+.user-chip .admin-tag{background:#ffe9c2;color:#a86a00;font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
+.spacer{flex:1}
+button{font-family:inherit;font-size:15px;cursor:pointer;border:1px solid #d5dbe8;background:#fff;color:#2b3448;padding:8px 16px;border-radius:8px;transition:.15s;white-space:nowrap}
+button:hover{background:#f2f6ff;border-color:#9db6ff}
+button:active{transform:scale(.97)}
+button.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+button.primary:hover{background:#2a5ae0}
+button.ghost{background:transparent;border-color:#e4e9f2;color:#7a8399}
+button.ghost:hover{background:#f6f8fc;border-color:#d3dae8;color:#5a6376}
+button.small{font-size:12px;padding:5px 10px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.ink-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tool-label{font-size:13px;color:#7a8399;margin:0 2px 0 6px}
+.swatch{width:32px;height:32px;border-radius:8px;padding:0;border:2px solid #d5dbe8;background:var(--c)}
+.swatch.active{border-color:#3b6ef5;box-shadow:0 0 0 3px rgba(59,110,245,.18)}
+.swatch.eraser{background:#fff;color:#6b7488;font-size:13px;display:flex;align-items:center;justify-content:center}
+.size-btn{width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.size-btn i{display:block;border-radius:50%;background:#5a6b8c}
+.size-btn.active{border-color:#3b6ef5;background:#eef3ff}
+.size-btn.active i{background:#3b6ef5}
+.bar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tab{padding:7px 17px;border-radius:20px;font-size:15px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
+.tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-weight:600}
+#paperView{padding:6px 0 60px}
+.page{position:relative;max-width:1040px;margin:20px auto;background:#fff;border-radius:16px;box-shadow:0 4px 22px rgba(30,40,70,.09);padding:32px 42px 52px;min-height:320px}
+canvas.ink{position:absolute;left:0;top:0;z-index:5;pointer-events:none;border-radius:16px;touch-action:none}
+body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
+.sec-title{font-size:22px;font-weight:700;color:#1b2740;margin:4px 0 22px;padding-left:14px;border-left:6px solid #3b6ef5;line-height:1.3}
+.q{padding:24px 0;border-bottom:1px dashed #e6eaf2;display:flex;gap:18px;align-items:flex-start}
+.q:last-child{border-bottom:none}
+.q-main{flex:1;min-width:0}
+.stem{font-size:20px;line-height:2.4;white-space:pre-wrap;color:#1f2430;word-break:break-word;letter-spacing:.3px}
+.btns{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;position:relative;z-index:10}
+.panel{display:none;margin-top:14px;padding:14px 18px;border-radius:10px;font-size:17px;line-height:2;white-space:pre-wrap;word-break:break-word}
+.panel.show{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.panel.answer{background:#eefaf1;border-left:4px solid #43b96c}
+.panel.analysis{background:#fff8e8;border-left:4px solid #f0b429}
+.panel.similar{background:#f4f7ff;border-left:4px solid #7d9bf5;padding:14px 16px}
+.panel.homework{background:#f0f7ff;border-left:4px solid #4a90e2;padding:14px 16px}
+.similar-head,.homework-head{font-size:15px;font-weight:700;margin-bottom:11px;letter-spacing:.5px}
+.similar-head{color:#3b6ef5}
+.homework-head{color:#2f7ad4}
+.subq{background:#fff;border:1px solid #dfe7fa;border-radius:10px;padding:14px 16px;margin:12px 0}
+.sub-title{font-size:14px;font-weight:700;color:#5c7cf0;margin-bottom:8px;letter-spacing:.5px}
+.subq .sub-title{color:#2f7ad4}
+.sub-stem{font-size:17.5px;line-height:2.2;white-space:pre-wrap;letter-spacing:.2px}
+.subq .btns{margin-top:12px}
+.subq button{font-size:14px;padding:6px 15px}
+.panel.sub-answer{background:#eefaf1;border-left:4px solid #43b96c;font-size:16.5px;padding:11px 15px}
+.panel.sub-analysis{background:#fff8e8;border-left:4px solid #f0b429;font-size:16.5px;padding:11px 15px}
+.empty{color:#98a1b5;font-size:15px;padding:8px 0}
+.sim-nav{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:14px;border-top:1px dashed #cddaf5;flex-wrap:wrap}
+.sim-progress{font-size:14px;color:#5c7cf0;font-weight:600;margin-right:auto}
+.sim-progress b{color:#3b6ef5;font-size:17px}
+.sim-nav button{font-size:14px;padding:7px 15px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
+.sim-nav button:disabled{opacity:.35;cursor:not-allowed}
+.sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
+#hwView{padding-bottom:60px}
+.hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
+.hw-title{font-weight:700;font-size:17px;color:#23304d}
+.hw-q{padding:22px 0;border-bottom:1px dashed #e6eaf2}
+.hw-q:last-child{border-bottom:none}
+.hw-explain .line{margin:6px 0}
+.hw-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
+.hw-item>label{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer;min-width:0;font-size:15px}
+.hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hw-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0}
+.hw-item select{font-family:inherit;font-size:14.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
+.modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.45);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.modal-mask.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:760px;max-height:88vh;overflow:auto;padding:24px 26px 22px;box-shadow:0 18px 50px rgba(20,28,50,.28)}
+.modal.wide{max-width:820px}
+.modal h3{margin:0 0 10px;font-size:19px;color:#1b2740}
+.modal .hint{font-size:14px;color:#6b7488;line-height:1.9;margin-bottom:13px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:13px 16px}
+.modal .hint code{background:#eaf0ff;color:#2a5ae0;padding:1px 6px;border-radius:4px;font-size:13.5px}
+.modal .hint .fmt{display:block;margin-top:9px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#3a4560;white-space:pre;overflow-x:auto;line-height:1.8}
+.modal textarea{width:100%;min-height:280px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.8;border:1px solid #d5dbe8;border-radius:10px;padding:13px;background:#fafbff;color:#26304a;outline:none}
+.modal textarea:focus{border-color:#3b6ef5;background:#fff}
+.modal input[type=text],.modal input[type=email],.modal input[type=password]{width:100%;font-family:inherit;font-size:15px;padding:11px 14px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px}
+.modal input:focus{border-color:#3b6ef5;background:#fff}
+.modal-actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.modal-actions.right{justify-content:flex-end}
+.form-field{margin-top:12px}
+.form-field label{font-size:13.5px;color:#5a6376;font-weight:600;display:block}
+.qlist{display:flex;flex-direction:column;gap:8px;margin:13px 0;max-height:48vh;overflow:auto;padding:2px}
+.papers-list{display:flex;flex-direction:column;gap:9px;max-height:50vh;overflow:auto;padding:2px;margin:12px 0}
+.paper-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff;cursor:pointer;transition:.15s}
+.paper-item:hover{background:#f1f5ff;border-color:#b9caf7}
+.paper-item.current{background:#eef3ff;border-color:#7d9bf5}
+.paper-item .info{flex:1;min-width:0}
+.paper-item .name{font-size:14.5px;font-weight:600;color:#26304a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.paper-item .meta{font-size:12px;color:#98a1b5;margin-top:3px}
+.paper-item .tag{font-size:11.5px;color:#3b6ef5;background:#e5edff;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:500}
+.paper-item .actions{display:flex;gap:5px;flex-shrink:0}
+.msg{font-size:13.5px;padding:9px 12px;border-radius:8px;margin-top:10px;display:none}
+.msg.show{display:block}
+.msg.err{background:#ffe9ec;color:#c4304a;border:1px solid #ffd0d8}
+.msg.ok{background:#e9f8ee;color:#1f8a45;border:1px solid #c8eed6}
+.share-row{display:flex;align-items:center;gap:8px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px}
+.share-row input{flex:1;font-family:ui-monospace,monospace;font-size:12.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;outline:none;min-width:0}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
+.stat-card{background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border:1px solid #dfe7fa;border-radius:12px;padding:14px 16px}
+.stat-card .num{font-size:26px;font-weight:800;color:#3b6ef5;line-height:1.1}
+.stat-card .lbl{font-size:12.5px;color:#5a6376;margin-top:4px}
+.table-wrap{max-height:44vh;overflow:auto;border:1px solid #e6eaf2;border-radius:10px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #eef1f7;white-space:nowrap}
+th{background:#f7f9ff;font-weight:700;color:#3a4560;position:sticky;top:0;z-index:1}
+tr:last-child td{border-bottom:none}
+.save-hint{position:fixed;bottom:18px;right:18px;z-index:100;background:rgba(30,42,70,.92);color:#fff;font-size:13px;padding:9px 16px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
+.save-hint.show{opacity:1;transform:translateY(0)}
+.q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
+.q-figure:hover{border-color:#cbd5e1}
+.q-figure img{display:block;height:auto;border-radius:8px;border:1px solid #e6eaf2;background:#fafbfd;user-select:none}
+.q-figure .fig-handle{position:absolute;right:-7px;bottom:-7px;width:16px;height:16px;border-radius:50%;background:#3b6ef5;border:2px solid #fff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:0;transition:opacity .15s;touch-action:none;z-index:22}
+.q-figure:hover .fig-handle{opacity:1}
+.q-figure .fig-tools{position:absolute;top:-36px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(17,24,39,.94);border-radius:8px;padding:3px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;z-index:25}
+.q-figure:hover .fig-tools{opacity:1;pointer-events:auto}
+.q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:11px;padding:4px 9px;border-radius:5px;cursor:pointer;font-family:inherit}
+.q-figure .fig-tools button:hover{background:rgba(255,255,255,.16)}
+.fig-stage{position:relative;display:inline-block;line-height:0;touch-action:none;user-select:none;max-width:100%}
+.fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;pointer-events:none}
+.fig-region{position:absolute;border:2px solid rgba(59,130,246,.85);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s}
+.fig-region:hover{background:rgba(59,130,246,.2)}
+.fig-region.selected{border-color:#10b981;background:rgba(16,185,129,.16);z-index:5}
+.fig-region .rg-check{position:absolute;top:-11px;left:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
+.fig-region .rg-check:hover{border-color:#3b6ef5}
+.fig-region.selected .rg-check{background:#10b981;border-color:#10b981;color:#fff}
+.fig-region .h{position:absolute;width:11px;height:11px;background:#fff;border:2px solid #3b6ef5;border-radius:50%;box-sizing:border-box;z-index:6}
+.fig-region.selected .h{border-color:#10b981}
+.h.nw{left:-6px;top:-6px;cursor:nwse-resize}
+.h.n{left:50%;top:-6px;margin-left:-6px;cursor:ns-resize}
+.h.ne{right:-6px;top:-6px;cursor:nesw-resize}
+.h.e{right:-6px;top:50%;margin-top:-6px;cursor:ew-resize}
+.h.se{right:-6px;bottom:-6px;cursor:nwse-resize}
+.h.s{left:50%;bottom:-6px;margin-left:-6px;cursor:ns-resize}
+.h.sw{left:-6px;bottom:-6px;cursor:nesw-resize}
+.h.w{left:-6px;top:50%;margin-top:-6px;cursor:ew-resize}
+.fig-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px dashed #e3e8f0}
+.fig-thumb{position:relative;border:2px solid #e3e8f0;border-radius:8px;padding:4px;cursor:pointer;background:#fff;transition:border-color .12s,transform .12s;max-width:150px}
+.fig-thumb:hover{border-color:#93c5fd;transform:translateY(-2px)}
+.fig-thumb.selected{border-color:#10b981}
+.fig-thumb canvas{display:block;max-width:138px;max-height:96px;height:auto;border-radius:4px}
+.fig-thumb .thumb-tag{font-size:11px;color:#98a1b5;text-align:center;margin-top:4px}
+.fig-thumb .thumb-check{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:transparent;line-height:1;padding:0;z-index:3}
+.fig-thumb.selected .thumb-check{background:#10b981;border-color:#10b981;color:#fff}
+.fig-empty{font-size:13px;color:#f59e0b;padding:16px;text-align:center;width:100%}
+.fig-editor-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #e3e8f0;flex-wrap:wrap}
+.fig-editor-bar .left{display:flex;gap:8px;flex-wrap:wrap}
+.fig-editor-bar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.count-badge{font-size:12px;color:#3b6ef5;background:#eff6ff;padding:4px 12px;border-radius:20px;font-weight:600}
+.assign-list{display:flex;flex-direction:column;gap:10px;max-height:56vh;overflow:auto;padding:2px;margin:12px 0}
+.assign-row{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff}
+.assign-row .fig-preview{flex-shrink:0;width:100px;height:70px;border-radius:6px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.assign-row .fig-preview img{max-width:100%;max-height:100%;display:block}
+.assign-row .arrow{color:#98a1b5;font-size:16px;flex-shrink:0}
+.assign-row select{flex:1;font-family:inherit;font-size:14px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;min-width:0}
+.assign-row select:focus{border-color:#3b6ef5}
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:13px;padding:10px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.drag-overlay{position:fixed;inset:0;z-index:150;background:rgba(59,130,246,.08);border:3px dashed #3b6ef5;display:none;align-items:center;justify-content:center;font-size:18px;color:#3b6ef5;font-weight:600}
+.drag-overlay.show{display:flex}
+#bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column}
+#bbView.show{display:flex}
+.bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0}
+.bb-title{font-weight:700;font-size:15px;color:#e6e8ee;display:flex;align-items:center;gap:6px}
+.bb-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bb-label{font-size:12px;color:#7a8399;margin:0 4px 0 8px}
+.bb-swatch{width:30px;height:30px;padding:0;border-radius:8px;border:2px solid #2f3444;background:var(--c);cursor:pointer}
+.bb-swatch.active{border-color:#6ea8ff;box-shadow:0 0 0 3px rgba(110,168,255,.25)}
+.bb-swatch.eraser{background:#2a2f3d;color:#98a1b5;font-size:12px;display:flex;align-items:center;justify-content:center}
+.bb-size{width:30px;height:30px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #2f3444;cursor:pointer}
+.bb-size i{display:block;border-radius:50%;background:#7a8399}
+.bb-size.active{border-color:#6ea8ff;background:rgba(110,168,255,.12)}
+.bb-size.active i{background:#6ea8ff}
+.bb-theme{font-size:12px;padding:5px 11px;background:transparent;border:1px solid #2f3444;color:#98a1b5;border-radius:7px}
+.bb-theme.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+.bb-bar .bb-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bb-bar button{font-size:13px;padding:6px 12px;background:#232734;border-color:#2f3444;color:#e6e8ee}
+.bb-bar button:hover{background:#2a2f3d;border-color:#3d455c}
+.bb-bar button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+.bb-tabs{display:flex;gap:6px;padding:8px 14px;background:#12151c;border-bottom:1px solid #262b38;overflow-x:auto;flex-shrink:0}
+.bb-tab{padding:5px 14px;border-radius:16px;font-size:13px;background:#232734;border:1px solid #2f3444;color:#98a1b5;cursor:pointer;white-space:nowrap}
+.bb-tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+.bb-stage-wrap{flex:1;overflow:auto;padding:20px;display:flex;justify-content:center;align-items:flex-start}
+.bb-stage{position:relative;width:100%;max-width:1400px;aspect-ratio:8/5;background:#141820;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.5);overflow:hidden;border:1px solid #262b38;flex-shrink:0}
+.bb-stage.light{background:#ffffff;border-color:#cbd5e1}
+.bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+@media (max-width:720px){
+  .bar-row{padding:7px 10px;gap:6px}
+  .brand{font-size:14px;gap:5px}
+  .paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:160px}
+  .tool-label{display:none}
+  .swatch,.size-btn{width:32px;height:32px}
+  button{padding:8px 11px;font-size:13px;min-height:36px}
+  .tab{padding:7px 13px;font-size:13px}
+  .page{margin:8px;padding:16px 13px 26px;border-radius:12px}
+  .sec-title{font-size:17px;padding-left:10px;margin-bottom:15px;border-left-width:5px}
+  .q{padding:15px 0;flex-direction:column;gap:12px}
+  .q-figure{align-self:flex-end}
+  .stem{font-size:16px;line-height:1.85;letter-spacing:0}
+  .btns{gap:6px;margin-top:10px}
+  .btns button{padding:7px 12px;font-size:13px}
+  .panel{font-size:14.5px;padding:10px 12px;margin-top:10px;line-height:1.9}
+  .subq{padding:10px 11px;margin:9px 0}
+  .sub-stem{font-size:14.5px;line-height:1.9;letter-spacing:0}
+  .subq button{font-size:12.5px;padding:4px 11px}
+  .panel.sub-answer,.panel.sub-analysis{font-size:14.5px;padding:9px 13px}
+  .similar-head,.homework-head{font-size:13.5px;margin-bottom:7px}
+  .sim-nav{margin-top:10px;padding-top:10px;gap:7px}
+  .sim-progress{font-size:12.5px}
+  .sim-progress b{font-size:15px}
+  .sim-nav button{padding:7px 12px;font-size:13px;min-height:34px}
+  .modal{padding:16px 15px 14px;border-radius:12px;max-height:92vh}
+  .modal h3{font-size:17px}
+  .modal .hint{font-size:12.5px;padding:11px 13px}
+  .modal textarea{min-height:200px;font-size:12px}
+  .fig-thumb canvas{max-width:100px;max-height:70px}
+  .assign-row{flex-wrap:wrap}
+  .assign-row .fig-preview{width:80px;height:56px}
+  #paperView{padding-bottom:40px}
+  .user-chip{font-size:12px;padding:4px 10px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-card .num{font-size:20px}
+  .bb-bar{padding:6px 10px;gap:5px}
+  .bb-title{font-size:13px}
+  .bb-stage-wrap{padding:8px}
+  .bb-bar button{font-size:12px;padding:5px 9px;min-height:30px}
+  .bb-swatch,.bb-size{width:26px;height:26px}
+}
+</style>
+</head>
+<body>
+
+<div class="modal-mask show" id="authModal" style="z-index:300">
+  <div class="modal" style="max-width:440px">
+    <h3 id="authTitle">登录 / 注册</h3>
+    <div class="hint" style="padding:10px 14px;font-size:13px">
+      每个账号拥有独立的试卷空间。注册后会自动分配一个唯一用户 ID，用于识别和分享。
+    </div>
+    <div class="form-field">
+      <label>邮箱</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="form-field">
+      <label>密码（至少 6 位）</label>
+      <input type="password" id="authPassword" placeholder="••••••" autocomplete="current-password">
+    </div>
+    <div class="form-field" id="signupExtra" style="display:none">
+      <label>用户短 ID（字母数字，4-20 位，全局唯一）</label>
+      <input type="text" id="authCode" placeholder="例如：zhangsan01" autocomplete="off">
+    </div>
+    <div class="form-field" id="signupExtra2" style="display:none">
+      <label>昵称（可选）</label>
+      <input type="text" id="authNick" placeholder="例如：张三老师" autocomplete="off">
+    </div>
+    <div class="msg" id="authMsg"></div>
+    <div class="modal-actions" style="justify-content:space-between">
+      <button class="ghost" id="btnToggleMode">切换到注册</button>
+      <button class="primary" id="btnAuthSubmit">登录</button>
+    </div>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="bar-row">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="paper-name-btn" id="paperNameBtn" title="点击管理试卷">
+        <span class="txt" id="paperTitle">加载中…</span>
+        <span style="font-size:11px;color:#7a8399">▾</span>
+      </span>
+    </div>
+    <div class="spacer"></div>
+    <div class="ink-tools">
+      <span class="tool-label">颜色</span>
+      <button class="swatch" data-color="#ffe066" style="--c:#ffe066"></button>
+      <button class="swatch" data-color="#8ce99a" style="--c:#8ce99a"></button>
+      <button class="swatch" data-color="#ffa8c5" style="--c:#ffa8c5"></button>
+      <button class="swatch eraser" data-erase="1">擦</button>
+      <span class="tool-label">粗细</span>
+      <button class="size-btn" data-size="6"><i style="width:5px;height:5px"></i></button>
+      <button class="size-btn active" data-size="16"><i style="width:11px;height:11px"></i></button>
+      <button class="size-btn" data-size="30"><i style="width:19px;height:19px"></i></button>
+      <button id="btnClearInk">清空</button>
+      <button id="btnExitInk">退出涂抹</button>
+    </div>
+    <div class="bar-right">
+      <button id="btnBlackboard">📝 电子黑板</button>
+      <button id="btnImport">导入试卷</button>
+      <button id="btnHomework" class="primary">布置作业</button>
+      <button id="btnAddFigure">🖼 添加图形</button>
+      <button id="btnShareQuestion">🔗 分享题目</button>
+      <button id="btnReceiveQuestion">📥 接收试题</button>
+      <div class="user-chip" id="userChip" style="display:none">
+        <span>ID：<b id="userCodeLabel">-</b></span>
+        <span class="admin-tag" id="adminTag" style="display:none">管理员</span>
+        <button class="ghost small" id="btnAdminPanel" style="display:none">分享管理</button>
+        <button class="ghost small" id="btnLogout">退出</button>
+      </div>
+    </div>
+  </div>
+  <div class="bar-row tabs" id="tabs"></div>
+</header>
+
+<main id="paperView"></main>
+
+<section id="hwView" style="display:none">
+  <div class="hw-bar">
+    <div class="hw-title">📋 作业单（无答案）</div>
+    <div class="spacer"></div>
+    <button id="btnHwExplainAll">作业讲解</button>
+    <button id="btnHwRegenerate">重新生成</button>
+    <button id="btnHwBack" class="primary">返回试卷</button>
+  </div>
+  <div class="page" id="hwContent"></div>
+</section>
+
+<section id="bbView">
+  <div class="bb-bar">
+    <div class="bb-title">📝 电子黑板</div>
+    <div class="bb-tools">
+      <span class="bb-label">颜色</span>
+      <button class="bb-swatch active" data-color="#ffffff" style="--c:#ffffff"></button>
+      <button class="bb-swatch" data-color="#ffe066" style="--c:#ffe066"></button>
+      <button class="bb-swatch" data-color="#8ce99a" style="--c:#8ce99a"></button>
+      <button class="bb-swatch" data-color="#74c0fc" style="--c:#74c0fc"></button>
+      <button class="bb-swatch" data-color="#ffa8c5" style="--c:#ffa8c5"></button>
+      <button class="bb-swatch eraser" data-erase="1">擦</button>
+      <span class="bb-label">粗细</span>
+      <button class="bb-size" data-size="4"><i style="width:4px;height:4px"></i></button>
+      <button class="bb-size active" data-size="8"><i style="width:8px;height:8px"></i></button>
+      <button class="bb-size" data-size="16"><i style="width:14px;height:14px"></i></button>
+      <button class="bb-size" data-size="28"><i style="width:22px;height:22px"></i></button>
+      <span class="bb-label">底色</span>
+      <button class="bb-theme active" data-theme="dark">黑板</button>
+      <button class="bb-theme" data-theme="light">白板</button>
+    </div>
+    <div class="spacer"></div>
+    <div class="bb-actions">
+      <button id="bbUndo">撤销</button>
+      <button id="bbClear">清空本页</button>
+      <button id="bbAddPage">+ 加页</button>
+      <button id="bbDelPage">删页</button>
+      <button id="bbBack" class="primary">返回试卷</button>
+    </div>
+  </div>
+  <div class="bb-tabs" id="bbTabs"></div>
+  <div class="bb-stage-wrap">
+    <div class="bb-stage" id="bbStage">
+      <canvas id="bbCanvas"></canvas>
+    </div>
+  </div>
+</section>
+
+<input type="file" id="fileInput" accept="image/*" hidden>
+<div class="toast" id="toast"></div>
+<div class="drag-overlay" id="dragOverlay">松开鼠标，开始识别图形</div>
+<div class="save-hint" id="saveHint">已自动保存</div>
+
+<div class="modal-mask" id="papersModal">
+  <div class="modal">
+    <h3>我的试卷</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      所有内容自动同步到云端。点击"分享"会生成一个链接，对方打开后会得到一份<strong>全新独立</strong>的副本。
+    </div>
+    <div class="modal-actions">
+      <button id="btnNewPaper" class="primary">+ 新建试卷</button>
+      <button id="btnShareCurrent">分享当前试卷</button>
+    </div>
+    <div class="papers-list" id="papersList"></div>
+    <div class="modal-actions right">
+      <button id="btnPapersClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="shareModal">
+  <div class="modal" style="max-width:600px">
+    <h3>分享试卷</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      把链接发给同事或学生，对方打开后会创建一份全新的试卷副本，从零开始存储，不会影响你的原卷。
+    </div>
+    <div class="share-row">
+      <input type="text" id="shareLinkInput" readonly>
+      <button class="primary small" id="btnCopyShare">复制链接</button>
+    </div>
+    <div class="msg" id="shareMsg"></div>
+    <div class="modal-actions right">
+      <button id="btnShareClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="pickQuestionModal">
+  <div class="modal wide">
+    <h3>选择要分享的题目</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px;margin-bottom:12px">
+      按顺序选：<b>① 试卷 → ② 大题 → ③ 题目</b>。图形会跟着分享，<b>涂鸦不分享</b>。
+    </div>
+    <div class="form-field">
+      <label>① 选择试卷</label>
+      <select id="pickQPaperSelect" style="width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px"></select>
+    </div>
+    <div class="form-field">
+      <label>② 选择大题</label>
+      <select id="pickQSectionSelect" style="width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px"></select>
+    </div>
+    <div class="form-field">
+      <label>③ 点击要分享的题目</label>
+      <div class="qlist" id="pickQuestionList" style="max-height:36vh;margin-top:8px"></div>
+    </div>
+    <div class="modal-actions right">
+      <button id="pickQuestionCancel">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="receiveQuestionModal">
+  <div class="modal" style="max-width:520px">
+    <h3>接收分享的试题</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      粘贴对方发来的<b>分享链接</b>，或直接贴<b>分享 ID</b>。
+    </div>
+    <div class="form-field">
+      <label>分享链接 / ID</label>
+      <input type="text" id="receiveShareInput" placeholder="粘贴链接或分享 ID" autocomplete="off">
+    </div>
+    <div class="msg" id="receiveMsg"></div>
+    <div class="modal-actions right">
+      <button id="receiveCancel">取消</button>
+      <button class="primary" id="receiveOk">接收</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="adminModal">
+  <div class="modal" style="max-width:900px">
+    <h3>分享管理（仅管理员可见）</h3>
+    <div class="stats-grid" id="adminStats"></div>
+    <div style="font-size:14px;font-weight:700;color:#3a4560;margin-top:6px">接受分享的用户记录</div>
+    <div class="table-wrap" id="adminTableWrap">
+      <table id="adminTable">
+        <thead>
+          <tr>
+            <th>接受时间</th>
+            <th>试卷名称</th>
+            <th>分享者 ID</th>
+            <th>接受者 ID</th>
+          </tr>
+        </thead>
+        <tbody id="adminTbody"></tbody>
+      </table>
+    </div>
+    <div class="modal-actions right">
+      <button id="btnAdminClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="figEditorModal">
+  <div class="modal wide">
+    <h3>选择图形区域</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      蓝框为自动识别结果。点击左上角圆点 <b>勾选/取消</b>；拖动框内可 <b>移动</b>；拖动边角手柄可 <b>缩放</b>；在空白处拖拽可 <b>新建</b>；按 <code>Delete</code> 删除当前编辑的框。<br>
+      <b>勾选多个图形后，一次批量分配到不同题目。</b>
+    </div>
+    <div class="fig-stage" id="figStage">
+      <canvas id="figCanvas"></canvas>
+    </div>
+    <div class="fig-thumbs" id="figThumbs"></div>
+    <div class="fig-editor-bar">
+      <div class="left">
+        <button class="ghost small" id="figClearAll">清空选区</button>
+        <button class="ghost small" id="figSelectAll">整张图</button>
+      </div>
+      <div class="right">
+        <span class="count-badge" id="figCountBadge">已勾选 0 / 共 0 个</span>
+        <button class="ghost" id="figEditorCancel">取消</button>
+        <button class="primary" id="figEditorConfirm" disabled>批量插入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="assignModal">
+  <div class="modal">
+    <h3>分配图形到题目</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      为每个图形选择要插入的题目。默认按顺序分配，可手动修改。
+    </div>
+    <div class="assign-list" id="assignList"></div>
+    <div class="modal-actions right">
+      <button id="assignCancel">返回</button>
+      <button class="primary" id="assignConfirm">确认插入</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="hwModal">
+  <div class="modal">
+    <h3>布置作业 · 选择题目与数量</h3>
+    <div class="hint" style="padding:10px 14px">
+      勾选要布置的题目，并选择每题生成的作业题数（1 / 2 / 3 题）。
+    </div>
+    <div class="modal-actions">
+      <button id="btnHwAll">全选</button>
+      <button id="btnHwNone">全不选</button>
+    </div>
+    <div class="qlist" id="hwList"></div>
+    <div class="modal-actions right">
+      <button id="btnHwCancel">取消</button>
+      <button id="btnHwGen" class="primary">生成作业</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-mask" id="importModal">
+  <div class="modal">
+    <h3>导入试卷（粘贴文字即可）</h3>
+    <div class="hint">
+      <b>大题</b>直接写 <code>一、选择题</code>、<code>二、填空题</code> 即可。<br>
+      <b>题号</b>用 <code>1.</code> <code>2.</code> 起行，答案 / 解析 / 举一反三 / 作业自动归属。
+      <span class="fmt">一、选择题
+
+1. 题干第一行
+   题干第二行
+答案：A
+解析：解题过程……
+举一反三：
+- 变式题干 | 变式答案 | 变式解析
+作业：
+- 作业题干 | 作业答案 | 作业解析
+
+二、填空题
+
+1. 填空题题干
+答案：……
+解析：……</span>
+    </div>
+    <textarea id="importText" spellcheck="false" placeholder="在此粘贴试卷文字……"></textarea>
+    <div class="modal-actions right">
+      <button id="btnImportCancel">取消</button>
+      <button id="btnImportDemo">填入示例</button>
+      <button id="btnImportOk" class="primary">解析并生成</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* 
+================================================================
+   配置：把下面两个值换成你自己的 Supabase 项目信息
+   Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
+   ================================================================ */
+var SUPABASE_URL = 'https://dsyhhqimtglzatfggifj.supabase.co/rest/v1/';
+var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzeWhocWltdGdsemF0ZmdnaWZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTQ5ODM5OSwiZXhwIjoyMTA1MDc0Mzk5fQ.0lmqARrKYbqnxov0EAY5tXWj-qGHwBjpZufA_DhDce8';
+
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ================================================================
+   工具
+   ================================================================ */
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function flash(txt){var el=$('#saveHint');if(!el)return;el.textContent=txt;el.classList.add('show');clearTimeout(flash._t);flash._t=setTimeout(function(){el.classList.remove('show');},1400);}
+function showMsg(sel,txt,type){var el=$(sel);if(!el)return;el.textContent=txt;el.className='msg show '+(type||'');if(type==='ok'){clearTimeout(showMsg._t);showMsg._t=setTimeout(function(){el.classList.remove('show');},2600);}}
+var toastTimer=null;
+function toast(msg){var el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove('show');},2000);}
+
+/* ================================================================
+   全局状态
+   ================================================================ */
+var currentUser = null;
+var currentProfile = null;
+var papers = [];
+var currentPaper = null;
+var state = { page:0, inkOn:false, color:'#ffe066', erase:false, size:16 };
+var strokes = new Map();
+var currentStroke = null;
+var simMemory = {};
+var savedHomeworkItems = null;
+var hwAllOn = false;
+var resizeObserver = null;
+var saveTimer = null;
+var exam = { title:'', sections:[] };
+
+/* 黑板状态 */
+var bbState = { color:'#ffffff', size:8, erase:false };
+var bbCanvas = null, bbCtx = null, bbCurrentStroke = null;
+var BB_W = 1600, BB_H = 1000;
+
+function ensureBlackboard(){
+  if(!exam.blackboard || typeof exam.blackboard !== 'object') exam.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
+  var bb = exam.blackboard;
+  if(!Array.isArray(bb.pages) || !bb.pages.length) bb.pages = [{strokes:[]}];
+  bb.pages.forEach(function(p){ if(!p.strokes) p.strokes = []; });
+  if(typeof bb.current !== 'number' || bb.current < 0 || bb.current >= bb.pages.length) bb.current = 0;
+  if(bb.theme !== 'light') bb.theme = 'dark';
+  return bb;
+}
+
+/* ================================================================
+   认证
+   ================================================================ */
+var authMode = 'login';
+function setAuthMode(m){
+  authMode=m;
+  $('#authTitle').textContent = m==='login' ? '登录' : '注册新账号';
+  $('#btnToggleMode').textContent = m==='login' ? '切换到注册' : '切换到登录';
+  $('#btnAuthSubmit').textContent = m==='login' ? '登录' : '注册';
+  $('#signupExtra').style.display  = m==='login' ? 'none' : 'block';
+  $('#signupExtra2').style.display = m==='login' ? 'none' : 'block';
+}
+$('#btnToggleMode').onclick = function(){ setAuthMode(authMode==='login'?'signup':'login'); $('#authMsg').className='msg'; };
+setAuthMode('login');
+
+function validateUserCode(code){
+  if(!/^[A-Za-z0-9_]{4,20}$/.test(code)) return '用户 ID 需为 4-20 位字母、数字或下划线';
+  return '';
+}
+
+async function checkUserCodeUnique(code){
+  var r = await sb.from('profiles').select('id').eq('user_code', code).maybeSingle();
+  if(r.error && r.error.code !== 'PGRST116') throw r.error;
+  return !r.data;
+}
+
+$('#btnAuthSubmit').onclick = async function(){
+  var email = $('#authEmail').value.trim();
+  var pwd = $('#authPassword').value;
+  if(!email || !pwd){ showMsg('#authMsg','请填写邮箱和密码','err'); return; }
+  if(pwd.length<6){ showMsg('#authMsg','密码至少 6 位','err'); return; }
+
+  this.disabled = true;
+  var oldTxt = this.textContent;
+  this.textContent = '处理中…';
+
+  try{
+    if(authMode==='login'){
+      var r = await sb.auth.signInWithPassword({ email: email, password: pwd });
+      if(r.error) throw r.error;
+      await afterLogin();
+    } else {
+      var code = $('#authCode').value.trim();
+      var nick = $('#authNick').value.trim();
+      var err = validateUserCode(code);
+      if(err){ showMsg('#authMsg',err,'err'); this.disabled=false; this.textContent=oldTxt; return; }
+
+      var unique = await checkUserCodeUnique(code);
+      if(!unique){ showMsg('#authMsg','该用户 ID 已被占用，请换一个','err'); this.disabled=false; this.textContent=oldTxt; return; }
+
+      var rr = await sb.auth.signUp({ email: email, password: pwd });
+      if(rr.error) throw rr.error;
+      if(!rr.data.user){ showMsg('#authMsg','注册成功，请到邮箱确认后再登录','ok'); this.disabled=false; this.textContent=oldTxt; return; }
+
+      var ins = await sb.from('profiles').insert({
+        id: rr.data.user.id,
+        user_code: code,
+        display_name: nick || code,
+        is_admin: false
+      });
+      if(ins.error) throw ins.error;
+
+      showMsg('#authMsg','注册成功！','ok');
+      await afterLogin();
+    }
+  } catch(e){
+    console.error(e);
+    showMsg('#authMsg', (e.message||'操作失败'), 'err');
+    this.disabled = false;
+    this.textContent = oldTxt;
+    return;
+  }
+  this.disabled = false;
+  this.textContent = oldTxt;
+};
+
+async function afterLogin(){
+  var u = await sb.auth.getUser();
+  if(!u.data || !u.data.user){ return; }
+  currentUser = u.data.user;
+
+  var pr = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+  if(pr.error && pr.error.code !== 'PGRST116') throw pr.error;
+
+  if(!pr.data){
+    var auto = 'u_' + Math.random().toString(36).slice(2,10);
+    var ins = await sb.from('profiles').insert({
+      id: currentUser.id,
+      user_code: auto,
+      display_name: auto,
+      is_admin: false
+    });
+    if(ins.error) throw ins.error;
+    pr = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+  }
+  currentProfile = pr.data;
+
+  $('#authModal').classList.remove('show');
+  $('#userChip').style.display = 'flex';
+  $('#userCodeLabel').textContent = currentProfile.user_code;
+  $('#adminTag').style.display = currentProfile.is_admin ? '' : 'none';
+  $('#btnAdminPanel').style.display = currentProfile.is_admin ? '' : 'none';
+
+  await handleShareLink();
+  await loadPapers();
+}
+
+$('#btnLogout').onclick = async function(){
+  if(!confirm('确定退出登录吗？')) return;
+  await sb.auth.signOut();
+  location.reload();
+};
+
+/* ================================================================
+   分享链接处理（整卷 / 单题 二合一）
+   ================================================================ */
+async function handleShareLink(){
+  var params = new URLSearchParams(location.search);
+  var shareId = params.get('share');
+  if(!shareId) return;
+
+  history.replaceState({}, '', location.pathname);
+
+  try{
+    await receiveShareById(shareId);
+  }catch(e){
+    console.error(e);
+    alert('接收分享失败：' + (e.message||'未知错误'));
+  }
+}
+
+/* 统一的接收入口：shareId 是 shares 表主键 */
+async function receiveShareById(shareId){
+  var r = await sb.rpc('get_share_snapshot', { p_share_id: shareId });
+  if(r.error) throw r.error;
+  var obj = r.data;
+  if(!obj || obj.error) throw new Error('分享链接无效或已被删除');
+
+  var snapshot = obj.snapshot || {};
+  var ownerCode = obj.owner_code || '未知';
+  var paperName = obj.paper_name || snapshot.title || '分享的试卷';
+
+  /* ---------- 单题分支 ---------- */
+  if(snapshot.__kind === 'question'){
+    var q = snapshot.question || {};
+    var preview = String(q.stem||'').split('\n')[0];
+    if(preview.length > 60) preview = preview.slice(0,60) + '…';
+
+    if(!currentPaper){
+      alert('请先打开一份试卷，再接收试题。');
+      return { cancelled: true };
+    }
+
+    var go = confirm(
+      '你收到了来自用户【'+ownerCode+'】分享的一道试题：\n\n'+
+      '「'+preview+'」\n\n'+
+      '点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
+    );
+    if(!go) return { cancelled: true };
+
+    if(!exam.sections) exam.sections = [];
+    var targetSec;
+    if(exam.sections.length){
+      targetSec = exam.sections[exam.sections.length - 1];
+    } else {
+      targetSec = { name: '分享的题目', questions: [] };
+      exam.sections.push(targetSec);
+    }
+    if(!targetSec.questions) targetSec.questions = [];
+
+    targetSec.questions.push({
+      stem: q.stem || '',
+      answer: q.answer || '',
+      analysis: q.analysis || '',
+      similar: q.similar || [],
+      homework: q.homework || [],
+      figure: q.figure || null
+    });
+
+    try{
+      await sb.from('share_accepts').insert({
+        share_id: shareId,
+        paper_name: snapshot.paper_name || paperName,
+        owner_id: null,
+        owner_code: ownerCode,
+        accepted_by: currentUser.id,
+        accepted_by_code: currentProfile.user_code
+      });
+    }catch(_){}
+
+    renderTabs();
+    renderPaper();
+    showPageInternal(exam.sections.length - 1);
+    requestAnimationFrame(function(){
+      $$('#paperView .page').forEach(function(p){
+        if(p.style.display!=='none') fitCanvas(p);
+      });
+    });
+    await saveCurrentPaper();
+
+    alert('已加入「'+currentPaper.name+'」的「'+targetSec.name+'」大题末尾。');
+    return { ok: true };
+  }
+
+  /* ---------- 整卷分支 ---------- */
+  var go2 = confirm(
+    '你收到了来自用户【'+ownerCode+'】分享的试卷：\n\n'+
+    '「'+paperName+'」\n\n'+
+    '点击"确定"会在你的账号下创建一份全新的副本。'
+  );
+  if(!go2) return { cancelled: true };
+
+  var myId = currentUser.id;
+  var finalName = paperName + '（来自 ' + ownerCode + '）';
+
+  var ins = await sb.from('papers').insert({
+    owner_id: myId,
+    name: finalName,
+    data: Object.assign({}, snapshot, { title: finalName }),
+    saved_homework: null,
+    sim_memory: {},
+    current_page: 0,
+    strokes: {},
+    source_owner_code: ownerCode,
+    source_paper_name: paperName
+  }).select().single();
+  if(ins.error) throw ins.error;
+
+  try{
+    await sb.from('share_accepts').insert({
+      share_id: shareId,
+      paper_name: paperName,
+      owner_id: null,
+      owner_code: ownerCode,
+      accepted_by: myId,
+      accepted_by_code: currentProfile.user_code
+    });
+  }catch(_){}
+
+  alert('已成功接收！新试卷已保存到你的账号。');
+  await loadPapers(ins.data.id);
+  return { ok: true };
+}
+
+/* ================================================================
+   试卷数据层
+   ================================================================ */
+async function loadPapers(preferId){
+  var r = await sb.from('papers')
+    .select('id,name,updated_at,created_at,data')
+    .eq('owner_id', currentUser.id)
+    .order('updated_at', { ascending: false });
+  if(r.error){ console.error(r.error); return; }
+  papers = r.data || [];
+  if(!papers.length){
+    var ins = await sb.from('papers').insert({
+      owner_id: currentUser.id,
+      name: '我的第一份试卷',
+      data: {
+        title: '我的第一份试卷',
+        sections: [{ name:'一、题目', questions:[{ stem:'（点击右上角"导入试卷"，粘贴题目文字即可自动生成）', answer:'', analysis:'', similar:[], homework:[] }] }],
+        blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' }
+      },
+      saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
+    }).select().single();
+    if(ins.error){ console.error(ins.error); return; }
+    papers = [ins.data];
+  }
+  var target = preferId ? papers.find(function(p){return p.id===preferId;}) : papers[0];
+  if(!target) target = papers[0];
+  await openPaper(target.id);
+  renderPapersList();
+}
+
+async function openPaper(id){
+  var r = await sb.from('papers').select('*').eq('id', id).maybeSingle();
+  if(r.error){ console.error(r.error); return; }
+  if(!r.data) return;
+  currentPaper = r.data;
+  exam = currentPaper.data || { title:'', sections:[] };
+  if(!exam.sections) exam.sections = [];
+  ensureBlackboard();
+
+  simMemory = currentPaper.sim_memory || {};
+  savedHomeworkItems = currentPaper.saved_homework || null;
+  state.page = currentPaper.current_page || 0;
+  strokes = new Map();
+  if(currentPaper.strokes){
+    Object.keys(currentPaper.strokes).forEach(function(k){ strokes.set(parseInt(k,10), currentPaper.strokes[k]); });
+  }
+  $('#paperTitle').textContent = currentPaper.name;
+  document.title = currentPaper.name + ' · 试卷讲解';
+  renderTabs();
+  renderPaper();
+  showPageInternal(state.page);
+  requestAnimationFrame(function(){ $$('#paperView .page').forEach(redrawPage); });
+}
+
+async function saveCurrentPaper(){
+  if(!currentPaper || !currentUser) return;
+  var strokesJSON = {};
+  strokes.forEach(function(v,k){ strokesJSON[k] = v; });
+  var payload = {
+    name: exam.title || currentPaper.name,
+    data: exam,
+    saved_homework: savedHomeworkItems,
+    sim_memory: simMemory,
+    current_page: state.page,
+    strokes: strokesJSON,
+    updated_at: new Date().toISOString()
+  };
+  var r = await sb.from('papers').update(payload).eq('id', currentPaper.id);
+  if(r.error){ console.error('保存失败', r.error); return; }
+  currentPaper.name = payload.name;
+  $('#paperTitle').textContent = payload.name;
+  flash('已保存到云端');
+  var idx = papers.findIndex(function(p){return p.id===currentPaper.id;});
+  if(idx>=0){ papers[idx].name = payload.name; papers[idx].updated_at = payload.updated_at; }
+}
+
+function scheduleSave(){
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){ saveTimer=null; saveCurrentPaper(); }, 900);
+}
+
+/* ================================================================
+   渲染
+   ================================================================ */
+function renderTabs(){
+  $('#tabs').innerHTML = exam.sections.map(function(s,i){
+    return '<button class="tab" data-page="'+i+'">'+esc(s.name)+'</button>';
+  }).join('');
+}
+
+function buildSimilarArea(list,si,qi){
+  if(!list||!list.length) return '<div class="empty">该题暂无举一反三</div>';
+  var startIdx = simMemory[si+'-'+qi] || 0;
+  if(startIdx<0||startIdx>=list.length) startIdx = 0;
+  var items = list.map(function(s,i){
+    return '<div class="subq sim-item" data-sub="'+i+'"'+(i===startIdx?'':' style="display:none"')+'>'+
+      '<div class="sub-title">举一反三 · 第 '+(i+1)+' 题</div>'+
+      '<div class="sub-stem">'+esc(s.stem)+'</div>'+
+      '<div class="btns"><button data-act="sub-answer">答案</button><button data-act="sub-analysis">解析</button></div>'+
+      '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
+      '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
+      '</div>';
+  }).join('');
+  var nav = '<div class="sim-nav">'+
+    '<span class="sim-progress">第 <b class="sim-cur">'+(startIdx+1)+'</b> / '+list.length+' 题</span>'+
+    '<button data-act="sim-prev"'+(startIdx===0?' disabled':'')+'>上一题</button>'+
+    '<button data-act="sim-next"'+(startIdx===list.length-1?' disabled':'')+'>下一题</button>'+
+    '<button data-act="sim-exit" class="sim-exit">退出</button>'+
+    '</div>';
+  return items+nav;
+}
+
+function buildHomeworkArea(list){
+  if(!list||!list.length) return '<div class="empty">该题暂无配套作业</div>';
+  return list.map(function(s,i){
+    return '<div class="subq" data-sub="'+i+'">'+
+      '<div class="sub-title">作业 · 第 '+(i+1)+' 题</div>'+
+      '<div class="sub-stem">'+esc(s.stem)+'</div>'+
+      '<div class="btns"><button data-act="hw-answer">答案</button><button data-act="hw-analysis">解析</button></div>'+
+      '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
+      '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+function figureHTML(q){
+  if(!q.figure) return '';
+  var w = q.figure.width || 180;
+  var side = q.figure.side === 'left' ? ' order:-1' : '';
+  return '<div class="q-figure" style="'+side+'">'+
+    '<img src="'+q.figure.src+'" style="width:'+w+'px" draggable="false" alt="题目配图">'+
+    '<div class="fig-handle" title="拖动调整大小"></div>'+
+    '<div class="fig-tools">'+
+      '<button data-act="fig-side">'+(q.figure.side==='left'?'→ 右':'← 左')+'</button>'+
+      '<button data-act="fig-s">小</button>'+
+      '<button data-act="fig-m">中</button>'+
+      '<button data-act="fig-l">大</button>'+
+      '<button data-act="fig-del">✕</button>'+
+    '</div>'+
+    '</div>';
+}
+
+function questionHTML(q,si,qi){
+  return '<div class="q" data-si="'+si+'" data-qi="'+qi+'">'+
+    '<div class="q-main">'+
+      '<div class="stem">'+(qi+1)+'. '+esc(q.stem)+'</div>'+
+      '<div class="btns">'+
+        '<button data-act="answer">答案</button>'+
+        '<button data-act="analysis">解析</button>'+
+        '<button data-act="similar">举一反三</button>'+
+        '<button data-act="homework">作业</button>'+
+      '</div>'+
+      '<div class="panel answer">'+esc(q.answer||'暂无答案')+'</div>'+
+      '<div class="panel analysis">'+esc(q.analysis||'暂无解析')+'</div>'+
+      '<div class="panel similar"><div class="similar-head">举一反三 · 变式训练</div>'+buildSimilarArea(q.similar,si,qi)+'</div>'+
+      '<div class="panel homework"><div class="homework-head">配套作业 · 课后练习</div>'+buildHomeworkArea(q.homework)+'</div>'+
+    '</div>'+
+    figureHTML(q)+
+    '</div>';
+}
+
+function renderPaper(){
+  $('#paperView').innerHTML = exam.sections.map(function(sec,si){
+    var qs = sec.questions.map(function(q,qi){ return questionHTML(q,si,qi); }).join('');
+    return '<div class="page" data-page="'+si+'"><canvas class="ink"></canvas><div class="content"><div class="sec-title">'+esc(sec.name)+'</div>'+qs+'</div></div>';
+  }).join('');
+  $$('#paperView .page').forEach(attachInk);
+  $$('#paperView .q-figure').forEach(attachFigureInteraction);
+
+  if(resizeObserver) resizeObserver.disconnect();
+  resizeObserver = new ResizeObserver(function(){
+    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+  });
+  $$('#paperView .page').forEach(function(p){ resizeObserver.observe(p); });
+}
+
+function showPageInternal(i){
+  var n = exam.sections.length; if(!n) return;
+  if(i<0||i>=n) i = 0;
+  state.page = i;
+  $$('#paperView .page').forEach(function(p){ p.style.display = (+p.dataset.page===i)?'':'none'; });
+  $$('#tabs .tab').forEach(function(b){ b.classList.toggle('active', +b.dataset.page===i); });
+  requestAnimationFrame(function(){
+    var p = $('#paperView .page[data-page="'+i+'"]');
+    if(p) fitCanvas(p);
+  });
+}
+function showPage(i){ showPageInternal(i); scheduleSave(); }
+
+function attachFigureInteraction(wrap){
+  var img = wrap.querySelector('img');
+  var handle = wrap.querySelector('.fig-handle');
+  var tools = wrap.querySelector('.fig-tools');
+  if(!img || !handle || !tools) return;
+
+  var qEl = wrap.closest('.q');
+  if(!qEl) return;
+  var si = +qEl.dataset.si, qi = +qEl.dataset.qi;
+  var q = exam.sections[si].questions[qi];
+
+  handle.addEventListener('pointerdown', function(e){
+    e.preventDefault(); e.stopPropagation();
+    try{ handle.setPointerCapture(e.pointerId); }catch(_){}
+    var startX = e.clientX;
+    var startW = img.offsetWidth;
+    var startH = img.offsetHeight;
+    var ratio = startH / startW;
+    var isLeft = wrap.style.order === '-1';
+
+    function onMove(ev){
+      var dx = ev.clientX - startX;
+      var delta = isLeft ? -dx : dx;
+      var newW = clamp(startW + delta, 60, 600);
+      img.style.width = newW + 'px';
+      img.style.height = (newW * ratio) + 'px';
+    }
+    function onUp(ev){
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      try{ handle.releasePointerCapture(ev.pointerId); }catch(_){}
+      q.figure.width = img.offsetWidth;
+      scheduleSave();
+    }
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+  });
+
+  tools.querySelectorAll('button').forEach(function(btn){
+    btn.onclick = function(e){
+      e.stopPropagation();
+      var act = btn.dataset.act;
+      if(act === 'fig-del'){
+        if(!confirm('删除该图形？')) return;
+        q.figure = null;
+        renderPaper(); showPageInternal(state.page);
+        scheduleSave();
+        toast('已删除图形');
+      } else if(act === 'fig-side'){
+        q.figure.side = q.figure.side === 'left' ? 'right' : 'left';
+        renderPaper(); showPageInternal(state.page); scheduleSave();
+      } else if(act === 'fig-s'){ q.figure.width = 120; renderPaper(); showPageInternal(state.page); scheduleSave(); }
+      else if(act === 'fig-m'){ q.figure.width = 180; renderPaper(); showPageInternal(state.page); scheduleSave(); }
+      else if(act === 'fig-l'){ q.figure.width = 280; renderPaper(); showPageInternal(state.page); scheduleSave(); }
+    };
+  });
+}
+
+/* ================================================================
+   试卷涂抹
+   ================================================================ */
+function fitCanvas(page){
+  if(!page || page.style.display==='none') return;
+  var c = page.querySelector('canvas.ink'); if(!c) return;
+  var w = page.clientWidth, h = page.clientHeight;
+  if(w<=0||h<=0) return;
+  if(c.width===w && c.height===h) return;
+  c.width = w; c.height = h;
+  redrawPage(page);
+}
+function drawWholeStroke(ctx,s,w,h){
+  ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+  ctx.globalAlpha = s.erase ? 1 : 0.55;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = s.size;
+  var pts = s.points;
+  if(pts.length===1){ ctx.beginPath(); ctx.arc(pts[0].x*w, pts[0].y*h, s.size/2, 0, Math.PI*2); ctx.fill(); return; }
+  ctx.beginPath(); ctx.moveTo(pts[0].x*w, pts[0].y*h);
+  for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*w, pts[i].y*h);
+  ctx.stroke();
+}
+function redrawPage(page){
+  var idx = +page.dataset.page;
+  var c = page.querySelector('canvas.ink'); if(!c) return;
+  var ctx = c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  (strokes.get(idx)||[]).forEach(function(s){ drawWholeStroke(ctx,s,c.width,c.height); });
+}
+function strokeSegment(ctx,s,w,h){
+  var pts = s.points, n = pts.length; if(n<2) return;
+  var a = pts[n-2], b = pts[n-1];
+  ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+  ctx.globalAlpha = s.erase ? 1 : 0.55;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.strokeStyle = s.color; ctx.lineWidth = s.size;
+  ctx.beginPath(); ctx.moveTo(a.x*w, a.y*h); ctx.lineTo(b.x*w, b.y*h); ctx.stroke();
+}
+function attachInk(page){
+  var c = page.querySelector('canvas.ink'); if(!c) return;
+  c.addEventListener('pointerdown', function(e){
+    if(!state.inkOn) return; e.preventDefault();
+    var rect = c.getBoundingClientRect();
+    var p = { x:(e.clientX-rect.left)/rect.width, y:(e.clientY-rect.top)/rect.height };
+    var idx = +page.dataset.page;
+    var stroke = { color:state.color, erase:state.erase, size:state.size, points:[p] };
+    if(!strokes.has(idx)) strokes.set(idx, []);
+    strokes.get(idx).push(stroke);
+    currentStroke = stroke;
+    try{ c.setPointerCapture(e.pointerId); }catch(_){}
+    var ctx = c.getContext('2d');
+    ctx.globalCompositeOperation = stroke.erase ? 'destination-out' : 'source-over';
+    ctx.globalAlpha = stroke.erase ? 1 : 0.55;
+    ctx.fillStyle = stroke.color;
+    ctx.beginPath(); ctx.arc(p.x*c.width, p.y*c.height, stroke.size/2, 0, Math.PI*2); ctx.fill();
+  });
+  c.addEventListener('pointermove', function(e){
+    if(!currentStroke) return; e.preventDefault();
+    var rect = c.getBoundingClientRect();
+    var p = { x:(e.clientX-rect.left)/rect.width, y:(e.clientY-rect.top)/rect.height };
+    var last = currentStroke.points[currentStroke.points.length-1];
+    var dx = (p.x-last.x)*rect.width, dy = (p.y-last.y)*rect.height;
+    if(Math.sqrt(dx*dx+dy*dy)<1.5) return;
+    currentStroke.points.push(p);
+    strokeSegment(c.getContext('2d'), currentStroke, c.width, c.height);
+  });
+  function end(e){
+    if(!currentStroke) return;
+    if(e && e.pointerId!==undefined){ try{ c.releasePointerCapture(e.pointerId); }catch(_){} }
+    currentStroke = null;
+    scheduleSave();
+  }
+  c.addEventListener('pointerup', end);
+  c.addEventListener('pointercancel', end);
+}
+
+/* ================================================================
+   电子黑板
+   ================================================================ */
+function bbInit(){
+  bbCanvas = document.getElementById('bbCanvas');
+  bbCanvas.width = BB_W;
+  bbCanvas.height = BB_H;
+  bbCtx = bbCanvas.getContext('2d');
+  bbBindPointer();
+}
+
+function bbApplyTheme(){
+  var bb = ensureBlackboard();
+  var stage = document.getElementById('bbStage');
+  if(bb.theme === 'light') stage.classList.add('light');
+  else stage.classList.remove('light');
+  document.querySelectorAll('.bb-theme').forEach(function(b){
+    b.classList.toggle('active', b.dataset.theme === bb.theme);
+  });
+}
+
+function bbRenderTabs(){
+  var bb = ensureBlackboard();
+  var el = document.getElementById('bbTabs');
+  el.innerHTML = bb.pages.map(function(p,i){
+    return '<div class="bb-tab'+(i===bb.current?' active':'')+'" data-i="'+i+'">第 '+(i+1)+' 页</div>';
+  }).join('');
+}
+
+function bbDrawStroke(s){
+  if(!bbCtx) return;
+  var ctx = bbCtx;
+  ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = s.color;
+  ctx.fillStyle = s.color;
+  ctx.lineWidth = s.size;
+  var pts = s.points;
+  if(!pts || !pts.length) return;
+  if(pts.length === 1){
+    ctx.beginPath();
+    ctx.arc(pts[0].x*BB_W, pts[0].y*BB_H, s.size/2, 0, Math.PI*2);
+    ctx.fill();
+    return;
+  }
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x*BB_W, pts[0].y*BB_H);
+  for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*BB_W, pts[i].y*BB_H);
+  ctx.stroke();
+}
+
+function bbDrawSegment(s, a, b){
+  if(!bbCtx) return;
+  var ctx = bbCtx;
+  ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = s.color;
+  ctx.lineWidth = s.size;
+  ctx.beginPath();
+  ctx.moveTo(a.x*BB_W, a.y*BB_H);
+  ctx.lineTo(b.x*BB_W, b.y*BB_H);
+  ctx.stroke();
+}
+
+function bbRedraw(){
+  if(!bbCtx) return;
+  bbCtx.clearRect(0,0,BB_W,BB_H);
+  var bb = ensureBlackboard();
+  var page = bb.pages[bb.current];
+  if(!page) return;
+  page.strokes.forEach(bbDrawStroke);
+}
+
+function bbPointerPos(e){
+  var rect = bbCanvas.getBoundingClientRect();
+  return {
+    x: clamp((e.clientX - rect.left) / rect.width, 0, 1),
+    y: clamp((e.clientY - rect.top) / rect.height, 0, 1)
+  };
+}
+
+function bbBindPointer(){
+  bbCanvas.addEventListener('pointerdown', function(e){
+    if(e.button !== 0 && e.pointerType === 'mouse') return;
+    e.preventDefault();
+    var bb = ensureBlackboard();
+    var page = bb.pages[bb.current];
+    if(!page) return;
+    var p = bbPointerPos(e);
+    var stroke = {
+      color: bbState.erase ? '#000' : bbState.color,
+      size: bbState.size * (bbState.erase ? 2 : 1),
+      erase: bbState.erase,
+      points: [p]
+    };
+    page.strokes.push(stroke);
+    bbCurrentStroke = stroke;
+    try{ bbCanvas.setPointerCapture(e.pointerId); }catch(_){}
+    bbDrawStroke(stroke);
+  });
+
+  bbCanvas.addEventListener('pointermove', function(e){
+    if(!bbCurrentStroke) return;
+    e.preventDefault();
+    var p = bbPointerPos(e);
+    var pts = bbCurrentStroke.points;
+    var last = pts[pts.length-1];
+    var rect = bbCanvas.getBoundingClientRect();
+    var dx = (p.x - last.x) * rect.width;
+    var dy = (p.y - last.y) * rect.height;
+    if(Math.sqrt(dx*dx + dy*dy) < 1.2) return;
+    pts.push(p);
+    bbDrawSegment(bbCurrentStroke, last, p);
+  });
+
+  function end(e){
+    if(!bbCurrentStroke) return;
+    if(e && e.pointerId !== undefined){ try{ bbCanvas.releasePointerCapture(e.pointerId); }catch(_){} }
+    bbCurrentStroke = null;
+    scheduleSave();
+  }
+  bbCanvas.addEventListener('pointerup', end);
+  bbCanvas.addEventListener('pointercancel', end);
+  bbCanvas.addEventListener('pointerleave', function(e){ if(bbCurrentStroke) end(e); });
+}
+
+function bbSwitchPage(i){
+  var bb = ensureBlackboard();
+  if(i<0 || i>=bb.pages.length) return;
+  bb.current = i;
+  bbRenderTabs();
+  bbRedraw();
+  scheduleSave();
+}
+
+function bbAddPage(){
+  var bb = ensureBlackboard();
+  bb.pages.push({ strokes: [] });
+  bb.current = bb.pages.length - 1;
+  bbRenderTabs();
+  bbRedraw();
+  scheduleSave();
+}
+
+function bbDelPage(){
+  var bb = ensureBlackboard();
+  if(bb.pages.length <= 1){ toast('至少保留一页'); return; }
+  if(!confirm('删除当前页？')) return;
+  bb.pages.splice(bb.current, 1);
+  if(bb.current >= bb.pages.length) bb.current = bb.pages.length - 1;
+  bbRenderTabs();
+  bbRedraw();
+  scheduleSave();
+}
+
+function bbUndo(){
+  var bb = ensureBlackboard();
+  var page = bb.pages[bb.current];
+  if(!page || !page.strokes.length){ toast('没有可撤销的笔迹'); return; }
+  page.strokes.pop();
+  bbRedraw();
+  scheduleSave();
+}
+
+function bbClear(){
+  var bb = ensureBlackboard();
+  var page = bb.pages[bb.current];
+  if(!page || !page.strokes.length){ toast('当前页是空的'); return; }
+  if(!confirm('清空当前页的所有笔迹？')) return;
+  page.strokes = [];
+  bbRedraw();
+  scheduleSave();
+}
+
+function enterBlackboard(){
+  ensureBlackboard();
+  document.getElementById('bbView').classList.add('show');
+  document.body.classList.add('bb-open');
+  if(!bbCanvas) bbInit();
+  bbApplyTheme();
+  bbRenderTabs();
+  bbRedraw();
+}
+
+function exitBlackboard(){
+  document.getElementById('bbView').classList.remove('show');
+  document.body.classList.remove('bb-open');
+  scheduleSave();
+}
+
+/* ================================================================
+   举一反三导航
+   ================================================================ */
+function simGetPanel(q){ return q ? q.querySelector(':scope > .q-main > .panel.similar') : null; }
+function simUpdateNav(panel,cur,total){
+  var lbl = panel.querySelector('.sim-cur'); if(lbl) lbl.textContent = cur+1;
+  var prev = panel.querySelector('[data-act="sim-prev"]');
+  var next = panel.querySelector('[data-act="sim-next"]');
+  if(prev) prev.disabled = (cur===0);
+  if(next) next.disabled = (cur===total-1);
+}
+function simCurrentIndex(panel){
+  var items = $$('.sim-item', panel);
+  for(var i=0;i<items.length;i++) if(items[i].style.display!=='none') return i;
+  return 0;
+}
+function simMove(q,delta){
+  var panel = simGetPanel(q); if(!panel) return;
+  var items = $$('.sim-item', panel); if(!items.length) return;
+  var cur = simCurrentIndex(panel), next = cur+delta;
+  if(next<0||next>=items.length) return;
+  items[cur].style.display='none'; items[next].style.display='';
+  simUpdateNav(panel,next,items.length);
+  simMemory[q.dataset.si+'-'+q.dataset.qi] = next;
+  scheduleSave();
+  requestAnimationFrame(function(){ var p=q.closest('.page'); if(p) fitCanvas(p); });
+}
+function simExit(q){
+  var panel = simGetPanel(q);
+  if(panel){
+    simMemory[q.dataset.si+'-'+q.dataset.qi] = simCurrentIndex(panel);
+    scheduleSave();
+    panel.classList.remove('show');
+    var t = q.querySelector(':scope > .q-main > .btns > button[data-act="similar"]');
+    if(t) t.classList.remove('active');
+  }
+  var page = q.closest('.page'); if(!page) return;
+  var allQ = $$('.q', page), idx = allQ.indexOf(q);
+  requestAnimationFrame(function(){ fitCanvas(page); });
+  if(idx>-1 && idx<allQ.length-1){
+    setTimeout(function(){ allQ[idx+1].scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
+  } else {
+    var pages = $$('#paperView .page'), pi = pages.indexOf(page);
+    if(pi>-1 && pi<pages.length-1){ showPage(pi+1); setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},30); }
+  }
+}
+function simRestore(q){
+  var panel = simGetPanel(q); if(!panel) return;
+  var items = $$('.sim-item', panel); if(!items.length) return;
+  var idx = simMemory[q.dataset.si+'-'+q.dataset.qi] || 0;
+  if(idx<0||idx>=items.length) idx = 0;
+  items.forEach(function(it,i){ it.style.display = (i===idx)?'':'none'; });
+  simUpdateNav(panel, idx, items.length);
+}
+
+/* ================================================================
+   面板切换
+   ================================================================ */
+function togglePanel(panel,btn){
+  if(!panel) return;
+  var on = panel.classList.toggle('show');
+  if(btn) btn.classList.toggle('active', on);
+  requestAnimationFrame(function(){ var p = panel.closest('.page'); if(p) fitCanvas(p); });
+}
+$('#paperView').addEventListener('click', function(e){
+  var btn = e.target.closest('button[data-act]'); if(!btn||btn.disabled) return;
+  var act = btn.dataset.act, q = btn.closest('.q'), sub = btn.closest('.subq');
+  if(!q) return;
+  if(act==='answer') togglePanel(q.querySelector(':scope > .q-main > .panel.answer'), btn);
+  else if(act==='analysis') togglePanel(q.querySelector(':scope > .q-main > .panel.analysis'), btn);
+  else if(act==='similar'){
+    var panel = q.querySelector(':scope > .q-main > .panel.similar');
+    if(!panel.classList.contains('show')) simRestore(q);
+    togglePanel(panel, btn);
+  }
+  else if(act==='homework') togglePanel(q.querySelector(':scope > .q-main > .panel.homework'), btn);
+  else if(act==='sub-answer') togglePanel(sub.querySelector('.panel.sub-answer'), btn);
+  else if(act==='sub-analysis') togglePanel(sub.querySelector('.panel.sub-analysis'), btn);
+  else if(act==='hw-answer') togglePanel(sub.querySelector('.panel.sub-answer'), btn);
+  else if(act==='hw-analysis') togglePanel(sub.querySelector('.panel.sub-analysis'), btn);
+  else if(act==='sim-prev') simMove(q,-1);
+  else if(act==='sim-next') simMove(q,+1);
+  else if(act==='sim-exit') simExit(q);
+});
+
+/* ================================================================
+   工具栏
+   ================================================================ */
+$$('.swatch').forEach(function(b){
+  b.onclick = function(){
+    var isE = b.dataset.erase==='1';
+    state.erase = isE; if(!isE) state.color = b.dataset.color;
+    state.inkOn = true; document.body.classList.add('ink-on');
+    $$('.swatch').forEach(function(x){x.classList.remove('active');}); b.classList.add('active');
+  };
+});
+$$('.size-btn').forEach(function(b){
+  b.onclick = function(){
+    state.size = +b.dataset.size; state.inkOn = true; document.body.classList.add('ink-on');
+    $$('.size-btn').forEach(function(x){x.classList.remove('active');}); b.classList.add('active');
+  };
+});
+$('#btnExitInk').onclick = function(){
+  state.inkOn = false; document.body.classList.remove('ink-on');
+  $$('.swatch').forEach(function(x){x.classList.remove('active');});
+};
+$('#btnClearInk').onclick = function(){
+  if(!confirm('清空当前所有涂抹？')) return;
+  strokes.clear();
+  $$('#paperView canvas.ink').forEach(function(c){ c.getContext('2d').clearRect(0,0,c.width,c.height); });
+  scheduleSave();
+};
+$('#tabs').addEventListener('click', function(e){
+  var t = e.target.closest('.tab'); if(!t) return; showPage(+t.dataset.page);
+});
+
+/* ================================================================
+   试卷管理
+   ================================================================ */
+function renderPapersList(){
+  $('#papersList').innerHTML = papers.map(function(p){
+    var isCur = currentPaper && p.id===currentPaper.id;
+    var date = new Date(p.updated_at||p.created_at||Date.now());
+    var pad = function(n){return n<10?'0'+n:''+n;};
+    var ds = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+':'+pad(date.getMinutes());
+    var qc = 0; (p.data && p.data.sections||[]).forEach(function(s){qc += (s.questions||[]).length;});
+    return '<div class="paper-item'+(isCur?' current':'')+'" data-id="'+p.id+'">'+
+      '<div class="info">'+
+        '<div class="name">'+esc(p.name)+(isCur?'<span class="tag">当前</span>':'')+'</div>'+
+        '<div class="meta">'+qc+' 题 · 更新于 '+ds+'</div>'+
+      '</div>'+
+      '<div class="actions">'+
+        '<button data-pact="rename" data-pid="'+p.id+'">重命名</button>'+
+        '<button data-pact="delete" data-pid="'+p.id+'">删除</button>'+
+      '</div>'+
+    '</div>';
+  }).join('') || '<div class="empty">暂无试卷</div>';
+}
+
+$('#paperNameBtn').onclick = function(){
+  renderPapersList();
+  $('#papersModal').classList.add('show');
+};
+$('#btnPapersClose').onclick = function(){ $('#papersModal').classList.remove('show'); };
+
+$('#papersList').addEventListener('click', async function(e){
+  var ab = e.target.closest('button[data-pact]');
+  if(ab){
+    e.stopPropagation();
+    var act = ab.dataset.pact, id = ab.dataset.pid;
+    var p = papers.find(function(x){return x.id===id;}); if(!p) return;
+    if(act==='rename'){
+      var nn = prompt('重命名试卷：', p.name);
+      if(nn===null) return; nn = nn.trim(); if(!nn) return;
+      var r = await sb.from('papers').update({name:nn, updated_at:new Date().toISOString()}).eq('id',id);
+      if(r.error){ alert('重命名失败'); return; }
+      p.name = nn;
+      if(currentPaper && currentPaper.id===id){
+        currentPaper.name = nn; exam.title = nn;
+        $('#paperTitle').textContent = nn;
+        await sb.from('papers').update({data: Object.assign({}, exam, {title:nn})}).eq('id',id);
+      }
+      renderPapersList(); flash('已重命名');
+    } else if(act==='delete'){
+      if(papers.length<=1){ alert('至少保留一份试卷'); return; }
+      if(!confirm('确定删除「'+p.name+'」吗？')) return;
+      var rr = await sb.from('papers').delete().eq('id',id);
+      if(rr.error){ alert('删除失败'); return; }
+      papers = papers.filter(function(x){return x.id!==id;});
+      if(currentPaper && currentPaper.id===id){ await loadPapers(); }
+      renderPapersList();
+    }
+    return;
+  }
+  var it = e.target.closest('.paper-item');
+  if(it){
+    var pid = it.dataset.id;
+    if(currentPaper && currentPaper.id===pid){ $('#papersModal').classList.remove('show'); return; }
+    await saveCurrentPaper();
+    await openPaper(pid);
+    renderPapersList();
+    $('#papersModal').classList.remove('show');
+  }
+});
+
+$('#btnNewPaper').onclick = async function(){
+  var nn = prompt('新试卷名称：', '未命名试卷');
+  if(nn===null) return; nn = nn.trim() || '未命名试卷';
+  var blank = {
+    title: nn,
+    sections: [{ name:'一、题目', questions:[{stem:'（点击"导入试卷"粘贴题目文字）', answer:'', analysis:'', similar:[], homework:[]}] }],
+    blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' }
+  };
+  var r = await sb.from('papers').insert({
+    owner_id: currentUser.id, name: nn, data: blank,
+    saved_homework:null, sim_memory:{}, current_page:0, strokes:{}
+  }).select().single();
+  if(r.error){ alert('创建失败：'+r.error.message); return; }
+  papers.unshift(r.data);
+  await openPaper(r.data.id);
+  renderPapersList();
+  $('#papersModal').classList.remove('show');
+  setTimeout(function(){ $('#importText').value=''; $('#importModal').classList.add('show'); }, 200);
+};
+
+/* ================================================================
+   分享整卷
+   ================================================================ */
+$('#btnShareCurrent').onclick = async function(){
+  if(!currentPaper){ alert('请先打开一份试卷'); return; }
+  await saveCurrentPaper();
+
+  var r = await sb.from('shares').insert({
+    paper_id: currentPaper.id,
+    paper_name: currentPaper.name,
+    owner_id: currentUser.id,
+    owner_code: currentProfile.user_code,
+    snapshot: exam
+  }).select().single();
+  if(r.error){ alert('生成分享失败：'+r.error.message); return; }
+
+  var url = location.origin + location.pathname + '?share=' + r.data.id;
+  $('#shareLinkInput').value = url;
+  $('#shareMsg').className = 'msg';
+  $('#papersModal').classList.remove('show');
+  $('#shareModal').classList.add('show');
+};
+
+$('#btnCopyShare').onclick = function(){
+  var inp = $('#shareLinkInput');
+  inp.select(); inp.setSelectionRange(0, 99999);
+  try{
+    document.execCommand('copy');
+    showMsg('#shareMsg','已复制到剪贴板','ok');
+  }catch(e){
+    navigator.clipboard && navigator.clipboard.writeText(inp.value).then(function(){
+      showMsg('#shareMsg','已复制到剪贴板','ok');
+    });
+  }
+};
+$('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('show'); };
+
+/* ================================================================
+   分享单题（试卷 → 大题 → 题目）
+   ================================================================ */
+var pickQState = { paperId: null, si: 0 };
+
+$('#btnShareQuestion').onclick = function(){
+  if(!papers.length){ toast('还没有试卷'); return; }
+
+  var pSel = $('#pickQPaperSelect');
+  pSel.innerHTML = papers.map(function(p){
+    var qn = 0;
+    ((p.data && p.data.sections) || []).forEach(function(s){ qn += (s.questions||[]).length; });
+    var cur = (currentPaper && p.id === currentPaper.id) ? ' ★ 当前' : '';
+    return '<option value="'+p.id+'">'+esc(p.name)+cur+'（'+qn+' 题）</option>';
+  }).join('');
+  pSel.value = currentPaper ? currentPaper.id : papers[0].id;
+  pickQState.paperId = pSel.value;
+
+  refreshPickQSections();
+  $('#pickQuestionModal').classList.add('show');
+};
+
+$('#pickQPaperSelect').onchange = function(){
+  pickQState.paperId = this.value;
+  refreshPickQSections();
+};
+
+function refreshPickQSections(){
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  var secSel = $('#pickQSectionSelect');
+  var secs = (paper && paper.data && paper.data.sections) || [];
+
+  if(!secs.length){
+    secSel.innerHTML = '<option>（该试卷暂无大题）</option>';
+    pickQState.si = 0;
+    renderPickQuestionList(0);
+    return;
+  }
+  secSel.innerHTML = secs.map(function(s, i){
+    var n = (s.questions||[]).length;
+    return '<option value="'+i+'">'+esc(s.name || ('大题'+(i+1)))+'（'+n+' 题）</option>';
+  }).join('');
+  secSel.value = '0';
+  pickQState.si = 0;
+  renderPickQuestionList(0);
+}
+
+$('#pickQSectionSelect').onchange = function(){
+  pickQState.si = parseInt(this.value, 10) || 0;
+  renderPickQuestionList(pickQState.si);
+};
+
+function renderPickQuestionList(si){
+  var el = $('#pickQuestionList');
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections || !paper.data.sections[si]){
+    el.innerHTML = '<div class="empty">没有题目</div>';
+    return;
+  }
+  var sec = paper.data.sections[si];
+  var qs = sec.questions || [];
+  if(!qs.length){
+    el.innerHTML = '<div class="empty">该大题下暂无题目</div>';
+    return;
+  }
+  el.innerHTML = qs.map(function(q, qi){
+    var firstLine = String(q.stem||'').split('\n')[0];
+    var preview = firstLine.length > 48 ? firstLine.slice(0,48)+'…' : firstLine;
+    var figTag = (q.figure && q.figure.src)
+      ? '<span style="color:#2f7ad4;margin-left:8px;font-size:12px;flex-shrink:0">🖼 有图</span>'
+      : '';
+    return ''
+      + '<div class="hw-item" data-qi="'+qi+'" style="cursor:pointer">'
+      +   '<label style="cursor:pointer;width:100%">'
+      +     '<span><b>第 '+(qi+1)+' 题：</b>'+esc(preview)+'</span>'+figTag
+      +   '</label>'
+      + '</div>';
+  }).join('');
+}
+
+$('#pickQuestionList').onclick = async function(e){
+  var item = e.target.closest('.hw-item[data-qi]');
+  if(!item) return;
+  var si = pickQState.si;
+  var qi = parseInt(item.dataset.qi, 10);
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections[si]) return;
+  var sec = paper.data.sections[si];
+  var q = (sec.questions||[])[qi];
+  if(!q){ toast('题目不存在'); return; }
+
+  var payload = {
+    stem: q.stem || '',
+    answer: q.answer || '',
+    analysis: q.analysis || '',
+    similar: q.similar || [],
+    homework: q.homework || [],
+    figure: q.figure || null
+  };
+
+  $('#pickQuestionModal').classList.remove('show');
+
+  var r = await sb.from('shares').insert({
+    paper_id: paper.id,
+    paper_name: paper.name,
+    owner_id: currentUser.id,
+    owner_code: currentProfile.user_code,
+    snapshot: {
+      __kind: 'question',
+      question: payload,
+      section_name: sec.name,
+      paper_name: paper.name
+    }
+  }).select().single();
+  if(r.error){ alert('生成分享失败：'+r.error.message); return; }
+
+  var url = location.origin + location.pathname + '?share=' + r.data.id;
+  $('#shareLinkInput').value = url;
+  $('#shareMsg').className = 'msg';
+  $('#shareModal').classList.add('show');
+};
+
+$('#pickQuestionCancel').onclick = function(){
+  $('#pickQuestionModal').classList.remove('show');
+};
+
+/* ================================================================
+   接收试题（顶栏按钮入口）
+   ================================================================ */
+$('#btnReceiveQuestion').onclick = function(){
+  $('#receiveShareInput').value = '';
+  $('#receiveMsg').className = 'msg';
+  $('#receiveQuestionModal').classList.add('show');
+  setTimeout(function(){ $('#receiveShareInput').focus(); }, 80);
+};
+
+$('#receiveCancel').onclick = function(){
+  $('#receiveQuestionModal').classList.remove('show');
+};
+
+$('#receiveOk').onclick = async function(){
+  var v = $('#receiveShareInput').value.trim();
+  if(!v){ showMsg('#receiveMsg','请输入链接或分享 ID','err'); return; }
+
+  var m = v.match(/[?&]share=([^&\s]+)/);
+  var shareId = m ? decodeURIComponent(m[1]) : v;
+  if(!shareId){ showMsg('#receiveMsg','链接里没找到分享 ID','err'); return; }
+
+  this.disabled = true;
+  var old = this.textContent;
+  this.textContent = '接收中…';
+
+  try{
+    var result = await receiveShareById(shareId);
+    if(result && result.ok){
+      $('#receiveQuestionModal').classList.remove('show');
+    }
+  }catch(e){
+    showMsg('#receiveMsg', '接收失败：'+(e.message||'未知错误'), 'err');
+  }
+  this.disabled = false;
+  this.textContent = old;
+};
+
+/* ================================================================
+   管理员面板
+   ================================================================ */
+$('#btnAdminPanel').onclick = async function(){
+  if(!currentProfile || !currentProfile.is_admin) return;
+  $('#adminModal').classList.add('show');
+
+  var sr = await sb.from('shares').select('id', {count:'exact', head:true});
+  var ar = await sb.from('share_accepts').select('*', {count:'exact'}).order('accepted_at',{ascending:false}).limit(500);
+
+  var totalShares = sr.count || 0;
+  var accepts = ar.data || [];
+  var distinctUsers = {};
+  accepts.forEach(function(x){ distinctUsers[x.accepted_by_code] = 1; });
+  var uniqueUsers = Object.keys(distinctUsers).length;
+
+  $('#adminStats').innerHTML =
+    '<div class="stat-card"><div class="num">'+totalShares+'</div><div class="lbl">已生成分享总数</div></div>'+
+    '<div class="stat-card"><div class="num">'+accepts.length+'</div><div class="lbl">已被接受次数</div></div>'+
+    '<div class="stat-card"><div class="num">'+uniqueUsers+'</div><div class="lbl">接受过的用户数</div></div>';
+
+  $('#adminTbody').innerHTML = accepts.map(function(x){
+    var d = new Date(x.accepted_at);
+    var pad = function(n){return n<10?'0'+n:''+n;};
+    var ds = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    return '<tr><td>'+ds+'</td><td>'+esc(x.paper_name||'')+'</td><td>'+esc(x.owner_code||'')+'</td><td>'+esc(x.accepted_by_code||'')+'</td></tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#98a1b5;padding:20px">暂无记录</td></tr>';
+};
+$('#btnAdminClose').onclick = function(){ $('#adminModal').classList.remove('show'); };
+
+/* ================================================================
+   图形识别 & 批量分配
+   ================================================================ */
+var assignItems = [];
+
+function openFigEditor(sourceCanvas){
+  FigEditor.load(sourceCanvas);
+  $('#figEditorModal').classList.add('show');
+}
+
+function flattenQuestionList(){
+  var arr = [];
+  exam.sections.forEach(function(sec,si){
+    sec.questions.forEach(function(q,qi){
+      arr.push({
+        si: si, qi: qi,
+        label: sec.name + ' · 第 ' + (qi+1) + ' 题：' + q.stem.replace(/\s+/g,' ').slice(0, 32)
+      });
+    });
+  });
+  return arr;
+}
+
+function showAssignModal(){
+  var selected = FigEditor.getSelected();
+  if(!selected.length){ toast('请至少勾选一个图形'); return; }
+
+  assignItems = selected.map(function(r){
+    var c = cropRegion(FigEditor.canvas, r, 600);
+    return { dataUrl: c.toDataURL('image/png') };
+  });
+
+  var qList = flattenQuestionList();
+  var listEl = $('#assignList');
+  listEl.innerHTML = '';
+
+  assignItems.forEach(function(item, i){
+    var row = document.createElement('div');
+    row.className = 'assign-row';
+
+    var prev = document.createElement('div');
+    prev.className = 'fig-preview';
+    var img = document.createElement('img');
+    img.src = item.dataUrl;
+    prev.appendChild(img);
+    row.appendChild(prev);
+
+    var arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '→';
+    row.appendChild(arrow);
+
+    var sel = document.createElement('select');
+    var defaultIdx = Math.min(i, qList.length - 1);
+    qList.forEach(function(q, idx){
+      var opt = document.createElement('option');
+      opt.value = q.si + '-' + q.qi;
+      opt.textContent = q.label;
+      if(idx === defaultIdx) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    row.appendChild(sel);
+
+    listEl.appendChild(row);
+  });
+
+  $('#figEditorModal').classList.remove('show');
+  $('#assignModal').classList.add('show');
+}
+
+function confirmAssign(){
+  var rows = $$('#assignList .assign-row');
+  var insertCount = 0;
+
+  rows.forEach(function(row, i){
+    var sel = row.querySelector('select');
+    if(!sel) return;
+    var parts = sel.value.split('-');
+    var si = +parts[0], qi = +parts[1];
+    var q = exam.sections[si].questions[qi];
+    if(!q) return;
+
+    q.figure = {
+      src: assignItems[i].dataUrl,
+      width: 180,
+      side: 'right'
+    };
+    insertCount++;
+  });
+
+  $('#assignModal').classList.remove('show');
+  renderPaper();
+  showPageInternal(state.page);
+  requestAnimationFrame(function(){
+    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+  });
+  scheduleSave();
+
+  toast('已插入 ' + insertCount + ' 个图形');
+  assignItems = [];
+}
+
+async function handleFigureFile(file){
+  if(!file || !file.type.startsWith('image/')){ toast('请选择图片文件'); return; }
+  try{
+    var img = await fileToImage(file);
+    var canvas = imageToCanvas(img);
+    openFigEditor(canvas);
+  }catch(err){
+    console.error(err);
+    toast(err.message || '处理失败');
+  }
+}
+
+/* ================================================================
+   图形检测算法
+   ================================================================ */
+function otsuThreshold(hist, total){
+  var sum = 0;
+  for(var i=0;i<256;i++) sum += i*hist[i];
+  var sumB=0, wB=0, maxVar=0, th=127;
+  for(var i=0;i<256;i++){
+    wB += hist[i];
+    if(!wB) continue;
+    var wF = total - wB;
+    if(!wF) break;
+    sumB += i*hist[i];
+    var mB = sumB/wB;
+    var mF = (sum-sumB)/wF;
+    var v = wB*wF*(mB-mF)*(mB-mF);
+    if(v>maxVar){ maxVar=v; th=i; }
+  }
+  return th;
+}
+
+function detectRegions(sourceCanvas){
+  var MAX_ANALYZE = 800;
+  var scale = Math.min(1, MAX_ANALYZE / Math.max(sourceCanvas.width, sourceCanvas.height));
+  var W = Math.max(1, Math.round(sourceCanvas.width * scale));
+  var H = Math.max(1, Math.round(sourceCanvas.height * scale));
+
+  var ac = document.createElement('canvas');
+  ac.width = W; ac.height = H;
+  var actx = ac.getContext('2d', { willReadFrequently: true });
+  actx.drawImage(sourceCanvas, 0, 0, W, H);
+  var data = actx.getImageData(0, 0, W, H).data;
+
+  var gray = new Uint8Array(W*H);
+  var hist = new Int32Array(256);
+  for(var i=0;i<W*H;i++){
+    var v = (data[i*4]*0.299 + data[i*4+1]*0.587 + data[i*4+2]*0.114) | 0;
+    gray[i] = v; hist[v]++;
+  }
+  var th = otsuThreshold(hist, W*H);
+  var bin = new Uint8Array(W*H);
+  for(var i=0;i<W*H;i++) bin[i] = gray[i] < th ? 1 : 0;
+
+  var rowSum = new Int32Array(H);
+  for(var y=0;y<H;y++){
+    var s = 0, base = y*W;
+    for(var x=0;x<W;x++) s += bin[base+x];
+    rowSum[y] = s;
+  }
+
+  var rowBlankTh = Math.max(1, Math.round(W * 0.004));
+  var rowBlocks = [];
+  var rs = -1;
+  for(var y=0;y<H;y++){
+    if(rowSum[y] > rowBlankTh){ if(rs===-1) rs=y; }
+    else if(rs!==-1){
+      if(y-rs >= Math.max(3, H*0.015)) rowBlocks.push([rs, y-1]);
+      rs = -1;
+    }
+  }
+  if(rs!==-1) rowBlocks.push([rs, H-1]);
+
+  var regions = [];
+  for(var b=0;b<rowBlocks.length;b++){
+    var y1 = rowBlocks[b][0], y2 = rowBlocks[b][1];
+    var h = y2-y1+1;
+    var colSum = new Int32Array(W);
+    for(var x=0;x<W;x++){
+      var s2=0;
+      for(var y=y1;y<=y2;y++) s2 += bin[y*W+x];
+      colSum[x] = s2;
+    }
+    var colBlankTh = Math.max(1, Math.round(h * 0.02));
+    var colBlocks = [];
+    var cs = -1;
+    for(var x=0;x<W;x++){
+      if(colSum[x] > colBlankTh){ if(cs===-1) cs=x; }
+      else if(cs!==-1){ colBlocks.push([cs, x-1]); cs=-1; }
+    }
+    if(cs!==-1) colBlocks.push([cs, W-1]);
+
+    var merged = [];
+    for(var k=0;k<colBlocks.length;k++){
+      var cb = colBlocks[k];
+      if(!merged.length){ merged.push([cb[0], cb[1]]); continue; }
+      var last = merged[merged.length-1];
+      if(cb[0] - last[1] - 1 < Math.max(2, W*0.015)) last[1] = cb[1];
+      else merged.push([cb[0], cb[1]]);
+    }
+
+    for(var m=0;m<merged.length;m++){
+      var x1 = merged[m][0], x2 = merged[m][1];
+      var w = x2-x1+1;
+      if(w < W*0.05 || h < H*0.025) continue;
+      if(h > H*0.75) continue;
+      var ratio = w/h;
+      if(ratio > 12 || ratio < 0.08) continue;
+      var c = 0;
+      for(var y=y1;y<=y2;y++){
+        var base2 = y*W;
+        for(var x=x1;x<=x2;x++) c += bin[base2+x];
+      }
+      var density = c / (w*h);
+      if(density < 0.03) continue;
+      if(h < H*0.06 && density > 0.28 && ratio > 4) continue;
+
+      regions.push({
+        x: Math.round(x1/scale), y: Math.round(y1/scale),
+        w: Math.round(w/scale), h: Math.round(h/scale)
+      });
+    }
+  }
+
+  regions.sort(function(a,b){ return b.w*b.h - a.w*a.h; });
+  var kept = [];
+  for(var i=0;i<regions.length;i++){
+    var r = regions[i];
+    var dup = false;
+    for(var j=0;j<kept.length;j++){
+      var kk = kept[j];
+      var ix = Math.max(0, Math.min(r.x+r.w, kk.x+kk.w) - Math.max(r.x, kk.x));
+      var iy = Math.max(0, Math.min(r.y+r.h, kk.y+kk.h) - Math.max(r.y, kk.y));
+      var inter = ix*iy;
+      var smaller = Math.min(r.w*r.h, kk.w*kk.h);
+      if(smaller>0 && inter/smaller > 0.8){ dup = true; break; }
+    }
+    if(!dup) kept.push(r);
+    if(kept.length >= 15) break;
+  }
+  return kept;
+}
+
+function cropRegion(sourceCanvas, r, maxW){
+  maxW = maxW || 400;
+  var s = Math.min(1, maxW / r.w);
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(r.w * s));
+  c.height = Math.max(1, Math.round(r.h * s));
+  c.getContext('2d').drawImage(sourceCanvas, r.x, r.y, r.w, r.h, 0, 0, c.width, c.height);
+  return c;
+}
+
+function fileToImage(file){
+  return new Promise(function(resolve, reject){
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function(){ URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('图片读取失败')); };
+    img.src = url;
+  });
+}
+function imageToCanvas(img, maxSide){
+  maxSide = maxSide || 1600;
+  var scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(img.width * scale));
+  c.height = Math.max(1, Math.round(img.height * scale));
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  return c;
+}
+
+/* ================================================================
+   图形编辑器
+   ================================================================ */
+var FigEditor = {
+  canvas: null,
+  regions: [],
+  activeId: null,
+  nextId: 1,
+  drag: null,
+  bound: false,
+
+  load: function(sourceCanvas){
+    this.canvas = sourceCanvas;
+    this.regions = [];
+    this.activeId = null;
+    this.nextId = 1;
+    this.drag = null;
+
+    var canvasEl = document.getElementById('figCanvas');
+    canvasEl.width = sourceCanvas.width;
+    canvasEl.height = sourceCanvas.height;
+    canvasEl.getContext('2d').drawImage(sourceCanvas, 0, 0);
+
+    var detected = detectRegions(sourceCanvas);
+    this.regions = detected.map(function(r){
+      return { id: FigEditor.nextId++, x:r.x, y:r.y, w:r.w, h:r.h, selected:false };
+    });
+
+    if(!this.bound){ this.bindEvents(); this.bound = true; }
+    this.render();
+    this.updateUI();
+  },
+
+  toImageCoords: function(clientX, clientY){
+    var rect = this.canvas.getBoundingClientRect();
+    var sx = this.canvas.width / rect.width;
+    var sy = this.canvas.height / rect.height;
+    return {
+      x: clamp((clientX - rect.left) * sx, 0, this.canvas.width),
+      y: clamp((clientY - rect.top) * sy, 0, this.canvas.height)
+    };
+  },
+
+  toPercent: function(r){
+    return {
+      left: (r.x / this.canvas.width) * 100 + '%',
+      top: (r.y / this.canvas.height) * 100 + '%',
+      width: (r.w / this.canvas.width) * 100 + '%',
+      height: (r.h / this.canvas.height) * 100 + '%'
+    };
+  },
+
+  render: function(){
+    var stage = document.getElementById('figStage');
+    stage.querySelectorAll('.fig-region').forEach(function(el){ el.remove(); });
+
+    var self = this;
+    this.regions.forEach(function(r){
+      var el = document.createElement('div');
+      el.className = 'fig-region' + (r.selected ? ' selected' : '');
+      el.dataset.id = r.id;
+      var p = self.toPercent(r);
+      el.style.left = p.left; el.style.top = p.top;
+      el.style.width = p.width; el.style.height = p.height;
+
+      var check = document.createElement('div');
+      check.className = 'rg-check';
+      check.textContent = '✓';
+      check.title = '勾选/取消';
+      el.appendChild(check);
+
+      ['nw','n','ne','e','se','s','sw','w'].forEach(function(h){
+        var hd = document.createElement('div');
+        hd.className = 'h ' + h;
+        hd.dataset.h = h;
+        el.appendChild(hd);
+      });
+      stage.appendChild(el);
+    });
+    this.renderThumbs();
+  },
+
+  renderThumbs: function(){
+    var thumbs = document.getElementById('figThumbs');
+    thumbs.innerHTML = '';
+    var self = this;
+    if(!this.regions.length){
+      thumbs.innerHTML = '<div class="fig-empty">未检测到明显图形，请在图上拖拽手动框选。</div>';
+      return;
+    }
+    this.regions.forEach(function(r){
+      var c = cropRegion(self.canvas, r, 138);
+      var div = document.createElement('div');
+      div.className = 'fig-thumb' + (r.selected ? ' selected' : '');
+      div.dataset.id = r.id;
+      div.appendChild(c);
+
+      var tag = document.createElement('div');
+      tag.className = 'thumb-tag';
+      tag.textContent = Math.round(r.w) + ' × ' + Math.round(r.h);
+      div.appendChild(tag);
+
+      var check = document.createElement('div');
+      check.className = 'thumb-check';
+      check.textContent = '✓';
+      div.appendChild(check);
+
+      div.onclick = function(e){
+        e.stopPropagation();
+        self.toggleSelect(r.id);
+      };
+      thumbs.appendChild(div);
+    });
+  },
+
+  toggleSelect: function(id){
+    var r = this.regions.find(function(x){ return x.id === id; });
+    if(!r) return;
+    r.selected = !r.selected;
+    this.render();
+    this.updateUI();
+  },
+
+  setActive: function(id){
+    this.activeId = id;
+    this.render();
+    this.updateUI();
+  },
+
+  updateUI: function(){
+    var selCount = this.regions.filter(function(r){ return r.selected; }).length;
+    document.getElementById('figCountBadge').textContent =
+      '已勾选 ' + selCount + ' / 共 ' + this.regions.length + ' 个';
+    document.getElementById('figEditorConfirm').disabled = selCount === 0;
+  },
+
+  getSelected: function(){
+    return this.regions.filter(function(r){ return r.selected; });
+  },
+
+  bindEvents: function(){
+    var stage = document.getElementById('figStage');
+    var self = this;
+
+    stage.addEventListener('pointerdown', function(e){
+      if(e.button !== 0) return;
+
+      if(e.target.classList.contains('rg-check')){
+        var regEl = e.target.closest('.fig-region');
+        if(regEl){ self.toggleSelect(+regEl.dataset.id); }
+        e.preventDefault(); e.stopPropagation();
+        return;
+      }
+
+      var handleEl = e.target.closest('.h');
+      var regionEl = e.target.closest('.fig-region');
+
+      if(handleEl && regionEl){
+        var id = +regionEl.dataset.id;
+        var orig = self.regions.find(function(r){ return r.id === id; });
+        if(!orig) return;
+        self.activeId = id;
+        self.drag = {
+          type:'resize', id:id, handle:handleEl.dataset.h,
+          startX:e.clientX, startY:e.clientY,
+          orig:{ x:orig.x, y:orig.y, w:orig.w, h:orig.h }
+        };
+      }
+      else if(regionEl){
+        var id2 = +regionEl.dataset.id;
+        var orig2 = self.regions.find(function(r){ return r.id === id2; });
+        if(!orig2) return;
+        self.activeId = id2;
+        self.drag = {
+          type:'move', id:id2,
+          startX:e.clientX, startY:e.clientY,
+          orig:{ x:orig2.x, y:orig2.y, w:orig2.w, h:orig2.h }
+        };
+      }
+      else {
+        var pt = self.toImageCoords(e.clientX, e.clientY);
+        var newId = self.nextId++;
+        self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
+        self.activeId = newId;
+        self.drag = {
+          type:'create', id:newId,
+          startX:e.clientX, startY:e.clientY,
+          orig:{ x:pt.x, y:pt.y, w:0, h:0 }
+        };
+        self.render(); self.updateUI();
+      }
+
+      try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+      e.preventDefault(); e.stopPropagation();
+    });
+
+    stage.addEventListener('pointermove', function(e){
+      if(!self.drag || !self.canvas) return;
+      var r = self.regions.find(function(x){ return x.id === self.drag.id; });
+      if(!r) return;
+      var orig = self.drag.orig;
+
+      if(self.drag.type === 'move'){
+        var p1 = self.toImageCoords(self.drag.startX, self.drag.startY);
+        var p2 = self.toImageCoords(e.clientX, e.clientY);
+        r.x = clamp(orig.x + (p2.x - p1.x), 0, self.canvas.width - orig.w);
+        r.y = clamp(orig.y + (p2.y - p1.y), 0, self.canvas.height - orig.h);
+      } else if(self.drag.type === 'create'){
+        var p2c = self.toImageCoords(e.clientX, e.clientY);
+        r.x = Math.min(orig.x, p2c.x);
+        r.y = Math.min(orig.y, p2c.y);
+        r.w = Math.abs(p2c.x - orig.x);
+        r.h = Math.abs(p2c.y - orig.y);
+      } else if(self.drag.type === 'resize'){
+        var p2r = self.toImageCoords(e.clientX, e.clientY);
+        var p1r = self.toImageCoords(self.drag.startX, self.drag.startY);
+        var dx = p2r.x - p1r.x, dy = p2r.y - p1r.y;
+        var h = self.drag.handle;
+        var x1 = orig.x, y1 = orig.y;
+        var x2 = orig.x + orig.w, y2 = orig.y + orig.h;
+        if(h.indexOf('n')>=0) y1 = orig.y + dy;
+        if(h.indexOf('s')>=0) y2 = orig.y + orig.h + dy;
+        if(h.indexOf('w')>=0) x1 = orig.x + dx;
+        if(h.indexOf('e')>=0) x2 = orig.x + orig.w + dx;
+        if(x1 > x2){ var t = x1; x1 = x2; x2 = t; }
+        if(y1 > y2){ var t2 = y1; y1 = y2; y2 = t2; }
+        x1 = clamp(x1, 0, self.canvas.width);
+        x2 = clamp(x2, 0, self.canvas.width);
+        y1 = clamp(y1, 0, self.canvas.height);
+        y2 = clamp(y2, 0, self.canvas.height);
+        r.x = x1; r.y = y1; r.w = x2 - x1; r.h = y2 - y1;
+      }
+      self.render();
+    });
+
+    function finish(e){
+      if(!self.drag) return;
+      var r = self.regions.find(function(x){ return x.id === self.drag.id; });
+      if(r && (r.w < 12 || r.h < 12)){
+        self.regions = self.regions.filter(function(x){ return x.id !== r.id; });
+        if(self.activeId === r.id) self.activeId = null;
+        toast('选区太小，已取消');
+      }
+      self.drag = null;
+      self.render(); self.updateUI();
+      try{ stage.releasePointerCapture(e.pointerId); }catch(_){}
+    }
+    stage.addEventListener('pointerup', finish);
+    stage.addEventListener('pointercancel', finish);
+
+    document.addEventListener('keydown', function(e){
+      if(!document.getElementById('figEditorModal').classList.contains('show')) return;
+      var a = document.activeElement;
+      if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
+      if((e.key === 'Delete' || e.key === 'Backspace') && self.activeId){
+        e.preventDefault();
+        self.regions = self.regions.filter(function(r){ return r.id !== self.activeId; });
+        self.activeId = null;
+        self.render(); self.updateUI();
+      }
+    });
+  },
+
+  clearAll: function(){
+    this.regions = []; this.activeId = null;
+    this.render(); this.updateUI();
+  },
+  selectAll: function(){
+    this.regions = [{ id:this.nextId++, x:0, y:0, w:this.canvas.width, h:this.canvas.height, selected:true }];
+    this.activeId = this.regions[0].id;
+    this.render(); this.updateUI();
+  }
+};
+
+/* ================================================================
+   布置作业
+   ================================================================ */
+function openHwModal(){
+  var html = '';
+  exam.sections.forEach(function(sec,si){
+    sec.questions.forEach(function(q,qi){
+      var ss = sec.name.replace(/^[一二三四五六七八九十]+、/,'');
+      var pool = (q.homework||[]).length;
+      var tip = pool ? '（题库 '+pool+' 题）' : '（无题库，将使用原题）';
+      html += '<div class="hw-item">'+
+        '<label><input type="checkbox" value="'+si+'-'+qi+'" checked><span>'+esc(ss)+' 第'+(qi+1)+'题 <em style="color:#98a1b5;font-style:normal">'+tip+'</em></span></label>'+
+        '<select class="hw-count"><option value="1">1 题</option><option value="2" selected>2 题</option><option value="3">3 题</option></select>'+
+        '</div>';
+    });
+  });
+  $('#hwList').innerHTML = html || '<div class="empty">暂无题目</div>';
+  $('#hwModal').classList.add('show');
+}
+
+function buildHomeworkHTML(items){
+  var flat = [];
+  items.forEach(function(it){
+    var q = exam.sections[it.si].questions[it.qi];
+    var pool = q.homework||[];
+    if(!pool.length) flat.push({stem:q.stem,answer:q.answer,analysis:q.analysis});
+    else { var n = Math.min(it.count, pool.length); for(var i=0;i<n;i++) flat.push(pool[i]); }
+  });
+  return flat.map(function(h,i){
+    return '<div class="hw-q">'+
+      '<div class="stem">'+(i+1)+'. '+esc(h.stem)+'</div>'+
+      '<div class="btns"><button data-hwq="toggle">讲解</button></div>'+
+      '<div class="panel hw-explain"><div class="line"><b>答案：</b>'+esc(h.answer||'—')+'</div><div class="line"><b>解析：</b>'+esc(h.analysis||'—')+'</div></div>'+
+      '</div>';
+  }).join('') || '<div class="sec-title">作业单</div><div class="empty">未选择题目</div>';
+}
+
+function showHomeworkView(html){
+  $('#hwContent').innerHTML = html;
+  hwAllOn = false;
+  var b = $('#btnHwExplainAll'); b.classList.remove('active'); b.textContent = '作业讲解';
+  $('#paperView').style.display = 'none';
+  $('#tabs').style.display = 'none';
+  $('#hwView').style.display = '';
+  window.scrollTo(0,0);
+}
+function generateHomework(items){
+  savedHomeworkItems = items.slice();
+  showHomeworkView(buildHomeworkHTML(items));
+  scheduleSave();
+}
+function showSavedHomework(){ showHomeworkView(buildHomeworkHTML(savedHomeworkItems)); }
+
+$('#hwContent').addEventListener('click', function(e){
+  var b = e.target.closest('button[data-hwq]'); if(!b) return;
+  var w = b.closest('.hw-q'), p = w.querySelector('.panel.hw-explain');
+  var on = p.classList.toggle('show'); b.classList.toggle('active', on);
+});
+$('#btnHwExplainAll').onclick = function(){
+  hwAllOn = !hwAllOn;
+  $$('#hwContent .hw-explain').forEach(function(p){p.classList.toggle('show',hwAllOn);});
+  $$('#hwContent button[data-hwq]').forEach(function(b){b.classList.toggle('active',hwAllOn);});
+  this.classList.toggle('active',hwAllOn);
+  this.textContent = hwAllOn ? '隐藏讲解' : '作业讲解';
+};
+$('#btnHwBack').onclick = function(){
+  $('#hwView').style.display = 'none';
+  $('#paperView').style.display = '';
+  $('#tabs').style.display = '';
+  showPage(state.page);
+};
+$('#btnHwRegenerate').onclick = function(){ openHwModal(); };
+$('#btnHwCancel').onclick = function(){ $('#hwModal').classList.remove('show'); };
+$('#btnHwAll').onclick = function(){ $$('#hwList input[type=checkbox]').forEach(function(i){i.checked=true;}); };
+$('#btnHwNone').onclick = function(){ $$('#hwList input[type=checkbox]').forEach(function(i){i.checked=false;}); };
+
+$('#btnHwGen').onclick = function(){
+  var picked = [];
+  $$('#hwList .hw-item').forEach(function(it){
+    var cb = it.querySelector('input[type=checkbox]'); if(!cb||!cb.checked) return;
+    var sel = it.querySelector('.hw-count');
+    var c = sel ? (parseInt(sel.value,10)||1) : 1;
+    var p = cb.value.split('-');
+    picked.push({ si:+p[0], qi:+p[1], count:c });
+  });
+  if(!picked.length){ alert('请至少选择一道题'); return; }
+  picked.sort(function(a,b){return a.si-b.si||a.qi-b.qi;});
+  generateHomework(picked);
+  $('#hwModal').classList.remove('show');
+};
+
+/* ================================================================
+   导入解析
+   ================================================================ */
+function parsePaperText(text){
+  var result = { title:'试卷讲解', sections:[] };
+  var curSec=null, curQ=null, block=null, lastField=null, lastNum=0;
+  var lines = String(text||'').split(/\r?\n/);
+  function ensureSec(){ if(!curSec){ curSec={name:'题目',questions:[]}; result.sections.push(curSec); } return curSec; }
+  function startQ(stem){ ensureSec(); curQ={stem:(stem||'').trim(),answer:'',analysis:'',similar:[],homework:[]}; curSec.questions.push(curQ); block=null; lastField='stem'; }
+  var RE_NUM = /^(?:第\s*(\d{1,3})\s*[题问]|[(（]\s*(\d{1,3})\s*[)）]|(\d{1,3})\s*[.、．)）]\s*)([\s\S]*)$/;
+  var RE_ANS = /^[【\[]?\s*(?:答案|参考答案|答)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_ANA = /^[【\[]?\s*(?:解析|分析|解答|解)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_SIM = /^[-*·•]?\s*(?:举一反三|变式训练|变式练习|变式)\s*[:：]?\s*$/;
+  var RE_HW  = /^[-*·•]?\s*(?:作业|课后作业|配套作业|练习)\s*[:：]?\s*$/;
+  var RE_SP  = /^(?:##|###|[【\[]?\s*(?:答案|参考答案|解析|分析|解答|答|解|举一反三|变式|作业|练习)\s*[】\]]?\s*[:：]|第\s*\d+\s*[题问]|[(（]\s*\d+\s*[)）]|\d{1,3}\s*[.、．)）])/;
+
+  for(var i=0;i<lines.length;i++){
+    var line = lines[i].trim(); if(!line) continue;
+    if(/^#\s+/.test(line) && !/^##/.test(line)){ result.title = line.replace(/^#\s+/,'').trim(); block=null; lastField=null; continue; }
+    var mSec = line.match(/^([一二三四五六七八九十]+)\s*[、．.]\s*(.+)$/);
+    if(mSec){ curSec={name:line.trim(),questions:[]}; result.sections.push(curSec); curQ=null; block=null; lastField=null; lastNum=0; continue; }
+    if(/^##\s+/.test(line) && !/^###/.test(line)){ curSec={name:line.replace(/^##\s+/,'').trim(),questions:[]}; result.sections.push(curSec); curQ=null; block=null; lastField=null; lastNum=0; continue; }
+    if(/^###\s+/.test(line)){ startQ(line.replace(/^###\s+/,'')); continue; }
+    if(RE_SIM.test(line)){ if(curQ) block='similar'; lastField=null; continue; }
+    if(RE_HW.test(line)){ if(curQ) block='homework'; lastField=null; continue; }
+    if(block && curQ){
+      if(!RE_SP.test(line)){
+        var body = line.replace(/^[-*·•]\s*/,'').trim();
+        if(body){
+          var parts = body.split('|').map(function(s){return s.trim();});
+          var item = { stem: parts[0].replace(/^(?:变式|举一反三|作业|练习)\s*\d*\s*[:：]?\s*/,''), answer:parts[1]||'', analysis:parts.slice(2).join(' | ')||'' };
+          if(block==='similar') curQ.similar.push(item); else curQ.homework.push(item);
+        }
+        continue;
+      }
+      block = null;
+    }
+    var mA = line.match(RE_ANS);
+    if(mA){ if(!curQ) startQ(''); curQ.answer = mA[1].trim(); lastField='answer'; block=null; continue; }
+    var mAn = line.match(RE_ANA);
+    if(mAn){ if(!curQ) startQ(''); curQ.analysis = mAn[1].trim(); lastField='analysis'; block=null; continue; }
+    var mN = line.match(RE_NUM);
+    if(mN){
+      var num = parseInt(mN[1]||mN[2]||mN[3],10);
+      if(lastNum===0 || num===lastNum+1){ lastNum=num; startQ(mN[4]||''); continue; }
+    }
+    if(!curQ){ startQ(line); continue; }
+    if(lastField==='answer') curQ.answer += '\n'+line;
+    else if(lastField==='analysis') curQ.analysis += '\n'+line;
+    else curQ.stem += '\n'+line;
+  }
+  result.sections.forEach(function(s){
+    s.questions = s.questions.filter(function(q){
+      return q.stem||q.answer||q.analysis||(q.similar&&q.similar.length)||(q.homework&&q.homework.length);
+    });
+  });
+  result.sections = result.sections.filter(function(s){ return s.questions.length>0; });
+  result.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
+  return result;
+}
+
+/* ================================================================
+   事件绑定 & 启动
+   ================================================================ */
+(function init(){
+  var fileInput = $('#fileInput');
+  $('#btnAddFigure').onclick = function(){ fileInput.click(); };
+  fileInput.onchange = function(e){
+    var f = e.target.files && e.target.files[0];
+    fileInput.value = '';
+    if(f) handleFigureFile(f);
+  };
+
+  $('#btnBlackboard').onclick = enterBlackboard;
+  $('#bbBack').onclick = exitBlackboard;
+  $('#bbUndo').onclick = bbUndo;
+  $('#bbClear').onclick = bbClear;
+  $('#bbAddPage').onclick = bbAddPage;
+  $('#bbDelPage').onclick = bbDelPage;
+
+  $('#bbTabs').addEventListener('click', function(e){
+    var t = e.target.closest('.bb-tab'); if(!t) return;
+    bbSwitchPage(+t.dataset.i);
+  });
+
+  $$('.bb-swatch').forEach(function(b){
+    b.onclick = function(){
+      var isE = b.dataset.erase === '1';
+      bbState.erase = isE;
+      if(!isE) bbState.color = b.dataset.color;
+      $$('.bb-swatch').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+    };
+  });
+  $$('.bb-size').forEach(function(b){
+    b.onclick = function(){
+      bbState.size = +b.dataset.size;
+      $$('.bb-size').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+    };
+  });
+  $$('.bb-theme').forEach(function(b){
+    b.onclick = function(){
+      ensureBlackboard().theme = b.dataset.theme;
+      bbApplyTheme();
+      scheduleSave();
+    };
+  });
+
+  $('#figEditorCancel').onclick = function(){
+    $('#figEditorModal').classList.remove('show');
+    FigEditor.clearAll();
+  };
+  $('#figEditorConfirm').onclick = showAssignModal;
+  $('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
+  $('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
+
+  $('#assignCancel').onclick = function(){
+    $('#assignModal').classList.remove('show');
+    $('#figEditorModal').classList.add('show');
+  };
+  $('#assignConfirm').onclick = confirmAssign;
+
+  $('#btnHomework').onclick = function(){
+    if(savedHomeworkItems && savedHomeworkItems.length) showSavedHomework();
+    else openHwModal();
+  };
+
+  $('#btnImport').onclick = function(){
+    $('#importText').value = '';
+    $('#importModal').classList.add('show');
+  };
+  $('#btnImportCancel').onclick = function(){ $('#importModal').classList.remove('show'); };
+  $('#btnImportDemo').onclick = function(){
+    $('#importText').value = [
+      '# 七年级数学 · 有理数及其运算',
+      '',
+      '一、选择题',
+      '',
+      '1. 计算 (-3) + (-5) 的结果是（　　）',
+      'A. -8　　B. -2　　C. 2　　D. 8',
+      '答案：A',
+      '解析：同号两数相加，取相同的符号，并把绝对值相加。',
+      '举一反三：',
+      '- 计算 (-7) + (-4) 的结果 | -11 | 同号相加，取负号，绝对值相加。',
+      '- 计算 (-6) + 9 的结果 | 3 | 异号相加，取绝对值较大的加数的符号。',
+      '作业：',
+      '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。',
+      '- 计算 (-4) + 7 的结果 | 3 | 异号相加，取正号。',
+      '',
+      '二、填空题',
+      '',
+      '1. -5 的相反数是 ______，绝对值是 ______。',
+      '答案：5；5',
+      '解析：只有符号不同的两个数互为相反数；绝对值表示数轴上该点到原点的距离。'
+    ].join('\n');
+  };
+  $('#btnImportOk').onclick = async function(){
+    var txt = $('#importText').value.trim();
+    if(!txt){ alert('请先粘贴试卷文字内容'); return; }
+    var parsed = parsePaperText(txt);
+    if(!parsed.sections.length){ alert('没有识别到题目，请检查格式'); return; }
+    var bb = ensureBlackboard();
+    exam = parsed;
+    exam.blackboard = bb;
+    simMemory = {};
+    savedHomeworkItems = null;
+    strokes.clear();
+    state.page = 0;
+    currentPaper.name = exam.title || currentPaper.name;
+    $('#importModal').classList.remove('show');
+    renderTabs(); renderPaper(); showPageInternal(0);
+    await saveCurrentPaper();
+    await loadPapers(currentPaper.id);
+    window.scrollTo(0,0);
+  };
+
+  $$('.modal-mask').forEach(function(m){
+    m.addEventListener('click', function(e){
+      if(e.target === m){
+        if(m.id === 'authModal') return;
+        m.classList.remove('show');
+        if(m.id === 'figEditorModal') FigEditor.clearAll();
+      }
+    });
+  });
+
+  var overlay = $('#dragOverlay');
+  var dragDepth = 0;
+  window.addEventListener('dragenter', function(e){
+    e.preventDefault(); dragDepth++;
+    if(dragDepth === 1) overlay.classList.add('show');
+  });
+  window.addEventListener('dragover', function(e){ e.preventDefault(); });
+  window.addEventListener('dragleave', function(e){
+    e.preventDefault(); dragDepth--;
+    if(dragDepth <= 0){ dragDepth = 0; overlay.classList.remove('show'); }
+  });
+  window.addEventListener('drop', function(e){
+    e.preventDefault(); dragDepth = 0;
+    overlay.classList.remove('show');
+    var f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if(f) handleFigureFile(f);
+  });
+
+  window.addEventListener('resize', function(){
+    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+  });
+
+  window.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && document.getElementById('bbView').classList.contains('show')){
+      var anyModal = $$('.modal-mask').some(function(m){ return m.classList.contains('show'); });
+      if(!anyModal) exitBlackboard();
+    }
+  });
+
+  (async function bootstrap(){
+    var s = await sb.auth.getSession();
+    if(s.data && s.data.session && s.data.session.user){
+      try{ await afterLogin(); }catch(e){ console.error(e); $('#authModal').classList.add('show'); }
+    } else {
+      $('#authModal').classList.add('show');
+    }
+    sb.auth.onAuthStateChange(function(evt){
+      if(evt==='SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
+    });
+  })();
+})();
+</script>
+</body>
+</html>
