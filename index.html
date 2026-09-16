@@ -31,6 +31,8 @@ button.primary:hover{background:#2a5ae0}
 button.ghost{background:transparent;border-color:#e4e9f2;color:#7a8399}
 button.ghost:hover{background:#f6f8fc;border-color:#d3dae8;color:#5a6376}
 button.small{font-size:12px;padding:5px 10px}
+button.danger{color:#c4304a;border-color:#ffd0d8;background:#fff5f7}
+button.danger:hover{background:#ffe9ec;border-color:#ffb8c4}
 button:disabled{opacity:.45;cursor:not-allowed}
 .ink-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .tool-label{font-size:13px;color:#7a8399;margin:0 2px 0 6px}
@@ -79,17 +81,31 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .sim-nav button{font-size:14px;padding:7px 15px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
 .sim-nav button:disabled{opacity:.35;cursor:not-allowed}
 .sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
-#hwView{padding-bottom:60px}
+
+/* ===== 作业管理（新版） ===== */
+#hwView{display:none;padding-bottom:60px}
 .hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .hw-title{font-weight:700;font-size:17px;color:#23304d}
-.hw-q{padding:22px 0;border-bottom:1px dashed #e6eaf2}
+.hw-container{max-width:1040px;margin:20px auto;padding:0 16px}
+.hw-set{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(30,40,70,.08);margin-bottom:18px;overflow:hidden}
+.hw-set-head{display:flex;align-items:center;gap:10px;padding:14px 20px;background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border-bottom:1px solid #e2e8f5;flex-wrap:wrap}
+.hw-set-name{font-size:17px;font-weight:800;color:#2a5ae0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hw-badge{font-size:12px;font-weight:600;color:#3b6ef5;background:#fff;border:1px solid #d6e2ff;padding:2px 10px;border-radius:20px}
+.hw-date{font-size:12px;color:#98a1b5;font-weight:400}
+.hw-set-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.hw-set-body{padding:6px 20px 16px}
+.hw-set-body.collapsed{display:none}
+.hw-q{padding:18px 0;border-bottom:1px dashed #e6eaf2}
 .hw-q:last-child{border-bottom:none}
+.hw-q .stem{font-size:18px;line-height:2.05}
 .hw-explain .line{margin:6px 0}
+.used-tag{font-size:11.5px;color:#c4304a;background:#ffe9ec;padding:1px 7px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:500}
 .hw-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
 .hw-item>label{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer;min-width:0;font-size:15px}
 .hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hw-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0}
 .hw-item select{font-family:inherit;font-size:14.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
+
 .modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.45);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
 .modal-mask.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:760px;max-height:88vh;overflow:auto;padding:24px 26px 22px;box-shadow:0 18px 50px rgba(20,28,50,.28)}
@@ -211,46 +227,50 @@ tr:last-child td{border-bottom:none}
 .bb-stage.light{background:#ffffff;border-color:#cbd5e1}
 .bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
 @media (max-width:720px){
-  .bar-row{padding:7px 10px;gap:6px}
-  .brand{font-size:14px;gap:5px}
-  .paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:160px}
-  .tool-label{display:none}
-  .swatch,.size-btn{width:32px;height:32px}
-  button{padding:8px 11px;font-size:13px;min-height:36px}
-  .tab{padding:7px 13px;font-size:13px}
-  .page{margin:8px;padding:16px 13px 26px;border-radius:12px}
-  .sec-title{font-size:17px;padding-left:10px;margin-bottom:15px;border-left-width:5px}
-  .q{padding:15px 0;flex-direction:column;gap:12px}
-  .q-figure{align-self:flex-end}
-  .stem{font-size:16px;line-height:1.85;letter-spacing:0}
-  .btns{gap:6px;margin-top:10px}
-  .btns button{padding:7px 12px;font-size:13px}
-  .panel{font-size:14.5px;padding:10px 12px;margin-top:10px;line-height:1.9}
-  .subq{padding:10px 11px;margin:9px 0}
-  .sub-stem{font-size:14.5px;line-height:1.9;letter-spacing:0}
-  .subq button{font-size:12.5px;padding:4px 11px}
-  .panel.sub-answer,.panel.sub-analysis{font-size:14.5px;padding:9px 13px}
-  .similar-head,.homework-head{font-size:13.5px;margin-bottom:7px}
-  .sim-nav{margin-top:10px;padding-top:10px;gap:7px}
-  .sim-progress{font-size:12.5px}
-  .sim-progress b{font-size:15px}
-  .sim-nav button{padding:7px 12px;font-size:13px;min-height:34px}
-  .modal{padding:16px 15px 14px;border-radius:12px;max-height:92vh}
-  .modal h3{font-size:17px}
-  .modal .hint{font-size:12.5px;padding:11px 13px}
-  .modal textarea{min-height:200px;font-size:12px}
-  .fig-thumb canvas{max-width:100px;max-height:70px}
-  .assign-row{flex-wrap:wrap}
-  .assign-row .fig-preview{width:80px;height:56px}
-  #paperView{padding-bottom:40px}
-  .user-chip{font-size:12px;padding:4px 10px}
-  .stats-grid{grid-template-columns:1fr 1fr}
-  .stat-card .num{font-size:20px}
-  .bb-bar{padding:6px 10px;gap:5px}
-  .bb-title{font-size:13px}
-  .bb-stage-wrap{padding:8px}
-  .bb-bar button{font-size:12px;padding:5px 9px;min-height:30px}
-  .bb-swatch,.bb-size{width:26px;height:26px}
+.bar-row{padding:7px 10px;gap:6px}
+.brand{font-size:14px;gap:5px}
+.paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:160px}
+.tool-label{display:none}
+.swatch,.size-btn{width:32px;height:32px}
+button{padding:8px 11px;font-size:13px;min-height:36px}
+.tab{padding:7px 13px;font-size:13px}
+.page{margin:8px;padding:16px 13px 26px;border-radius:12px}
+.sec-title{font-size:17px;padding-left:10px;margin-bottom:15px;border-left-width:5px}
+.q{padding:15px 0;flex-direction:column;gap:12px}
+.q-figure{align-self:flex-end}
+.stem{font-size:16px;line-height:1.85;letter-spacing:0}
+.btns{gap:6px;margin-top:10px}
+.btns button{padding:7px 12px;font-size:13px}
+.panel{font-size:14.5px;padding:10px 12px;margin-top:10px;line-height:1.9}
+.subq{padding:10px 11px;margin:9px 0}
+.sub-stem{font-size:14.5px;line-height:1.9;letter-spacing:0}
+.subq button{font-size:12.5px;padding:4px 11px}
+.panel.sub-answer,.panel.sub-analysis{font-size:14.5px;padding:9px 13px}
+.similar-head,.homework-head{font-size:13.5px;margin-bottom:7px}
+.sim-nav{margin-top:10px;padding-top:10px;gap:7px}
+.sim-progress{font-size:12.5px}
+.sim-progress b{font-size:15px}
+.sim-nav button{padding:7px 12px;font-size:13px;min-height:34px}
+.modal{padding:16px 15px 14px;border-radius:12px;max-height:92vh}
+.modal h3{font-size:17px}
+.modal .hint{font-size:12.5px;padding:11px 13px}
+.modal textarea{min-height:200px;font-size:12px}
+.fig-thumb canvas{max-width:100px;max-height:70px}
+.assign-row{flex-wrap:wrap}
+.assign-row .fig-preview{width:80px;height:56px}
+#paperView{padding-bottom:40px}
+.user-chip{font-size:12px;padding:4px 10px}
+.stats-grid{grid-template-columns:1fr 1fr}
+.stat-card .num{font-size:20px}
+.bb-bar{padding:6px 10px;gap:5px}
+.bb-title{font-size:13px}
+.bb-stage-wrap{padding:8px}
+.bb-bar button{font-size:12px;padding:5px 9px;min-height:30px}
+.bb-swatch,.bb-size{width:26px;height:26px}
+.hw-container{padding:0 8px}
+.hw-set-body{padding:6px 12px 14px}
+.hw-set-head{padding:12px 14px}
+.hw-set-actions{margin-left:0;width:100%}
 }
 </style>
 </head>
@@ -291,7 +311,7 @@ tr:last-child td{border-bottom:none}
     <div class="brand">
       <span class="dot"></span>
       <span class="paper-name-btn" id="paperNameBtn" title="点击管理试卷">
-        <span class="txt" id="paperTitle">加载中…</span>
+        <span class="txt" id="paperTitle">加载中...</span>
         <span style="font-size:11px;color:#7a8399">▾</span>
       </span>
     </div>
@@ -312,7 +332,7 @@ tr:last-child td{border-bottom:none}
     <div class="bar-right">
       <button id="btnBlackboard">📝 电子黑板</button>
       <button id="btnImport">导入试卷</button>
-      <button id="btnHomework" class="primary">布置作业</button>
+      <button id="btnHomework" class="primary">📋 作业管理</button>
       <button id="btnAddFigure">🖼 添加图形</button>
       <button id="btnShareQuestion">🔗 分享题目</button>
       <button id="btnReceiveQuestion">📥 接收试题</button>
@@ -329,15 +349,15 @@ tr:last-child td{border-bottom:none}
 
 <main id="paperView"></main>
 
-<section id="hwView" style="display:none">
+<!-- ========== 作业管理视图（新版） ========== -->
+<section id="hwView">
   <div class="hw-bar">
-    <div class="hw-title">📋 作业单（无答案）</div>
+    <div class="hw-title">📋 作业管理</div>
     <div class="spacer"></div>
-    <button id="btnHwExplainAll">作业讲解</button>
-    <button id="btnHwRegenerate">重新生成</button>
-    <button id="btnHwBack" class="primary">返回试卷</button>
+    <button id="btnNewHw" class="primary">+ 生成新作业</button>
+    <button id="btnHwBack">返回试卷</button>
   </div>
-  <div class="page" id="hwContent"></div>
+  <div class="hw-container" id="hwContainer"></div>
 </section>
 
 <section id="bbView">
@@ -378,6 +398,7 @@ tr:last-child td{border-bottom:none}
 </section>
 
 <input type="file" id="fileInput" accept="image/*" hidden>
+
 <div class="toast" id="toast"></div>
 <div class="drag-overlay" id="dragOverlay">松开鼠标，开始识别图形</div>
 <div class="save-hint" id="saveHint">已自动保存</div>
@@ -521,11 +542,13 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- ========== 生成新作业弹窗（新版） ========== -->
 <div class="modal-mask" id="hwModal">
   <div class="modal">
-    <h3>布置作业 · 选择题目与数量</h3>
+    <h3>生成新作业 · 选择题目与数量</h3>
     <div class="hint" style="padding:10px 14px">
-      勾选要布置的题目，并选择每题生成的作业题数（1 / 2 / 3 题）。
+      勾选要布置的题目，并选择每题生成的作业题数（1 / 2 / 3 题）。<br>
+      <b>已在往期作业中用过的题目会自动跳过，不会重复出现。</b>
     </div>
     <div class="modal-actions">
       <button id="btnHwAll">全选</button>
@@ -539,6 +562,22 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- ========== 添加题目到指定作业单弹窗（新增） ========== -->
+<div class="modal-mask" id="addQModal">
+  <div class="modal">
+    <h3>添加题目到作业单</h3>
+    <div class="hint" style="padding:10px 14px">
+      已被往期作业使用的题目默认不可选。<br>
+      如需使用，请先删除对应的作业单释放题目，或从该作业单中「移出」该题。
+    </div>
+    <div class="qlist" id="addQList"></div>
+    <div class="modal-actions right">
+      <button id="addQCancel">取消</button>
+      <button id="addQConfirm" class="primary">确定添加</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-mask" id="importModal">
   <div class="modal">
     <h3>导入试卷（粘贴文字即可）</h3>
@@ -546,23 +585,20 @@ tr:last-child td{border-bottom:none}
       <b>大题</b>直接写 <code>一、选择题</code>、<code>二、填空题</code> 即可。<br>
       <b>题号</b>用 <code>1.</code> <code>2.</code> 起行，答案 / 解析 / 举一反三 / 作业自动归属。
       <span class="fmt">一、选择题
-
 1. 题干第一行
-   题干第二行
+题干第二行
 答案：A
-解析：解题过程……
+解析：解题过程......
 举一反三：
 - 变式题干 | 变式答案 | 变式解析
 作业：
 - 作业题干 | 作业答案 | 作业解析
-
 二、填空题
-
 1. 填空题题干
-答案：……
-解析：……</span>
+答案：......
+解析：......</span>
     </div>
-    <textarea id="importText" spellcheck="false" placeholder="在此粘贴试卷文字……"></textarea>
+    <textarea id="importText" spellcheck="false" placeholder="在此粘贴试卷文字......"></textarea>
     <div class="modal-actions right">
       <button id="btnImportCancel">取消</button>
       <button id="btnImportDemo">填入示例</button>
@@ -572,31 +608,54 @@ tr:last-child td{border-bottom:none}
 </div>
 
 <script>
-/* 
+/*
 ================================================================
-   配置：把下面两个值换成你自己的 Supabase 项目信息
-   Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
-   ================================================================ */
-var SUPABASE_URL = 'https://dsyhhqimtglzatfggifj.supabase.co/rest/v1/';
+配置：把下面两个值换成你自己的 Supabase 项目信息
+Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
+================================================================ */
+var SUPABASE_URL = 'https://dsyhhqimtglzatfggifj.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzeWhocWltdGdsemF0ZmdnaWZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTQ5ODM5OSwiZXhwIjoyMTA1MDc0Mzk5fQ.0lmqARrKYbqnxov0EAY5tXWj-qGHwBjpZufA_DhDce8';
 
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ================================================================
-   工具
-   ================================================================ */
+工具
+================================================================ */
 function $(s,r){return (r||document).querySelector(s);}
 function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-function flash(txt){var el=$('#saveHint');if(!el)return;el.textContent=txt;el.classList.add('show');clearTimeout(flash._t);flash._t=setTimeout(function(){el.classList.remove('show');},1400);}
-function showMsg(sel,txt,type){var el=$(sel);if(!el)return;el.textContent=txt;el.className='msg show '+(type||'');if(type==='ok'){clearTimeout(showMsg._t);showMsg._t=setTimeout(function(){el.classList.remove('show');},2600);}}
+function pad2(n){return n<10?'0'+n:''+n;}
+function uid(p){return (p||'id')+'_'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function fmtDate(iso){
+  var d = iso ? new Date(iso) : new Date();
+  return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes());
+}
+function flash(txt){
+  var el=$('#saveHint');if(!el)return;
+  el.textContent=txt;el.classList.add('show');
+  clearTimeout(flash._t);
+  flash._t=setTimeout(function(){el.classList.remove('show');},1400);
+}
+function showMsg(sel,txt,type){
+  var el=$(sel);if(!el)return;
+  el.textContent=txt;el.className='msg show '+(type||'');
+  if(type==='ok'){
+    clearTimeout(showMsg._t);
+    showMsg._t=setTimeout(function(){el.classList.remove('show');},2600);
+  }
+}
 var toastTimer=null;
-function toast(msg){var el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.classList.remove('show');},2000);}
+function toast(msg){
+  var el=$('#toast');if(!el)return;
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){el.classList.remove('show');},2000);
+}
 
 /* ================================================================
-   全局状态
-   ================================================================ */
+全局状态
+================================================================ */
 var currentUser = null;
 var currentProfile = null;
 var papers = [];
@@ -605,11 +664,13 @@ var state = { page:0, inkOn:false, color:'#ffe066', erase:false, size:16 };
 var strokes = new Map();
 var currentStroke = null;
 var simMemory = {};
-var savedHomeworkItems = null;
 var hwAllOn = false;
 var resizeObserver = null;
 var saveTimer = null;
 var exam = { title:'', sections:[] };
+
+/* 新版作业管理状态 */
+var addTargetId = null;   // 正在向哪个作业单添加题目
 
 /* 黑板状态 */
 var bbState = { color:'#ffffff', size:8, erase:false };
@@ -617,7 +678,8 @@ var bbCanvas = null, bbCtx = null, bbCurrentStroke = null;
 var BB_W = 1600, BB_H = 1000;
 
 function ensureBlackboard(){
-  if(!exam.blackboard || typeof exam.blackboard !== 'object') exam.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
+  if(!exam.blackboard || typeof exam.blackboard !== 'object')
+    exam.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
   var bb = exam.blackboard;
   if(!Array.isArray(bb.pages) || !bb.pages.length) bb.pages = [{strokes:[]}];
   bb.pages.forEach(function(p){ if(!p.strokes) p.strokes = []; });
@@ -627,18 +689,23 @@ function ensureBlackboard(){
 }
 
 /* ================================================================
-   认证
-   ================================================================ */
+认证
+================================================================ */
 var authMode = 'login';
+
 function setAuthMode(m){
   authMode=m;
   $('#authTitle').textContent = m==='login' ? '登录' : '注册新账号';
   $('#btnToggleMode').textContent = m==='login' ? '切换到注册' : '切换到登录';
   $('#btnAuthSubmit').textContent = m==='login' ? '登录' : '注册';
-  $('#signupExtra').style.display  = m==='login' ? 'none' : 'block';
+  $('#signupExtra').style.display = m==='login' ? 'none' : 'block';
   $('#signupExtra2').style.display = m==='login' ? 'none' : 'block';
 }
-$('#btnToggleMode').onclick = function(){ setAuthMode(authMode==='login'?'signup':'login'); $('#authMsg').className='msg'; };
+
+$('#btnToggleMode').onclick = function(){
+  setAuthMode(authMode==='login'?'signup':'login');
+  $('#authMsg').className='msg';
+};
 setAuthMode('login');
 
 function validateUserCode(code){
@@ -660,7 +727,7 @@ $('#btnAuthSubmit').onclick = async function(){
 
   this.disabled = true;
   var oldTxt = this.textContent;
-  this.textContent = '处理中…';
+  this.textContent = '处理中...';
 
   try{
     if(authMode==='login'){
@@ -671,15 +738,21 @@ $('#btnAuthSubmit').onclick = async function(){
       var code = $('#authCode').value.trim();
       var nick = $('#authNick').value.trim();
       var err = validateUserCode(code);
-      if(err){ showMsg('#authMsg',err,'err'); this.disabled=false; this.textContent=oldTxt; return; }
-
+      if(err){
+        showMsg('#authMsg',err,'err');
+        this.disabled=false; this.textContent=oldTxt; return;
+      }
       var unique = await checkUserCodeUnique(code);
-      if(!unique){ showMsg('#authMsg','该用户 ID 已被占用，请换一个','err'); this.disabled=false; this.textContent=oldTxt; return; }
-
+      if(!unique){
+        showMsg('#authMsg','该用户 ID 已被占用，请换一个','err');
+        this.disabled=false; this.textContent=oldTxt; return;
+      }
       var rr = await sb.auth.signUp({ email: email, password: pwd });
       if(rr.error) throw rr.error;
-      if(!rr.data.user){ showMsg('#authMsg','注册成功，请到邮箱确认后再登录','ok'); this.disabled=false; this.textContent=oldTxt; return; }
-
+      if(!rr.data.user){
+        showMsg('#authMsg','注册成功，请到邮箱确认后再登录','ok');
+        this.disabled=false; this.textContent=oldTxt; return;
+      }
       var ins = await sb.from('profiles').insert({
         id: rr.data.user.id,
         user_code: code,
@@ -687,7 +760,6 @@ $('#btnAuthSubmit').onclick = async function(){
         is_admin: false
       });
       if(ins.error) throw ins.error;
-
       showMsg('#authMsg','注册成功！','ok');
       await afterLogin();
     }
@@ -721,6 +793,7 @@ async function afterLogin(){
     if(ins.error) throw ins.error;
     pr = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
   }
+
   currentProfile = pr.data;
 
   $('#authModal').classList.remove('show');
@@ -740,15 +813,13 @@ $('#btnLogout').onclick = async function(){
 };
 
 /* ================================================================
-   分享链接处理（整卷 / 单题 二合一）
-   ================================================================ */
+分享链接处理（整卷 / 单题 二合一）
+================================================================ */
 async function handleShareLink(){
   var params = new URLSearchParams(location.search);
   var shareId = params.get('share');
   if(!shareId) return;
-
   history.replaceState({}, '', location.pathname);
-
   try{
     await receiveShareById(shareId);
   }catch(e){
@@ -757,7 +828,6 @@ async function handleShareLink(){
   }
 }
 
-/* 统一的接收入口：shareId 是 shares 表主键 */
 async function receiveShareById(shareId){
   var r = await sb.rpc('get_share_snapshot', { p_share_id: shareId });
   if(r.error) throw r.error;
@@ -772,7 +842,7 @@ async function receiveShareById(shareId){
   if(snapshot.__kind === 'question'){
     var q = snapshot.question || {};
     var preview = String(q.stem||'').split('\n')[0];
-    if(preview.length > 60) preview = preview.slice(0,60) + '…';
+    if(preview.length > 60) preview = preview.slice(0,60) + '...';
 
     if(!currentPaper){
       alert('请先打开一份试卷，再接收试题。');
@@ -825,7 +895,6 @@ async function receiveShareById(shareId){
       });
     });
     await saveCurrentPaper();
-
     alert('已加入「'+currentPaper.name+'」的「'+targetSec.name+'」大题末尾。');
     return { ok: true };
   }
@@ -871,31 +940,40 @@ async function receiveShareById(shareId){
 }
 
 /* ================================================================
-   试卷数据层
-   ================================================================ */
+试卷数据层
+================================================================ */
 async function loadPapers(preferId){
   var r = await sb.from('papers')
     .select('id,name,updated_at,created_at,data')
     .eq('owner_id', currentUser.id)
     .order('updated_at', { ascending: false });
   if(r.error){ console.error(r.error); return; }
+
   papers = r.data || [];
+
   if(!papers.length){
     var ins = await sb.from('papers').insert({
       owner_id: currentUser.id,
       name: '我的第一份试卷',
       data: {
         title: '我的第一份试卷',
-        sections: [{ name:'一、题目', questions:[{ stem:'（点击右上角"导入试卷"，粘贴题目文字即可自动生成）', answer:'', analysis:'', similar:[], homework:[] }] }],
-        blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' }
+        sections: [{ name:'一、题目', questions:[{
+          stem:'（点击右上角"导入试卷"，粘贴题目文字即可自动生成）',
+          answer:'', analysis:'', similar:[], homework:[]
+        }] }],
+        blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' },
+        homeworkSets: [],
+        usedKeys: []
       },
       saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
     }).select().single();
     if(ins.error){ console.error(ins.error); return; }
     papers = [ins.data];
   }
+
   var target = preferId ? papers.find(function(p){return p.id===preferId;}) : papers[0];
   if(!target) target = papers[0];
+
   await openPaper(target.id);
   renderPapersList();
 }
@@ -904,56 +982,73 @@ async function openPaper(id){
   var r = await sb.from('papers').select('*').eq('id', id).maybeSingle();
   if(r.error){ console.error(r.error); return; }
   if(!r.data) return;
+
   currentPaper = r.data;
   exam = currentPaper.data || { title:'', sections:[] };
   if(!exam.sections) exam.sections = [];
+  if(!exam.homeworkSets) exam.homeworkSets = [];
+  if(!exam.usedKeys) exam.usedKeys = [];
+
   ensureBlackboard();
 
   simMemory = currentPaper.sim_memory || {};
-  savedHomeworkItems = currentPaper.saved_homework || null;
   state.page = currentPaper.current_page || 0;
+
   strokes = new Map();
   if(currentPaper.strokes){
-    Object.keys(currentPaper.strokes).forEach(function(k){ strokes.set(parseInt(k,10), currentPaper.strokes[k]); });
+    Object.keys(currentPaper.strokes).forEach(function(k){
+      strokes.set(parseInt(k,10), currentPaper.strokes[k]);
+    });
   }
+
   $('#paperTitle').textContent = currentPaper.name;
   document.title = currentPaper.name + ' · 试卷讲解';
+
   renderTabs();
   renderPaper();
   showPageInternal(state.page);
-  requestAnimationFrame(function(){ $$('#paperView .page').forEach(redrawPage); });
+  requestAnimationFrame(function(){
+    $$('#paperView .page').forEach(redrawPage);
+  });
 }
 
 async function saveCurrentPaper(){
   if(!currentPaper || !currentUser) return;
+
   var strokesJSON = {};
   strokes.forEach(function(v,k){ strokesJSON[k] = v; });
+
   var payload = {
     name: exam.title || currentPaper.name,
     data: exam,
-    saved_homework: savedHomeworkItems,
+    saved_homework: null,
     sim_memory: simMemory,
     current_page: state.page,
     strokes: strokesJSON,
     updated_at: new Date().toISOString()
   };
+
   var r = await sb.from('papers').update(payload).eq('id', currentPaper.id);
   if(r.error){ console.error('保存失败', r.error); return; }
+
   currentPaper.name = payload.name;
   $('#paperTitle').textContent = payload.name;
   flash('已保存到云端');
+
   var idx = papers.findIndex(function(p){return p.id===currentPaper.id;});
-  if(idx>=0){ papers[idx].name = payload.name; papers[idx].updated_at = payload.updated_at; }
+  if(idx>=0){
+    papers[idx].name = payload.name;
+    papers[idx].updated_at = payload.updated_at;
+  }
 }
 
 function scheduleSave(){
   if(saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(function(){ saveTimer=null; saveCurrentPaper(); }, 900);
 }
-
 /* ================================================================
-   渲染
-   ================================================================ */
+渲染
+================================================================ */
 function renderTabs(){
   $('#tabs').innerHTML = exam.sections.map(function(s,i){
     return '<button class="tab" data-page="'+i+'">'+esc(s.name)+'</button>';
@@ -962,8 +1057,10 @@ function renderTabs(){
 
 function buildSimilarArea(list,si,qi){
   if(!list||!list.length) return '<div class="empty">该题暂无举一反三</div>';
+
   var startIdx = simMemory[si+'-'+qi] || 0;
   if(startIdx<0||startIdx>=list.length) startIdx = 0;
+
   var items = list.map(function(s,i){
     return '<div class="subq sim-item" data-sub="'+i+'"'+(i===startIdx?'':' style="display:none"')+'>'+
       '<div class="sub-title">举一反三 · 第 '+(i+1)+' 题</div>'+
@@ -971,19 +1068,22 @@ function buildSimilarArea(list,si,qi){
       '<div class="btns"><button data-act="sub-answer">答案</button><button data-act="sub-analysis">解析</button></div>'+
       '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
       '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
-      '</div>';
+    '</div>';
   }).join('');
+
   var nav = '<div class="sim-nav">'+
     '<span class="sim-progress">第 <b class="sim-cur">'+(startIdx+1)+'</b> / '+list.length+' 题</span>'+
     '<button data-act="sim-prev"'+(startIdx===0?' disabled':'')+'>上一题</button>'+
     '<button data-act="sim-next"'+(startIdx===list.length-1?' disabled':'')+'>下一题</button>'+
     '<button data-act="sim-exit" class="sim-exit">退出</button>'+
-    '</div>';
+  '</div>';
+
   return items+nav;
 }
 
 function buildHomeworkArea(list){
   if(!list||!list.length) return '<div class="empty">该题暂无配套作业</div>';
+
   return list.map(function(s,i){
     return '<div class="subq" data-sub="'+i+'">'+
       '<div class="sub-title">作业 · 第 '+(i+1)+' 题</div>'+
@@ -991,7 +1091,7 @@ function buildHomeworkArea(list){
       '<div class="btns"><button data-act="hw-answer">答案</button><button data-act="hw-analysis">解析</button></div>'+
       '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
       '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
-      '</div>';
+    '</div>';
   }).join('');
 }
 
@@ -1009,7 +1109,7 @@ function figureHTML(q){
       '<button data-act="fig-l">大</button>'+
       '<button data-act="fig-del">✕</button>'+
     '</div>'+
-    '</div>';
+  '</div>';
 }
 
 function questionHTML(q,si,qi){
@@ -1028,7 +1128,7 @@ function questionHTML(q,si,qi){
       '<div class="panel homework"><div class="homework-head">配套作业 · 课后练习</div>'+buildHomeworkArea(q.homework)+'</div>'+
     '</div>'+
     figureHTML(q)+
-    '</div>';
+  '</div>';
 }
 
 function renderPaper(){
@@ -1036,12 +1136,15 @@ function renderPaper(){
     var qs = sec.questions.map(function(q,qi){ return questionHTML(q,si,qi); }).join('');
     return '<div class="page" data-page="'+si+'"><canvas class="ink"></canvas><div class="content"><div class="sec-title">'+esc(sec.name)+'</div>'+qs+'</div></div>';
   }).join('');
+
   $$('#paperView .page').forEach(attachInk);
   $$('#paperView .q-figure').forEach(attachFigureInteraction);
 
   if(resizeObserver) resizeObserver.disconnect();
   resizeObserver = new ResizeObserver(function(){
-    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+    $$('#paperView .page').forEach(function(p){
+      if(p.style.display!=='none') fitCanvas(p);
+    });
   });
   $$('#paperView .page').forEach(function(p){ resizeObserver.observe(p); });
 }
@@ -1050,13 +1153,20 @@ function showPageInternal(i){
   var n = exam.sections.length; if(!n) return;
   if(i<0||i>=n) i = 0;
   state.page = i;
-  $$('#paperView .page').forEach(function(p){ p.style.display = (+p.dataset.page===i)?'':'none'; });
-  $$('#tabs .tab').forEach(function(b){ b.classList.toggle('active', +b.dataset.page===i); });
+
+  $$('#paperView .page').forEach(function(p){
+    p.style.display = (+p.dataset.page===i)?'':'none';
+  });
+  $$('#tabs .tab').forEach(function(b){
+    b.classList.toggle('active', +b.dataset.page===i);
+  });
+
   requestAnimationFrame(function(){
     var p = $('#paperView .page[data-page="'+i+'"]');
     if(p) fitCanvas(p);
   });
 }
+
 function showPage(i){ showPageInternal(i); scheduleSave(); }
 
 function attachFigureInteraction(wrap){
@@ -1118,8 +1228,8 @@ function attachFigureInteraction(wrap){
 }
 
 /* ================================================================
-   试卷涂抹
-   ================================================================ */
+试卷涂抹
+================================================================ */
 function fitCanvas(page){
   if(!page || page.style.display==='none') return;
   var c = page.querySelector('canvas.ink'); if(!c) return;
@@ -1129,24 +1239,34 @@ function fitCanvas(page){
   c.width = w; c.height = h;
   redrawPage(page);
 }
+
 function drawWholeStroke(ctx,s,w,h){
   ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
   ctx.globalAlpha = s.erase ? 1 : 0.55;
   ctx.lineCap='round'; ctx.lineJoin='round';
   ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = s.size;
   var pts = s.points;
-  if(pts.length===1){ ctx.beginPath(); ctx.arc(pts[0].x*w, pts[0].y*h, s.size/2, 0, Math.PI*2); ctx.fill(); return; }
+  if(pts.length===1){
+    ctx.beginPath();
+    ctx.arc(pts[0].x*w, pts[0].y*h, s.size/2, 0, Math.PI*2);
+    ctx.fill();
+    return;
+  }
   ctx.beginPath(); ctx.moveTo(pts[0].x*w, pts[0].y*h);
   for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*w, pts[i].y*h);
   ctx.stroke();
 }
+
 function redrawPage(page){
   var idx = +page.dataset.page;
   var c = page.querySelector('canvas.ink'); if(!c) return;
   var ctx = c.getContext('2d');
   ctx.clearRect(0,0,c.width,c.height);
-  (strokes.get(idx)||[]).forEach(function(s){ drawWholeStroke(ctx,s,c.width,c.height); });
+  (strokes.get(idx)||[]).forEach(function(s){
+    drawWholeStroke(ctx,s,c.width,c.height);
+  });
 }
+
 function strokeSegment(ctx,s,w,h){
   var pts = s.points, n = pts.length; if(n<2) return;
   var a = pts[n-2], b = pts[n-1];
@@ -1156,8 +1276,10 @@ function strokeSegment(ctx,s,w,h){
   ctx.strokeStyle = s.color; ctx.lineWidth = s.size;
   ctx.beginPath(); ctx.moveTo(a.x*w, a.y*h); ctx.lineTo(b.x*w, b.y*h); ctx.stroke();
 }
+
 function attachInk(page){
   var c = page.querySelector('canvas.ink'); if(!c) return;
+
   c.addEventListener('pointerdown', function(e){
     if(!state.inkOn) return; e.preventDefault();
     var rect = c.getBoundingClientRect();
@@ -1168,12 +1290,16 @@ function attachInk(page){
     strokes.get(idx).push(stroke);
     currentStroke = stroke;
     try{ c.setPointerCapture(e.pointerId); }catch(_){}
+
     var ctx = c.getContext('2d');
     ctx.globalCompositeOperation = stroke.erase ? 'destination-out' : 'source-over';
     ctx.globalAlpha = stroke.erase ? 1 : 0.55;
     ctx.fillStyle = stroke.color;
-    ctx.beginPath(); ctx.arc(p.x*c.width, p.y*c.height, stroke.size/2, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath();
+    ctx.arc(p.x*c.width, p.y*c.height, stroke.size/2, 0, Math.PI*2);
+    ctx.fill();
   });
+
   c.addEventListener('pointermove', function(e){
     if(!currentStroke) return; e.preventDefault();
     var rect = c.getBoundingClientRect();
@@ -1184,9 +1310,12 @@ function attachInk(page){
     currentStroke.points.push(p);
     strokeSegment(c.getContext('2d'), currentStroke, c.width, c.height);
   });
+
   function end(e){
     if(!currentStroke) return;
-    if(e && e.pointerId!==undefined){ try{ c.releasePointerCapture(e.pointerId); }catch(_){} }
+    if(e && e.pointerId!==undefined){
+      try{ c.releasePointerCapture(e.pointerId); }catch(_){}
+    }
     currentStroke = null;
     scheduleSave();
   }
@@ -1195,8 +1324,8 @@ function attachInk(page){
 }
 
 /* ================================================================
-   电子黑板
-   ================================================================ */
+电子黑板
+================================================================ */
 function bbInit(){
   bbCanvas = document.getElementById('bbCanvas');
   bbCanvas.width = BB_W;
@@ -1315,13 +1444,17 @@ function bbBindPointer(){
 
   function end(e){
     if(!bbCurrentStroke) return;
-    if(e && e.pointerId !== undefined){ try{ bbCanvas.releasePointerCapture(e.pointerId); }catch(_){} }
+    if(e && e.pointerId !== undefined){
+      try{ bbCanvas.releasePointerCapture(e.pointerId); }catch(_){}
+    }
     bbCurrentStroke = null;
     scheduleSave();
   }
   bbCanvas.addEventListener('pointerup', end);
   bbCanvas.addEventListener('pointercancel', end);
-  bbCanvas.addEventListener('pointerleave', function(e){ if(bbCurrentStroke) end(e); });
+  bbCanvas.addEventListener('pointerleave', function(e){
+    if(bbCurrentStroke) end(e);
+  });
 }
 
 function bbSwitchPage(i){
@@ -1389,9 +1522,10 @@ function exitBlackboard(){
 }
 
 /* ================================================================
-   举一反三导航
-   ================================================================ */
+举一反三导航
+================================================================ */
 function simGetPanel(q){ return q ? q.querySelector(':scope > .q-main > .panel.similar') : null; }
+
 function simUpdateNav(panel,cur,total){
   var lbl = panel.querySelector('.sim-cur'); if(lbl) lbl.textContent = cur+1;
   var prev = panel.querySelector('[data-act="sim-prev"]');
@@ -1399,11 +1533,15 @@ function simUpdateNav(panel,cur,total){
   if(prev) prev.disabled = (cur===0);
   if(next) next.disabled = (cur===total-1);
 }
+
 function simCurrentIndex(panel){
   var items = $$('.sim-item', panel);
-  for(var i=0;i<items.length;i++) if(items[i].style.display!=='none') return i;
+  for(var i=0;i<items.length;i++){
+    if(items[i].style.display!=='none') return i;
+  }
   return 0;
 }
+
 function simMove(q,delta){
   var panel = simGetPanel(q); if(!panel) return;
   var items = $$('.sim-item', panel); if(!items.length) return;
@@ -1415,6 +1553,7 @@ function simMove(q,delta){
   scheduleSave();
   requestAnimationFrame(function(){ var p=q.closest('.page'); if(p) fitCanvas(p); });
 }
+
 function simExit(q){
   var panel = simGetPanel(q);
   if(panel){
@@ -1428,12 +1567,18 @@ function simExit(q){
   var allQ = $$('.q', page), idx = allQ.indexOf(q);
   requestAnimationFrame(function(){ fitCanvas(page); });
   if(idx>-1 && idx<allQ.length-1){
-    setTimeout(function(){ allQ[idx+1].scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
+    setTimeout(function(){
+      allQ[idx+1].scrollIntoView({behavior:'smooth',block:'start'});
+    }, 60);
   } else {
     var pages = $$('#paperView .page'), pi = pages.indexOf(page);
-    if(pi>-1 && pi<pages.length-1){ showPage(pi+1); setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},30); }
+    if(pi>-1 && pi<pages.length-1){
+      showPage(pi+1);
+      setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},30);
+    }
   }
 }
+
 function simRestore(q){
   var panel = simGetPanel(q); if(!panel) return;
   var items = $$('.sim-item', panel); if(!items.length) return;
@@ -1444,18 +1589,24 @@ function simRestore(q){
 }
 
 /* ================================================================
-   面板切换
-   ================================================================ */
+面板切换
+================================================================ */
 function togglePanel(panel,btn){
   if(!panel) return;
   var on = panel.classList.toggle('show');
   if(btn) btn.classList.toggle('active', on);
-  requestAnimationFrame(function(){ var p = panel.closest('.page'); if(p) fitCanvas(p); });
+  requestAnimationFrame(function(){
+    var p = panel.closest('.page');
+    if(p) fitCanvas(p);
+  });
 }
+
 $('#paperView').addEventListener('click', function(e){
-  var btn = e.target.closest('button[data-act]'); if(!btn||btn.disabled) return;
+  var btn = e.target.closest('button[data-act]');
+  if(!btn||btn.disabled) return;
   var act = btn.dataset.act, q = btn.closest('.q'), sub = btn.closest('.subq');
   if(!q) return;
+
   if(act==='answer') togglePanel(q.querySelector(':scope > .q-main > .panel.answer'), btn);
   else if(act==='analysis') togglePanel(q.querySelector(':scope > .q-main > .panel.analysis'), btn);
   else if(act==='similar'){
@@ -1474,46 +1625,62 @@ $('#paperView').addEventListener('click', function(e){
 });
 
 /* ================================================================
-   工具栏
-   ================================================================ */
+工具栏
+================================================================ */
 $$('.swatch').forEach(function(b){
   b.onclick = function(){
     var isE = b.dataset.erase==='1';
-    state.erase = isE; if(!isE) state.color = b.dataset.color;
-    state.inkOn = true; document.body.classList.add('ink-on');
-    $$('.swatch').forEach(function(x){x.classList.remove('active');}); b.classList.add('active');
+    state.erase = isE;
+    if(!isE) state.color = b.dataset.color;
+    state.inkOn = true;
+    document.body.classList.add('ink-on');
+    $$('.swatch').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
   };
 });
+
 $$('.size-btn').forEach(function(b){
   b.onclick = function(){
-    state.size = +b.dataset.size; state.inkOn = true; document.body.classList.add('ink-on');
-    $$('.size-btn').forEach(function(x){x.classList.remove('active');}); b.classList.add('active');
+    state.size = +b.dataset.size;
+    state.inkOn = true;
+    document.body.classList.add('ink-on');
+    $$('.size-btn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
   };
 });
+
 $('#btnExitInk').onclick = function(){
-  state.inkOn = false; document.body.classList.remove('ink-on');
+  state.inkOn = false;
+  document.body.classList.remove('ink-on');
   $$('.swatch').forEach(function(x){x.classList.remove('active');});
 };
+
 $('#btnClearInk').onclick = function(){
   if(!confirm('清空当前所有涂抹？')) return;
   strokes.clear();
-  $$('#paperView canvas.ink').forEach(function(c){ c.getContext('2d').clearRect(0,0,c.width,c.height); });
+  $$('#paperView canvas.ink').forEach(function(c){
+    c.getContext('2d').clearRect(0,0,c.width,c.height);
+  });
   scheduleSave();
 };
+
 $('#tabs').addEventListener('click', function(e){
-  var t = e.target.closest('.tab'); if(!t) return; showPage(+t.dataset.page);
+  var t = e.target.closest('.tab'); if(!t) return;
+  showPage(+t.dataset.page);
 });
 
 /* ================================================================
-   试卷管理
-   ================================================================ */
+试卷管理
+================================================================ */
 function renderPapersList(){
   $('#papersList').innerHTML = papers.map(function(p){
     var isCur = currentPaper && p.id===currentPaper.id;
     var date = new Date(p.updated_at||p.created_at||Date.now());
-    var pad = function(n){return n<10?'0'+n:''+n;};
-    var ds = date.getFullYear()+'-'+pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+':'+pad(date.getMinutes());
-    var qc = 0; (p.data && p.data.sections||[]).forEach(function(s){qc += (s.questions||[]).length;});
+    var ds = fmtDate(date);
+    var qc = 0;
+    ((p.data && p.data.sections)||[]).forEach(function(s){
+      qc += (s.questions||[]).length;
+    });
     return '<div class="paper-item'+(isCur?' current':'')+'" data-id="'+p.id+'">'+
       '<div class="info">'+
         '<div class="name">'+esc(p.name)+(isCur?'<span class="tag">当前</span>':'')+'</div>'+
@@ -1531,6 +1698,7 @@ $('#paperNameBtn').onclick = function(){
   renderPapersList();
   $('#papersModal').classList.add('show');
 };
+
 $('#btnPapersClose').onclick = function(){ $('#papersModal').classList.remove('show'); };
 
 $('#papersList').addEventListener('click', async function(e){
@@ -1539,6 +1707,7 @@ $('#papersList').addEventListener('click', async function(e){
     e.stopPropagation();
     var act = ab.dataset.pact, id = ab.dataset.pid;
     var p = papers.find(function(x){return x.id===id;}); if(!p) return;
+
     if(act==='rename'){
       var nn = prompt('重命名试卷：', p.name);
       if(nn===null) return; nn = nn.trim(); if(!nn) return;
@@ -1562,10 +1731,13 @@ $('#papersList').addEventListener('click', async function(e){
     }
     return;
   }
+
   var it = e.target.closest('.paper-item');
   if(it){
     var pid = it.dataset.id;
-    if(currentPaper && currentPaper.id===pid){ $('#papersModal').classList.remove('show'); return; }
+    if(currentPaper && currentPaper.id===pid){
+      $('#papersModal').classList.remove('show'); return;
+    }
     await saveCurrentPaper();
     await openPaper(pid);
     renderPapersList();
@@ -1576,26 +1748,34 @@ $('#papersList').addEventListener('click', async function(e){
 $('#btnNewPaper').onclick = async function(){
   var nn = prompt('新试卷名称：', '未命名试卷');
   if(nn===null) return; nn = nn.trim() || '未命名试卷';
+
   var blank = {
     title: nn,
     sections: [{ name:'一、题目', questions:[{stem:'（点击"导入试卷"粘贴题目文字）', answer:'', analysis:'', similar:[], homework:[]}] }],
-    blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' }
+    blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' },
+    homeworkSets: [],
+    usedKeys: []
   };
+
   var r = await sb.from('papers').insert({
     owner_id: currentUser.id, name: nn, data: blank,
     saved_homework:null, sim_memory:{}, current_page:0, strokes:{}
   }).select().single();
   if(r.error){ alert('创建失败：'+r.error.message); return; }
+
   papers.unshift(r.data);
   await openPaper(r.data.id);
   renderPapersList();
   $('#papersModal').classList.remove('show');
-  setTimeout(function(){ $('#importText').value=''; $('#importModal').classList.add('show'); }, 200);
+  setTimeout(function(){
+    $('#importText').value='';
+    $('#importModal').classList.add('show');
+  }, 200);
 };
 
 /* ================================================================
-   分享整卷
-   ================================================================ */
+分享整卷
+================================================================ */
 $('#btnShareCurrent').onclick = async function(){
   if(!currentPaper){ alert('请先打开一份试卷'); return; }
   await saveCurrentPaper();
@@ -1628,26 +1808,27 @@ $('#btnCopyShare').onclick = function(){
     });
   }
 };
+
 $('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('show'); };
 
 /* ================================================================
-   分享单题（试卷 → 大题 → 题目）
-   ================================================================ */
+分享单题（试卷 → 大题 → 题目）
+================================================================ */
 var pickQState = { paperId: null, si: 0 };
 
 $('#btnShareQuestion').onclick = function(){
   if(!papers.length){ toast('还没有试卷'); return; }
-
   var pSel = $('#pickQPaperSelect');
   pSel.innerHTML = papers.map(function(p){
     var qn = 0;
-    ((p.data && p.data.sections) || []).forEach(function(s){ qn += (s.questions||[]).length; });
+    ((p.data && p.data.sections) || []).forEach(function(s){
+      qn += (s.questions||[]).length;
+    });
     var cur = (currentPaper && p.id === currentPaper.id) ? ' ★ 当前' : '';
     return '<option value="'+p.id+'">'+esc(p.name)+cur+'（'+qn+' 题）</option>';
   }).join('');
   pSel.value = currentPaper ? currentPaper.id : papers[0].id;
   pickQState.paperId = pSel.value;
-
   refreshPickQSections();
   $('#pickQuestionModal').classList.add('show');
 };
@@ -1661,7 +1842,6 @@ function refreshPickQSections(){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   var secSel = $('#pickQSectionSelect');
   var secs = (paper && paper.data && paper.data.sections) || [];
-
   if(!secs.length){
     secSel.innerHTML = '<option>（该试卷暂无大题）</option>';
     pickQState.si = 0;
@@ -1697,16 +1877,16 @@ function renderPickQuestionList(si){
   }
   el.innerHTML = qs.map(function(q, qi){
     var firstLine = String(q.stem||'').split('\n')[0];
-    var preview = firstLine.length > 48 ? firstLine.slice(0,48)+'…' : firstLine;
+    var preview = firstLine.length > 48 ? firstLine.slice(0,48)+'...' : firstLine;
     var figTag = (q.figure && q.figure.src)
       ? '<span style="color:#2f7ad4;margin-left:8px;font-size:12px;flex-shrink:0">🖼 有图</span>'
       : '';
-    return ''
-      + '<div class="hw-item" data-qi="'+qi+'" style="cursor:pointer">'
-      +   '<label style="cursor:pointer;width:100%">'
-      +     '<span><b>第 '+(qi+1)+' 题：</b>'+esc(preview)+'</span>'+figTag
-      +   '</label>'
-      + '</div>';
+    return ''+
+      '<div class="hw-item" data-qi="'+qi+'" style="cursor:pointer">'+
+      '<label style="cursor:pointer;width:100%">'+
+      '<span><b>第 '+(qi+1)+' 题：</b>'+esc(preview)+'</span>'+figTag+
+      '</label>'+
+      '</div>';
   }).join('');
 }
 
@@ -1757,8 +1937,8 @@ $('#pickQuestionCancel').onclick = function(){
 };
 
 /* ================================================================
-   接收试题（顶栏按钮入口）
-   ================================================================ */
+接收试题（顶栏按钮入口）
+================================================================ */
 $('#btnReceiveQuestion').onclick = function(){
   $('#receiveShareInput').value = '';
   $('#receiveMsg').className = 'msg';
@@ -1773,14 +1953,13 @@ $('#receiveCancel').onclick = function(){
 $('#receiveOk').onclick = async function(){
   var v = $('#receiveShareInput').value.trim();
   if(!v){ showMsg('#receiveMsg','请输入链接或分享 ID','err'); return; }
-
   var m = v.match(/[?&]share=([^&\s]+)/);
   var shareId = m ? decodeURIComponent(m[1]) : v;
   if(!shareId){ showMsg('#receiveMsg','链接里没找到分享 ID','err'); return; }
 
   this.disabled = true;
   var old = this.textContent;
-  this.textContent = '接收中…';
+  this.textContent = '接收中...';
 
   try{
     var result = await receiveShareById(shareId);
@@ -1793,10 +1972,9 @@ $('#receiveOk').onclick = async function(){
   this.disabled = false;
   this.textContent = old;
 };
-
 /* ================================================================
-   管理员面板
-   ================================================================ */
+管理员面板
+================================================================ */
 $('#btnAdminPanel').onclick = async function(){
   if(!currentProfile || !currentProfile.is_admin) return;
   $('#adminModal').classList.add('show');
@@ -1806,6 +1984,7 @@ $('#btnAdminPanel').onclick = async function(){
 
   var totalShares = sr.count || 0;
   var accepts = ar.data || [];
+
   var distinctUsers = {};
   accepts.forEach(function(x){ distinctUsers[x.accepted_by_code] = 1; });
   var uniqueUsers = Object.keys(distinctUsers).length;
@@ -1816,17 +1995,16 @@ $('#btnAdminPanel').onclick = async function(){
     '<div class="stat-card"><div class="num">'+uniqueUsers+'</div><div class="lbl">接受过的用户数</div></div>';
 
   $('#adminTbody').innerHTML = accepts.map(function(x){
-    var d = new Date(x.accepted_at);
-    var pad = function(n){return n<10?'0'+n:''+n;};
-    var ds = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+    var ds = fmtDate(x.accepted_at);
     return '<tr><td>'+ds+'</td><td>'+esc(x.paper_name||'')+'</td><td>'+esc(x.owner_code||'')+'</td><td>'+esc(x.accepted_by_code||'')+'</td></tr>';
   }).join('') || '<tr><td colspan="4" style="text-align:center;color:#98a1b5;padding:20px">暂无记录</td></tr>';
 };
+
 $('#btnAdminClose').onclick = function(){ $('#adminModal').classList.remove('show'); };
 
 /* ================================================================
-   图形识别 & 批量分配
-   ================================================================ */
+图形识别 & 批量分配
+================================================================ */
 var assignItems = [];
 
 function openFigEditor(sourceCanvas){
@@ -1905,7 +2083,6 @@ function confirmAssign(){
     var si = +parts[0], qi = +parts[1];
     var q = exam.sections[si].questions[qi];
     if(!q) return;
-
     q.figure = {
       src: assignItems[i].dataUrl,
       width: 180,
@@ -1918,16 +2095,19 @@ function confirmAssign(){
   renderPaper();
   showPageInternal(state.page);
   requestAnimationFrame(function(){
-    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+    $$('#paperView .page').forEach(function(p){
+      if(p.style.display!=='none') fitCanvas(p);
+    });
   });
   scheduleSave();
-
   toast('已插入 ' + insertCount + ' 个图形');
   assignItems = [];
 }
 
 async function handleFigureFile(file){
-  if(!file || !file.type.startsWith('image/')){ toast('请选择图片文件'); return; }
+  if(!file || !file.type.startsWith('image/')){
+    toast('请选择图片文件'); return;
+  }
   try{
     var img = await fileToImage(file);
     var canvas = imageToCanvas(img);
@@ -1939,8 +2119,8 @@ async function handleFigureFile(file){
 }
 
 /* ================================================================
-   图形检测算法
-   ================================================================ */
+图形检测算法
+================================================================ */
 function otsuThreshold(hist, total){
   var sum = 0;
   for(var i=0;i<256;i++) sum += i*hist[i];
@@ -2035,6 +2215,7 @@ function detectRegions(sourceCanvas){
       if(h > H*0.75) continue;
       var ratio = w/h;
       if(ratio > 12 || ratio < 0.08) continue;
+
       var c = 0;
       for(var y=y1;y<=y2;y++){
         var base2 = y*W;
@@ -2052,6 +2233,7 @@ function detectRegions(sourceCanvas){
   }
 
   regions.sort(function(a,b){ return b.w*b.h - a.w*a.h; });
+
   var kept = [];
   for(var i=0;i<regions.length;i++){
     var r = regions[i];
@@ -2089,6 +2271,7 @@ function fileToImage(file){
     img.src = url;
   });
 }
+
 function imageToCanvas(img, maxSide){
   maxSide = maxSide || 1600;
   var scale = Math.min(1, maxSide / Math.max(img.width, img.height));
@@ -2100,8 +2283,8 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-   图形编辑器
-   ================================================================ */
+图形编辑器
+================================================================ */
 var FigEditor = {
   canvas: null,
   regions: [],
@@ -2176,8 +2359,10 @@ var FigEditor = {
         hd.dataset.h = h;
         el.appendChild(hd);
       });
+
       stage.appendChild(el);
     });
+
     this.renderThumbs();
   },
 
@@ -2366,6 +2551,7 @@ var FigEditor = {
     this.regions = []; this.activeId = null;
     this.render(); this.updateUI();
   },
+
   selectAll: function(){
     this.regions = [{ id:this.nextId++, x:0, y:0, w:this.canvas.width, h:this.canvas.height, selected:true }];
     this.activeId = this.regions[0].id;
@@ -2374,105 +2560,322 @@ var FigEditor = {
 };
 
 /* ================================================================
-   布置作业
-   ================================================================ */
+★★★ 新版作业管理（核心） ★★★
+================================================================ */
+
+/* 确保数据结构 */
+function ensureHomeworkData(){
+  if(!exam.homeworkSets) exam.homeworkSets = [];
+  if(!exam.usedKeys) exam.usedKeys = [];
+}
+
+/* 打开作业管理视图 */
+function openHomeworkView(){
+  ensureHomeworkData();
+  $('#paperView').style.display = 'none';
+  $('#tabs').style.display = 'none';
+  $('#hwView').style.display = 'block';
+  renderHomeworkList();
+  window.scrollTo(0,0);
+}
+
+/* 关闭作业管理视图，返回试卷 */
+function closeHomeworkView(){
+  $('#hwView').style.display = 'none';
+  $('#paperView').style.display = '';
+  $('#tabs').style.display = '';
+  showPage(state.page);
+  window.scrollTo(0,0);
+}
+
+/* 下一个作业编号 */
+function nextHwNo(){
+  var max = 0;
+  ensureHomeworkData();
+  exam.homeworkSets.forEach(function(s){ if(s.no > max) max = s.no; });
+  return max + 1;
+}
+
+/* 统计某一题已用掉的题库数量 */
+function countUsed(si,qi,pool){
+  var n = 0;
+  if(pool){
+    for(var i=0;i<pool;i++){
+      if(exam.usedKeys.indexOf(si+"-"+qi+"-"+i) >= 0) n++;
+    }
+  } else {
+    if(exam.usedKeys.indexOf("q-"+si+"-"+qi) >= 0) n++;
+  }
+  return n;
+}
+
+/* 由 key 反查题目对象 */
+function keyToItem(key){
+  if(key.indexOf("q-") === 0){
+    var a = key.split("-");
+    var si = +a[1], qi = +a[2];
+    var q = exam.sections[si] && exam.sections[si].questions[qi];
+    if(!q) return null;
+    return { key:key, si:si, qi:qi, hi:-1, stem:q.stem, answer:q.answer, analysis:q.analysis };
+  }
+  var b = key.split("-");
+  var si2 = +b[0], qi2 = +b[1], hi2 = +b[2];
+  var q2 = exam.sections[si2] && exam.sections[si2].questions[qi2];
+  if(!q2) return null;
+  var h = (q2.homework||[])[hi2];
+  if(!h) return null;
+  return { key:key, si:si2, qi:qi2, hi:hi2, stem:h.stem, answer:h.answer, analysis:h.analysis };
+}
+
+/* 渲染作业列表 */
+function renderHomeworkList(){
+  ensureHomeworkData();
+  var list = exam.homeworkSets.slice().sort(function(a,b){ return a.no - b.no; });
+
+  if(!list.length){
+    $('#hwContainer').innerHTML = '<div class="page"><div class="empty">还没有作业。点击「+ 生成新作业」开始，系统会自动编号为「作业1」，下次为「作业2」。</div></div>';
+    return;
+  }
+
+  $('#hwContainer').innerHTML = list.map(function(set){
+    var body = set.items.length
+      ? set.items.map(function(it,i){ return hwItemHTML(it,i); }).join('')
+      : '<div class="empty">该作业暂无题目，可点击「+ 添加题目」。</div>';
+
+    return '<div class="hw-set" data-id="'+set.id+'">'+
+      '<div class="hw-set-head">'+
+        '<div class="hw-set-name">📄 '+esc(set.name)+
+          '<span class="hw-badge">'+set.items.length+' 题</span>'+
+          '<span class="hw-date">'+fmtDate(set.createdAt)+'</span>'+
+        '</div>'+
+        '<div class="hw-set-actions">'+
+          '<button class="small" data-hwact="add">+ 添加题目</button>'+
+          '<button class="small" data-hwact="toggle">收起讲解</button>'+
+          '<button class="small" data-hwact="rename">重命名</button>'+
+          '<button class="small danger" data-hwact="del">删除</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="hw-set-body">'+body+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function hwItemHTML(it,i){
+  return '<div class="hw-q" data-key="'+esc(it.key)+'">'+
+    '<div class="stem">'+(i+1)+'. '+esc(it.stem)+'</div>'+
+    '<div class="btns">'+
+      '<button data-hwq="toggle">讲解</button>'+
+      '<button data-hwq="remove" class="danger">移出</button>'+
+    '</div>'+
+    '<div class="panel hw-explain">'+
+      '<div class="line"><b>答案：</b>'+esc(it.answer||'---')+'</div>'+
+      '<div class="line"><b>解析：</b>'+esc(it.analysis||'---')+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+/* 生成新作业弹窗 */
 function openHwModal(){
+  ensureHomeworkData();
   var html = '';
   exam.sections.forEach(function(sec,si){
-    sec.questions.forEach(function(q,qi){
-      var ss = sec.name.replace(/^[一二三四五六七八九十]+、/,'');
+    (sec.questions||[]).forEach(function(q,qi){
       var pool = (q.homework||[]).length;
-      var tip = pool ? '（题库 '+pool+' 题）' : '（无题库，将使用原题）';
+      var total = pool || 1;
+      var used = countUsed(si,qi,pool);
+      var exhausted = used >= total;
+      var tip = pool ? ('（题库 '+pool+' 题，已用 '+used+'）') : '（无题库，将使用原题）';
       html += '<div class="hw-item">'+
-        '<label><input type="checkbox" value="'+si+'-'+qi+'" checked><span>'+esc(ss)+' 第'+(qi+1)+'题 <em style="color:#98a1b5;font-style:normal">'+tip+'</em></span></label>'+
+        '<label><input type="checkbox" value="'+si+'-'+qi+'"'+(exhausted?' disabled':'')+'>'+
+        '<span>'+esc(sec.name)+' 第'+(qi+1)+'题 <em style="color:#98a1b5;font-style:normal">'+tip+'</em></span></label>'+
+        (exhausted?'<span class="used-tag">已用尽</span>':'')+
         '<select class="hw-count"><option value="1">1 题</option><option value="2" selected>2 题</option><option value="3">3 题</option></select>'+
-        '</div>';
+      '</div>';
     });
   });
   $('#hwList').innerHTML = html || '<div class="empty">暂无题目</div>';
   $('#hwModal').classList.add('show');
 }
 
-function buildHomeworkHTML(items){
-  var flat = [];
-  items.forEach(function(it){
-    var q = exam.sections[it.si].questions[it.qi];
-    var pool = q.homework||[];
-    if(!pool.length) flat.push({stem:q.stem,answer:q.answer,analysis:q.analysis});
-    else { var n = Math.min(it.count, pool.length); for(var i=0;i<n;i++) flat.push(pool[i]); }
-  });
-  return flat.map(function(h,i){
-    return '<div class="hw-q">'+
-      '<div class="stem">'+(i+1)+'. '+esc(h.stem)+'</div>'+
-      '<div class="btns"><button data-hwq="toggle">讲解</button></div>'+
-      '<div class="panel hw-explain"><div class="line"><b>答案：</b>'+esc(h.answer||'—')+'</div><div class="line"><b>解析：</b>'+esc(h.analysis||'—')+'</div></div>'+
-      '</div>';
-  }).join('') || '<div class="sec-title">作业单</div><div class="empty">未选择题目</div>';
-}
-
-function showHomeworkView(html){
-  $('#hwContent').innerHTML = html;
-  hwAllOn = false;
-  var b = $('#btnHwExplainAll'); b.classList.remove('active'); b.textContent = '作业讲解';
-  $('#paperView').style.display = 'none';
-  $('#tabs').style.display = 'none';
-  $('#hwView').style.display = '';
-  window.scrollTo(0,0);
-}
-function generateHomework(items){
-  savedHomeworkItems = items.slice();
-  showHomeworkView(buildHomeworkHTML(items));
-  scheduleSave();
-}
-function showSavedHomework(){ showHomeworkView(buildHomeworkHTML(savedHomeworkItems)); }
-
-$('#hwContent').addEventListener('click', function(e){
-  var b = e.target.closest('button[data-hwq]'); if(!b) return;
-  var w = b.closest('.hw-q'), p = w.querySelector('.panel.hw-explain');
-  var on = p.classList.toggle('show'); b.classList.toggle('active', on);
-});
-$('#btnHwExplainAll').onclick = function(){
-  hwAllOn = !hwAllOn;
-  $$('#hwContent .hw-explain').forEach(function(p){p.classList.toggle('show',hwAllOn);});
-  $$('#hwContent button[data-hwq]').forEach(function(b){b.classList.toggle('active',hwAllOn);});
-  this.classList.toggle('active',hwAllOn);
-  this.textContent = hwAllOn ? '隐藏讲解' : '作业讲解';
-};
-$('#btnHwBack').onclick = function(){
-  $('#hwView').style.display = 'none';
-  $('#paperView').style.display = '';
-  $('#tabs').style.display = '';
-  showPage(state.page);
-};
-$('#btnHwRegenerate').onclick = function(){ openHwModal(); };
-$('#btnHwCancel').onclick = function(){ $('#hwModal').classList.remove('show'); };
-$('#btnHwAll').onclick = function(){ $$('#hwList input[type=checkbox]').forEach(function(i){i.checked=true;}); };
-$('#btnHwNone').onclick = function(){ $$('#hwList input[type=checkbox]').forEach(function(i){i.checked=false;}); };
-
-$('#btnHwGen').onclick = function(){
-  var picked = [];
+/* 核心：生成作业（自动去重 + 自动编号） */
+function doGenerateHomework(){
+  ensureHomeworkData();
+  var picks = [];
   $$('#hwList .hw-item').forEach(function(it){
-    var cb = it.querySelector('input[type=checkbox]'); if(!cb||!cb.checked) return;
+    var cb = it.querySelector('input[type=checkbox]');
+    if(!cb || !cb.checked) return;
     var sel = it.querySelector('.hw-count');
     var c = sel ? (parseInt(sel.value,10)||1) : 1;
     var p = cb.value.split('-');
-    picked.push({ si:+p[0], qi:+p[1], count:c });
+    picks.push({ si:+p[0], qi:+p[1], count:c });
   });
-  if(!picked.length){ alert('请至少选择一道题'); return; }
-  picked.sort(function(a,b){return a.si-b.si||a.qi-b.qi;});
-  generateHomework(picked);
+
+  if(!picks.length){ alert('请至少勾选一道题'); return; }
+
+  var newItems = [], skipped = 0;
+
+  picks.forEach(function(p){
+    var sec = exam.sections[p.si]; if(!sec) return;
+    var q = sec.questions[p.qi]; if(!q) return;
+    var pool = q.homework || [];
+    var avail = [];
+
+    for(var i=0;i<pool.length;i++){
+      var k = p.si+"-"+p.qi+"-"+i;
+      if(exam.usedKeys.indexOf(k) >= 0) continue;
+      avail.push({
+        key:k, si:p.si, qi:p.qi, hi:i,
+        stem:pool[i].stem, answer:pool[i].answer, analysis:pool[i].analysis
+      });
+    }
+
+    if(!avail.length){
+      var qk = "q-"+p.si+"-"+p.qi;
+      if(exam.usedKeys.indexOf(qk) < 0){
+        avail.push({
+          key:qk, si:p.si, qi:p.qi, hi:-1,
+          stem:q.stem, answer:q.answer, analysis:q.analysis
+        });
+      }
+    }
+
+    var take = avail.slice(0, p.count);
+    skipped += Math.max(0, p.count - take.length);
+    newItems = newItems.concat(take);
+  });
+
+  if(!newItems.length){
+    alert('所选题目均已在往期作业中使用过，没有新题可生成。\n可先删除对应作业释放题目，或导入更多题库。');
+    return;
+  }
+
+  var no = nextHwNo();
+  var set = {
+    id: uid('hw'),
+    no: no,
+    name: '作业' + no,
+    createdAt: new Date().toISOString(),
+    items: newItems
+  };
+  exam.homeworkSets.push(set);
+  newItems.forEach(function(it){
+    if(exam.usedKeys.indexOf(it.key) < 0) exam.usedKeys.push(it.key);
+  });
+
+  scheduleSave();
   $('#hwModal').classList.remove('show');
-};
+  renderHomeworkList();
+  toast('已生成 ' + set.name + '（' + newItems.length + ' 题）' + (skipped ? '，跳过 ' + skipped + ' 道重复题' : ''));
+}
+
+/* 删除作业单（释放题目） */
+function deleteHwSet(id){
+  ensureHomeworkData();
+  var set = exam.homeworkSets.find(function(s){ return s.id === id; });
+  if(!set) return;
+  if(!confirm('确定删除「'+set.name+'」吗？\n删除后其中题目将释放，可再次被新作业使用。')) return;
+
+  set.items.forEach(function(it){
+    var i = exam.usedKeys.indexOf(it.key);
+    if(i >= 0) exam.usedKeys.splice(i,1);
+  });
+
+  exam.homeworkSets = exam.homeworkSets.filter(function(s){ return s.id !== id; });
+  scheduleSave();
+  renderHomeworkList();
+  toast('已删除 ' + set.name);
+}
+
+/* 重命名作业单 */
+function renameHwSet(id){
+  ensureHomeworkData();
+  var set = exam.homeworkSets.find(function(s){ return s.id === id; });
+  if(!set) return;
+  var nn = prompt('重命名作业单：', set.name);
+  if(nn === null) return;
+  nn = nn.trim(); if(!nn) return;
+  set.name = nn;
+  scheduleSave();
+  renderHomeworkList();
+}
+
+/* 从作业单中移出单题 */
+function removeItemFromSet(setId, key){
+  ensureHomeworkData();
+  var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
+  if(!set) return;
+  if(!confirm('将该题从作业单中移出？移出后可再次被使用。')) return;
+
+  set.items = set.items.filter(function(it){ return it.key !== key; });
+  var i = exam.usedKeys.indexOf(key);
+  if(i >= 0) exam.usedKeys.splice(i,1);
+
+  scheduleSave();
+  renderHomeworkList();
+  toast('已移出');
+}
+
+/* 添加题目弹窗 */
+function openAddQModal(setId){
+  ensureHomeworkData();
+  addTargetId = setId;
+  var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
+  if(!set) return;
+
+  var exist = {};
+  (set.items||[]).forEach(function(it){ exist[it.key] = 1; });
+
+  var html = '';
+  exam.sections.forEach(function(sec,si){
+    (sec.questions||[]).forEach(function(q,qi){
+      var pool = q.homework || [];
+      var opts = [];
+      if(pool.length){
+        pool.forEach(function(h,hi){
+          opts.push({ key: si+"-"+qi+"-"+hi, stem: h.stem, src: "题库" + (hi+1) });
+        });
+      } else {
+        opts.push({ key: "q-"+si+"-"+qi, stem: q.stem, src: "原题" });
+      }
+
+      opts.forEach(function(o){
+        var used = exam.usedKeys.indexOf(o.key) >= 0;
+        var inSet = exist[o.key];
+        var dis = used && !inSet;
+        html += '<div class="hw-item">'+
+          '<label><input type="checkbox" value="'+esc(o.key)+'"'+(dis?' disabled':'')+'>'+
+          '<span>'+esc(String(o.stem).slice(0,46))+'</span>'+
+          (dis?'<span class="used-tag">已用</span>':'')+
+          '</label>'+
+          '<span style="font-size:12px;color:#98a1b5;white-space:nowrap">'+esc(sec.name)+' 第'+(qi+1)+'题 · '+o.src+'</span>'+
+        '</div>';
+      });
+    });
+  });
+
+  $('#addQList').innerHTML = html || '<div class="empty">暂无可添加的题目</div>';
+  $('#addQModal').classList.add('show');
+}
 
 /* ================================================================
-   导入解析
-   ================================================================ */
+导入解析
+================================================================ */
 function parsePaperText(text){
   var result = { title:'试卷讲解', sections:[] };
   var curSec=null, curQ=null, block=null, lastField=null, lastNum=0;
   var lines = String(text||'').split(/\r?\n/);
-  function ensureSec(){ if(!curSec){ curSec={name:'题目',questions:[]}; result.sections.push(curSec); } return curSec; }
-  function startQ(stem){ ensureSec(); curQ={stem:(stem||'').trim(),answer:'',analysis:'',similar:[],homework:[]}; curSec.questions.push(curQ); block=null; lastField='stem'; }
+
+  function ensureSec(){
+    if(!curSec){ curSec={name:'题目',questions:[]}; result.sections.push(curSec); }
+    return curSec;
+  }
+  function startQ(stem){
+    ensureSec();
+    curQ = { stem:(stem||'').trim(), answer:'', analysis:'', similar:[], homework:[] };
+    curSec.questions.push(curQ);
+    block=null; lastField='stem';
+  }
+
   var RE_NUM = /^(?:第\s*(\d{1,3})\s*[题问]|[(（]\s*(\d{1,3})\s*[)）]|(\d{1,3})\s*[.、．)）]\s*)([\s\S]*)$/;
   var RE_ANS = /^[【\[]?\s*(?:答案|参考答案|答)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
   var RE_ANA = /^[【\[]?\s*(?:解析|分析|解答|解)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
@@ -2482,54 +2885,93 @@ function parsePaperText(text){
 
   for(var i=0;i<lines.length;i++){
     var line = lines[i].trim(); if(!line) continue;
-    if(/^#\s+/.test(line) && !/^##/.test(line)){ result.title = line.replace(/^#\s+/,'').trim(); block=null; lastField=null; continue; }
+
+    if(/^#\s+/.test(line) && !/^##/.test(line)){
+      result.title = line.replace(/^#\s+/,'').trim();
+      block=null; lastField=null;
+      continue;
+    }
+
     var mSec = line.match(/^([一二三四五六七八九十]+)\s*[、．.]\s*(.+)$/);
-    if(mSec){ curSec={name:line.trim(),questions:[]}; result.sections.push(curSec); curQ=null; block=null; lastField=null; lastNum=0; continue; }
-    if(/^##\s+/.test(line) && !/^###/.test(line)){ curSec={name:line.replace(/^##\s+/,'').trim(),questions:[]}; result.sections.push(curSec); curQ=null; block=null; lastField=null; lastNum=0; continue; }
+    if(mSec){
+      curSec={name:line.trim(),questions:[]};
+      result.sections.push(curSec);
+      curQ=null; block=null; lastField=null; lastNum=0;
+      continue;
+    }
+
+    if(/^##\s+/.test(line) && !/^###/.test(line)){
+      curSec={name:line.replace(/^##\s+/,'').trim(),questions:[]};
+      result.sections.push(curSec);
+      curQ=null; block=null; lastField=null; lastNum=0;
+      continue;
+    }
+
     if(/^###\s+/.test(line)){ startQ(line.replace(/^###\s+/,'')); continue; }
+
     if(RE_SIM.test(line)){ if(curQ) block='similar'; lastField=null; continue; }
     if(RE_HW.test(line)){ if(curQ) block='homework'; lastField=null; continue; }
+
     if(block && curQ){
       if(!RE_SP.test(line)){
         var body = line.replace(/^[-*·•]\s*/,'').trim();
         if(body){
-          var parts = body.split('|').map(function(s){return s.trim();});
-          var item = { stem: parts[0].replace(/^(?:变式|举一反三|作业|练习)\s*\d*\s*[:：]?\s*/,''), answer:parts[1]||'', analysis:parts.slice(2).join(' | ')||'' };
-          if(block==='similar') curQ.similar.push(item); else curQ.homework.push(item);
+          var parts = body.split('|').map(function(s){ return s.trim(); });
+          var item = {
+            stem: parts[0].replace(/^(?:变式|举一反三|作业|练习)\s*\d*\s*[:：]?\s*/,''),
+            answer: parts[1]||'',
+            analysis: parts.slice(2).join(' | ')||''
+          };
+          if(block==='similar') curQ.similar.push(item);
+          else curQ.homework.push(item);
         }
         continue;
       }
       block = null;
     }
+
     var mA = line.match(RE_ANS);
     if(mA){ if(!curQ) startQ(''); curQ.answer = mA[1].trim(); lastField='answer'; block=null; continue; }
+
     var mAn = line.match(RE_ANA);
     if(mAn){ if(!curQ) startQ(''); curQ.analysis = mAn[1].trim(); lastField='analysis'; block=null; continue; }
+
     var mN = line.match(RE_NUM);
     if(mN){
       var num = parseInt(mN[1]||mN[2]||mN[3],10);
-      if(lastNum===0 || num===lastNum+1){ lastNum=num; startQ(mN[4]||''); continue; }
+      if(lastNum===0 || num===lastNum+1){
+        lastNum=num;
+        startQ(mN[4]||'');
+        continue;
+      }
     }
+
     if(!curQ){ startQ(line); continue; }
     if(lastField==='answer') curQ.answer += '\n'+line;
     else if(lastField==='analysis') curQ.analysis += '\n'+line;
     else curQ.stem += '\n'+line;
   }
+
   result.sections.forEach(function(s){
     s.questions = s.questions.filter(function(q){
       return q.stem||q.answer||q.analysis||(q.similar&&q.similar.length)||(q.homework&&q.homework.length);
     });
   });
   result.sections = result.sections.filter(function(s){ return s.questions.length>0; });
+
   result.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
+  result.homeworkSets = [];
+  result.usedKeys = [];
+
   return result;
 }
 
 /* ================================================================
-   事件绑定 & 启动
-   ================================================================ */
+事件绑定 & 启动
+================================================================ */
 (function init(){
   var fileInput = $('#fileInput');
+
   $('#btnAddFigure').onclick = function(){ fileInput.click(); };
   fileInput.onchange = function(e){
     var f = e.target.files && e.target.files[0];
@@ -2558,6 +3000,7 @@ function parsePaperText(text){
       b.classList.add('active');
     };
   });
+
   $$('.bb-size').forEach(function(b){
     b.onclick = function(){
       bbState.size = +b.dataset.size;
@@ -2565,6 +3008,7 @@ function parsePaperText(text){
       b.classList.add('active');
     };
   });
+
   $$('.bb-theme').forEach(function(b){
     b.onclick = function(){
       ensureBlackboard().theme = b.dataset.theme;
@@ -2587,16 +3031,86 @@ function parsePaperText(text){
   };
   $('#assignConfirm').onclick = confirmAssign;
 
-  $('#btnHomework').onclick = function(){
-    if(savedHomeworkItems && savedHomeworkItems.length) showSavedHomework();
-    else openHwModal();
+  /* ===== 新版作业管理事件 ===== */
+  $('#btnHomework').onclick = function(){ openHomeworkView(); };
+  $('#btnHwBack').onclick = closeHomeworkView;
+  $('#btnNewHw').onclick = openHwModal;
+
+  $('#btnHwCancel').onclick = function(){ $('#hwModal').classList.remove('show'); };
+  $('#btnHwAll').onclick = function(){
+    $$('#hwList input[type=checkbox]').forEach(function(i){ if(!i.disabled) i.checked = true; });
+  };
+  $('#btnHwNone').onclick = function(){
+    $$('#hwList input[type=checkbox]').forEach(function(i){ i.checked = false; });
+  };
+  $('#btnHwGen').onclick = doGenerateHomework;
+
+  /* 添加题目弹窗 */
+  $('#addQCancel').onclick = function(){ $('#addQModal').classList.remove('show'); };
+  $('#addQConfirm').onclick = function(){
+    ensureHomeworkData();
+    var set = exam.homeworkSets.find(function(s){ return s.id === addTargetId; });
+    if(!set) return;
+
+    var added = 0;
+    $$('#addQList input[type=checkbox]:checked').forEach(function(cb){
+      var key = cb.value;
+      if(exam.usedKeys.indexOf(key) >= 0) return;
+      var it = keyToItem(key);
+      if(!it) return;
+      set.items.push(it);
+      exam.usedKeys.push(key);
+      added++;
+    });
+
+    if(!added){ toast('没有新增题目'); return; }
+    scheduleSave();
+    $('#addQModal').classList.remove('show');
+    renderHomeworkList();
+    toast('已添加 ' + added + ' 题到 ' + set.name);
   };
 
+  /* 作业容器事件委托 */
+  $('#hwContainer').addEventListener('click', function(e){
+    var setEl = e.target.closest('.hw-set'); if(!setEl) return;
+    var id = setEl.dataset.id;
+
+    var actBtn = e.target.closest('button[data-hwact]');
+    if(actBtn){
+      var act = actBtn.dataset.hwact;
+      if(act==='del') deleteHwSet(id);
+      else if(act==='add') openAddQModal(id);
+      else if(act==='rename') renameHwSet(id);
+      else if(act==='toggle'){
+        var body = setEl.querySelector('.hw-set-body');
+        var collapsed = body.classList.toggle('collapsed');
+        actBtn.textContent = collapsed ? '展开讲解' : '收起讲解';
+      }
+      return;
+    }
+
+    var qBtn = e.target.closest('button[data-hwq]');
+    if(qBtn){
+      var hwq = qBtn.closest('.hw-q');
+      var key = hwq.dataset.key;
+      if(qBtn.dataset.hwq === 'toggle'){
+        var p = hwq.querySelector('.panel');
+        var on = p.classList.toggle('show');
+        qBtn.classList.toggle('active', on);
+        qBtn.textContent = on ? '收起' : '讲解';
+      } else if(qBtn.dataset.hwq === 'remove'){
+        removeItemFromSet(id, key);
+      }
+    }
+  });
+
+  /* 导入试卷 */
   $('#btnImport').onclick = function(){
     $('#importText').value = '';
     $('#importModal').classList.add('show');
   };
   $('#btnImportCancel').onclick = function(){ $('#importModal').classList.remove('show'); };
+
   $('#btnImportDemo').onclick = function(){
     $('#importText').value = [
       '# 七年级数学 · 有理数及其运算',
@@ -2613,34 +3127,49 @@ function parsePaperText(text){
       '作业：',
       '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。',
       '- 计算 (-4) + 7 的结果 | 3 | 异号相加，取正号。',
+      '- 计算 12 + (-20) 的结果 | -8 | 异号相加，取绝对值较大数的符号。',
       '',
       '二、填空题',
       '',
       '1. -5 的相反数是 ______，绝对值是 ______。',
       '答案：5；5',
-      '解析：只有符号不同的两个数互为相反数；绝对值表示数轴上该点到原点的距离。'
+      '解析：只有符号不同的两个数互为相反数；绝对值表示数轴上该点到原点的距离。',
+      '作业：',
+      '- 0 的相反数是 ______，绝对值是 ______ | 0；0 | 0 的相反数和绝对值都是 0。',
+      '- -|-7| = ______ | -7 | 先算绝对值 |-7|=7，再取相反数得 -7。'
     ].join('\n');
   };
+
   $('#btnImportOk').onclick = async function(){
     var txt = $('#importText').value.trim();
     if(!txt){ alert('请先粘贴试卷文字内容'); return; }
     var parsed = parsePaperText(txt);
     if(!parsed.sections.length){ alert('没有识别到题目，请检查格式'); return; }
+
     var bb = ensureBlackboard();
+    var oldHwSets = exam.homeworkSets || [];
+    var oldUsed = exam.usedKeys || [];
+
     exam = parsed;
     exam.blackboard = bb;
+    exam.homeworkSets = oldHwSets;
+    exam.usedKeys = oldUsed;
+
     simMemory = {};
-    savedHomeworkItems = null;
     strokes.clear();
     state.page = 0;
     currentPaper.name = exam.title || currentPaper.name;
+
     $('#importModal').classList.remove('show');
     renderTabs(); renderPaper(); showPageInternal(0);
+
     await saveCurrentPaper();
     await loadPapers(currentPaper.id);
     window.scrollTo(0,0);
+    toast('导入成功，共 ' + parsed.sections.length + ' 个大题');
   };
 
+  /* 点击遮罩关闭 */
   $$('.modal-mask').forEach(function(m){
     m.addEventListener('click', function(e){
       if(e.target === m){
@@ -2651,6 +3180,7 @@ function parsePaperText(text){
     });
   });
 
+  /* 拖拽图片到页面 */
   var overlay = $('#dragOverlay');
   var dragDepth = 0;
   window.addEventListener('dragenter', function(e){
@@ -2669,10 +3199,14 @@ function parsePaperText(text){
     if(f) handleFigureFile(f);
   });
 
+  /* 窗口缩放时重绘涂鸦画布 */
   window.addEventListener('resize', function(){
-    $$('#paperView .page').forEach(function(p){ if(p.style.display!=='none') fitCanvas(p); });
+    $$('#paperView .page').forEach(function(p){
+      if(p.style.display!=='none') fitCanvas(p);
+    });
   });
 
+  /* Esc 退出黑板 */
   window.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && document.getElementById('bbView').classList.contains('show')){
       var anyModal = $$('.modal-mask').some(function(m){ return m.classList.contains('show'); });
@@ -2680,17 +3214,24 @@ function parsePaperText(text){
     }
   });
 
+  /* 启动 */
   (async function bootstrap(){
     var s = await sb.auth.getSession();
     if(s.data && s.data.session && s.data.session.user){
-      try{ await afterLogin(); }catch(e){ console.error(e); $('#authModal').classList.add('show'); }
+      try{ await afterLogin(); }
+      catch(e){
+        console.error(e);
+        $('#authModal').classList.add('show');
+      }
     } else {
       $('#authModal').classList.add('show');
     }
+
     sb.auth.onAuthStateChange(function(evt){
-      if(evt==='SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
+      if(evt === 'SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
     });
   })();
+
 })();
 </script>
 </body>
