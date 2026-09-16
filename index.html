@@ -2677,7 +2677,6 @@ function pickImageFiles(){
   $('#fileInput').click();
 }
 
-/* 文件输入 change（支持多选） */
 function onFileInputChange(e){
   var files = Array.prototype.slice.call(e.target.files || []);
   $('#fileInput').value = '';
@@ -2695,18 +2694,15 @@ function isImageFile(f){
   return /\.(png|jpe?g|gif|webp|bmp|svg|heic|heif)$/.test(n);
 }
 
-/* 从 DataTransfer 中提取图片文件（兼容不同浏览器） */
 function extractImageFiles(dt){
   if(!dt) return [];
   var out = [];
-  /* 优先 files */
   if(dt.files && dt.files.length){
     for(var i=0;i<dt.files.length;i++){
       if(isImageFile(dt.files[i])) out.push(dt.files[i]);
     }
   }
   if(out.length) return out;
-  /* 回退 items */
   if(dt.items && dt.items.length){
     for(var j=0;j<dt.items.length;j++){
       var it = dt.items[j];
@@ -2719,7 +2715,6 @@ function extractImageFiles(dt){
   return out;
 }
 
-/* 判断拖拽内容里是否含文件（避免页内拖动文字/元素触发覆盖层） */
 function dragContainsFiles(e){
   if(!e.dataTransfer) return false;
   var t = e.dataTransfer.types;
@@ -2733,7 +2728,6 @@ function dragContainsFiles(e){
 function bindDragAndDrop(){
   dragOverlay = $('#dragOverlay');
 
-  /* dragenter：只有含文件才显示覆盖层 */
   window.addEventListener('dragenter', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
@@ -2741,7 +2735,6 @@ function bindDragAndDrop(){
     document.body.classList.add('dragging-file');
   }, false);
 
-  /* dragover：必须 preventDefault 才能触发 drop */
   window.addEventListener('dragover', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
@@ -2750,7 +2743,6 @@ function bindDragAndDrop(){
     }
   }, false);
 
-  /* dragleave：离开窗口才隐藏（用 relatedTarget 判定） */
   window.addEventListener('dragleave', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
@@ -2761,7 +2753,6 @@ function bindDragAndDrop(){
     }
   }, false);
 
-  /* drop：提取图片文件 */
   window.addEventListener('drop', function(e){
     e.preventDefault();
     if(dragOverlay) dragOverlay.classList.remove('show');
@@ -2779,7 +2770,6 @@ function bindDragAndDrop(){
 /* ---------- 入口3：Ctrl+V 粘贴截图 ---------- */
 function bindPasteImage(){
   window.addEventListener('paste', function(e){
-    /* 正在输入框里粘贴文本，不拦截 */
     var a = document.activeElement;
     if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
 
@@ -2795,7 +2785,6 @@ function bindPasteImage(){
         if(f && isImageFile(f)) files.push(f);
       }
     }
-    /* 也支持从 Excel/网页复制出来的图片文件 */
     if(!files.length && cd.files && cd.files.length){
       for(var j=0;j<cd.files.length;j++){
         if(isImageFile(cd.files[j])) files.push(cd.files[j]);
@@ -2812,13 +2801,11 @@ function bindPasteImage(){
 
 /* ---------- 核心：处理多个图片文件 ---------- */
 async function handleIncomingImages(files){
-  /* 单张图片：直接进编辑器 */
   if(files.length === 1){
     await loadOneImageIntoEditor(files[0]);
     return;
   }
 
-  /* 多张图片：先全部读成 dataUrl，再弹选择框 */
   toast('正在加载 ' + files.length + ' 张图片…');
   var loaded = [];
   for(var i=0;i<files.length;i++){
@@ -2881,7 +2868,7 @@ function openFigEditorFromItem(item){
   img.src = item.dataUrl;
 }
 
-/* 旧接口：单个 File → 直接进编辑器 */
+/* 单个 File → 直接进编辑器 */
 async function loadOneImageIntoEditor(file){
   if(!isImageFile(file)){
     toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）');
@@ -2926,9 +2913,16 @@ $('#multiImgCancel').onclick = function(){
 /* ================================================================
 图形识别 & 批量分配
 ================================================================ */
+/* ★ 关键修复：先显示弹窗，再等两帧后 load，确保 DOM 布局完成 */
 function openFigEditor(sourceCanvas){
-  FigEditor.load(sourceCanvas);
-  $('#figEditorModal').classList.add('show');
+  var modal = document.getElementById('figEditorModal');
+  modal.classList.add('show');
+  /* 双 rAF 保证浏览器已经完成布局，canvas 的 getBoundingClientRect 不再是 0 */
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      FigEditor.load(sourceCanvas);
+    });
+  });
 }
 
 function flattenQuestionList(){
@@ -3188,10 +3182,16 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-图形编辑器（自选编辑修复版 + 支持换图）
+★★★ 图形编辑器（彻底修复版） ★★★
+根本修复：
+1) this.canvasEl 指向 DOM 中的 #figCanvas 元素，坐标计算用它
+2) toImageCoords 加保护，rect 为 0 时返回 {0,0}
+3) finish 只在「新建」时检查选区大小，移动/缩放不检查
+4) 触摸/笔事件不因 button 判断被跳过
 ================================================================ */
 var FigEditor = {
-  canvas: null,
+  canvas: null,        /* 离屏 canvas（用于裁剪/检测） */
+  canvasEl: null,      /* DOM 中的 #figCanvas（用于坐标计算） */
   regions: [],
   activeId: null,
   nextId: 1,
@@ -3199,20 +3199,23 @@ var FigEditor = {
   bound: false,
 
   load: function(sourceCanvas){
+    var self = this;
     this.canvas = sourceCanvas;
     this.regions = [];
     this.activeId = null;
     this.nextId = 1;
     this.drag = null;
 
-    var canvasEl = document.getElementById('figCanvas');
-    canvasEl.width = sourceCanvas.width;
-    canvasEl.height = sourceCanvas.height;
-    canvasEl.getContext('2d').drawImage(sourceCanvas, 0, 0);
+    /* 关键：拿到 DOM 元素并设置尺寸 */
+    this.canvasEl = document.getElementById('figCanvas');
+    this.canvasEl.width = sourceCanvas.width;
+    this.canvasEl.height = sourceCanvas.height;
+    this.canvasEl.getContext('2d').drawImage(sourceCanvas, 0, 0);
 
+    /* 自动检测图形 */
     var detected = detectRegions(sourceCanvas);
     this.regions = detected.map(function(r){
-      return { id: FigEditor.nextId++, x:r.x, y:r.y, w:r.w, h:r.h, selected:false };
+      return { id: self.nextId++, x:r.x, y:r.y, w:r.w, h:r.h, selected:false };
     });
 
     if(!this.bound){ this.bindEvents(); this.bound = true; }
@@ -3220,13 +3223,16 @@ var FigEditor = {
     this.updateUI();
   },
 
+  /* ★ 关键修复：用 canvasEl 计算坐标，加除零保护 */
   toImageCoords: function(clientX, clientY){
-    var rect = this.canvas.getBoundingClientRect();
-    var sx = this.canvas.width / rect.width;
-    var sy = this.canvas.height / rect.height;
+    if(!this.canvasEl) return { x:0, y:0 };
+    var rect = this.canvasEl.getBoundingClientRect();
+    if(rect.width < 1 || rect.height < 1) return { x:0, y:0 };
+    var sx = this.canvasEl.width / rect.width;
+    var sy = this.canvasEl.height / rect.height;
     return {
-      x: clamp((clientX - rect.left) * sx, 0, this.canvas.width),
-      y: clamp((clientY - rect.top) * sy, 0, this.canvas.height)
+      x: clamp((clientX - rect.left) * sx, 0, this.canvasEl.width),
+      y: clamp((clientY - rect.top) * sy, 0, this.canvasEl.height)
     };
   },
 
@@ -3333,40 +3339,50 @@ var FigEditor = {
     var stage = document.getElementById('figStage');
     var self = this;
 
-    /* 阻止浏览器把图片当作可拖动元素 */
+    /* 阻止浏览器原生拖拽和右键菜单 */
     stage.addEventListener('dragstart', function(e){ e.preventDefault(); });
     stage.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
     stage.addEventListener('pointerdown', function(e){
-      if(e.button !== 0 && e.pointerType === 'mouse') return;
-      if(!self.canvas) return;
+      if(!self.canvasEl) return;
+      /* 鼠标左键才响应；触摸/笔始终响应 */
+      if(e.pointerType === 'mouse' && e.button !== 0) return;
 
       e.preventDefault();
       e.stopPropagation();
 
-      /* 点击勾选圆点 */
+      var pt = self.toImageCoords(e.clientX, e.clientY);
+
+      /* 1) 点击勾选圆点 */
       if(e.target.classList.contains('rg-check')){
         var regEl = e.target.closest('.fig-region');
         if(regEl){ self.toggleSelect(+regEl.dataset.id); }
         return;
       }
 
+      /* 2) 点击缩放手柄 —— 优先级最高 */
       var handleEl = e.target.closest('.h');
-      var regionEl = e.target.closest('.fig-region');
-
-      if(handleEl && regionEl){
-        var id = +regionEl.dataset.id;
-        var orig = self.regions.find(function(r){ return r.id === id; });
-        if(!orig) return;
-        self.activeId = id;
-        self.drag = {
-          type:'resize', id:id, handle:handleEl.dataset.h,
-          startX:e.clientX, startY:e.clientY,
-          orig:{ x:orig.x, y:orig.y, w:orig.w, h:orig.h }
-        };
+      if(handleEl){
+        var rEl1 = handleEl.closest('.fig-region');
+        if(rEl1){
+          var id1 = +rEl1.dataset.id;
+          var orig1 = self.regions.find(function(r){ return r.id === id1; });
+          if(!orig1) return;
+          self.activeId = id1;
+          self.drag = {
+            type:'resize', id:id1, handle:handleEl.dataset.h,
+            startX:e.clientX, startY:e.clientY,
+            orig:{ x:orig1.x, y:orig1.y, w:orig1.w, h:orig1.h }
+          };
+          try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+          return;
+        }
       }
-      else if(regionEl){
-        var id2 = +regionEl.dataset.id;
+
+      /* 3) 点击已有框体（非手柄） → 移动 */
+      var rEl2 = e.target.closest('.fig-region');
+      if(rEl2){
+        var id2 = +rEl2.dataset.id;
         var orig2 = self.regions.find(function(r){ return r.id === id2; });
         if(!orig2) return;
         self.activeId = id2;
@@ -3375,26 +3391,27 @@ var FigEditor = {
           startX:e.clientX, startY:e.clientY,
           orig:{ x:orig2.x, y:orig2.y, w:orig2.w, h:orig2.h }
         };
-      }
-      else {
-        var pt = self.toImageCoords(e.clientX, e.clientY);
-        var newId = self.nextId++;
-        self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
-        self.activeId = newId;
-        self.drag = {
-          type:'create', id:newId,
-          startX:e.clientX, startY:e.clientY,
-          orig:{ x:pt.x, y:pt.y, w:0, h:0 }
-        };
-        self.render(); self.updateUI();
+        try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+        return;
       }
 
+      /* 4) 空白处拖拽 → 新建选区 */
+      var newId = self.nextId++;
+      self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
+      self.activeId = newId;
+      self.drag = {
+        type:'create', id:newId,
+        startX:e.clientX, startY:e.clientY,
+        orig:{ x:pt.x, y:pt.y, w:0, h:0 }
+      };
       try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+      self.render(); self.updateUI();
     });
 
     stage.addEventListener('pointermove', function(e){
-      if(!self.drag || !self.canvas) return;
+      if(!self.drag || !self.canvasEl) return;
       e.preventDefault();
+
       var r = self.regions.find(function(x){ return x.id === self.drag.id; });
       if(!r) return;
       var orig = self.drag.orig;
@@ -3402,8 +3419,8 @@ var FigEditor = {
       if(self.drag.type === 'move'){
         var p1 = self.toImageCoords(self.drag.startX, self.drag.startY);
         var p2 = self.toImageCoords(e.clientX, e.clientY);
-        r.x = clamp(orig.x + (p2.x - p1.x), 0, self.canvas.width - orig.w);
-        r.y = clamp(orig.y + (p2.y - p1.y), 0, self.canvas.height - orig.h);
+        r.x = clamp(orig.x + (p2.x - p1.x), 0, self.canvasEl.width - orig.w);
+        r.y = clamp(orig.y + (p2.y - p1.y), 0, self.canvasEl.height - orig.h);
       } else if(self.drag.type === 'create'){
         var p2c = self.toImageCoords(e.clientX, e.clientY);
         r.x = Math.min(orig.x, p2c.x);
@@ -3417,16 +3434,16 @@ var FigEditor = {
         var h = self.drag.handle;
         var x1 = orig.x, y1 = orig.y;
         var x2 = orig.x + orig.w, y2 = orig.y + orig.h;
-        if(h.indexOf('n')>=0) y1 = orig.y + dy;
-        if(h.indexOf('s')>=0) y2 = orig.y + orig.h + dy;
-        if(h.indexOf('w')>=0) x1 = orig.x + dx;
-        if(h.indexOf('e')>=0) x2 = orig.x + orig.w + dx;
+        if(h.indexOf('n') >= 0) y1 = orig.y + dy;
+        if(h.indexOf('s') >= 0) y2 = orig.y + orig.h + dy;
+        if(h.indexOf('w') >= 0) x1 = orig.x + dx;
+        if(h.indexOf('e') >= 0) x2 = orig.x + orig.w + dx;
         if(x1 > x2){ var t = x1; x1 = x2; x2 = t; }
         if(y1 > y2){ var t2 = y1; y1 = y2; y2 = t2; }
-        x1 = clamp(x1, 0, self.canvas.width);
-        x2 = clamp(x2, 0, self.canvas.width);
-        y1 = clamp(y1, 0, self.canvas.height);
-        y2 = clamp(y2, 0, self.canvas.height);
+        x1 = clamp(x1, 0, self.canvasEl.width);
+        x2 = clamp(x2, 0, self.canvasEl.width);
+        y1 = clamp(y1, 0, self.canvasEl.height);
+        y2 = clamp(y2, 0, self.canvasEl.height);
         r.x = x1; r.y = y1; r.w = x2 - x1; r.h = y2 - y1;
       }
       self.render();
@@ -3435,7 +3452,9 @@ var FigEditor = {
     function finish(e){
       if(!self.drag) return;
       var r = self.regions.find(function(x){ return x.id === self.drag.id; });
-      if(r && (r.w < 12 || r.h < 12)){
+      var isCreate = (self.drag.type === 'create');
+      /* ★ 只有「新建」才检查大小；移动/缩放一律保留 */
+      if(r && isCreate && (r.w < 15 || r.h < 15)){
         self.regions = self.regions.filter(function(x){ return x.id !== r.id; });
         if(self.activeId === r.id) self.activeId = null;
         toast('选区太小，已取消');
@@ -3482,7 +3501,7 @@ $('#figEditorConfirm').onclick = showAssignModal;
 $('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
 $('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
 
-/* 换图按钮（新）：临时隐藏编辑器，弹出文件选择；选完后直接覆盖编辑器内容 */
+/* 换图按钮 */
 $('#figChangeImage').onclick = function(){
   var picker = document.createElement('input');
   picker.type = 'file';
@@ -3495,7 +3514,6 @@ $('#figChangeImage').onclick = function(){
       var img = new Image();
       img.onload = function(){
         var newCanvas = imageToCanvas(img);
-        /* 重新载入编辑器，清空旧选区 */
         FigEditor.load(newCanvas);
         toast('已换图，请重新选择区域');
       };
