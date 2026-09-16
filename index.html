@@ -557,6 +557,10 @@ body.hw-open .page-nav{display:none !important}
       <button class="ghost" id="btnToggleMode">切换到注册</button>
       <button class="primary" id="btnAuthSubmit">登录</button>
     </div>
+<div style="text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #eef1f7">
+  <span style="font-size:13px;color:#7a8399">还没有账号？</span>
+  <a href=" " id="btnOpenApply" style="font-size:13.5px;color:#3b6ef5;font-weight:600;margin-left:6px;text-decoration:none;cursor:pointer">申请加入 →</a >
+</div>
   </div>
 </div>
 
@@ -582,7 +586,11 @@ body.hw-open .page-nav{display:none !important}
         <span>ID：<b id="userCodeLabel">-</b></span>
         <span class="admin-tag" id="adminTag" style="display:none">管理员</span>
         <button class="ghost small" id="btnAdminPanel" style="display:none">分享管理</button>
-        <button class="ghost small" id="btnLogout">退出</button>
+  <button class="ghost small" id="btnInviteUser" style="display:none">邀请用户</button>
+<button class="ghost small" id="btnJoinRequests" style="display:none">
+  待审批 <span id="joinReqBadge" style="background:#ff4d4f;color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;display:none">0</span>
+</button> 
+<button class="ghost small" id="btnLogout">退出</button>
       </div>
     </div>
   </div>
@@ -4660,6 +4668,425 @@ async function doImportAsMerge(){
       if(evt === 'SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
     });
   })();
+
+})();
+</script>
+<!-- ========== 邀请用户弹窗 ========== -->
+<div class="modal-mask" id="inviteModal">
+  <div class="modal" style="max-width:480px">
+    <h3>邀请新用户</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      输入对方邮箱，点击发送。对方会收到一封邀请邮件，点链接设置密码后即可登录你的网页。
+    </div>
+    <div class="form-field">
+      <label>对方邮箱</label>
+      <input type="email" id="inviteEmail" placeholder="user@example.com" autocomplete="off">
+    </div>
+    <div class="msg" id="inviteMsg"></div>
+    <div class="modal-actions right">
+      <button id="inviteCancel">取消</button>
+      <button class="primary" id="inviteOk">发送邀请</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 待审批面板 ========== -->
+<div class="modal-mask" id="joinReqModal">
+  <div class="modal wide">
+    <h3>待审批的申请</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      点"通过"会立即给对方发邀请邮件；点"拒绝"会标记为已拒绝（不会发邮件）。
+    </div>
+    <div class="modal-actions" style="margin-bottom:8px">
+      <button id="joinReqRefresh" class="ghost small">刷新列表</button>
+      <button id="joinReqShowAll" class="ghost small">显示全部（含已处理）</button>
+    </div>
+    <div id="joinReqList" style="max-height:52vh;overflow:auto;display:flex;flex-direction:column;gap:9px"></div>
+    <div class="modal-actions right">
+      <button id="joinReqClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 申请加入弹窗 ========== -->
+<div class="modal-mask" id="applyModal" style="z-index:400">
+  <div class="modal" style="max-width:480px">
+    <h3>申请加入</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      提交申请后，管理员审核通过会给你发一封邀请邮件，点邮件里的链接设置密码即可使用。
+    </div>
+    <div class="form-field">
+      <label>邮箱 <span style="color:#c4304a">*</span></label>
+      <input type="email" id="applyEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="form-field">
+      <label>你的姓名 / 昵称</label>
+      <input type="text" id="applyName" placeholder="例如：张三老师" autocomplete="name">
+    </div>
+    <div class="form-field">
+      <label>申请理由（可选）</label>
+      <textarea id="applyReason" rows="3" placeholder="例如：我是XX学校的数学老师…"
+        style="width:100%;font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px;resize:vertical"></textarea>
+    </div>
+    <div class="msg" id="applyMsg"></div>
+    <div class="modal-actions right">
+      <button id="applyCancel">取消</button>
+      <button class="primary" id="applySubmit">提交申请</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   申请加入 + 邀请用户 + 待审批（全部逻辑）
+   ================================================================ */
+(function(){
+
+  function ready(fn){
+    if(document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+
+  ready(function(){
+
+    /* ---------- 申请加入（未登录用户可见） ---------- */
+    var btnOpenApply = document.getElementById('btnOpenApply');
+    if(btnOpenApply){
+      btnOpenApply.onclick = function(){
+        document.getElementById('applyEmail').value = '';
+        document.getElementById('applyName').value = '';
+        document.getElementById('applyReason').value = '';
+        var m = document.getElementById('applyMsg');
+        if(m) m.className = 'msg';
+        document.getElementById('applyModal').classList.add('show');
+        setTimeout(function(){ document.getElementById('applyEmail').focus(); }, 80);
+      };
+    }
+
+    var applyCancel = document.getElementById('applyCancel');
+    if(applyCancel){
+      applyCancel.onclick = function(){
+        document.getElementById('applyModal').classList.remove('show');
+      };
+    }
+
+    var applySubmit = document.getElementById('applySubmit');
+    if(applySubmit){
+      applySubmit.onclick = async function(){
+        var email = document.getElementById('applyEmail').value.trim();
+        var name = document.getElementById('applyName').value.trim();
+        var reason = document.getElementById('applyReason').value.trim();
+        var msg = document.getElementById('applyMsg');
+
+        function show(txt, type){
+          msg.textContent = txt;
+          msg.className = 'msg show ' + (type || '');
+        }
+
+        if(!email){ show('请填写邮箱','err'); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
+
+        this.disabled = true;
+        var old = this.textContent;
+        this.textContent = '提交中…';
+
+        try{
+          var exist = await sb.from('join_requests')
+            .select('id,status')
+            .eq('email', email.toLowerCase())
+            .in('status', ['pending','approved'])
+            .maybeSingle();
+
+          if(exist.data){
+            if(exist.data.status === 'pending'){
+              show('你已经提交过申请了，请耐心等待管理员审核','err');
+            } else {
+              show('该邮箱已通过审核，请直接登录或查收邀请邮件','err');
+            }
+            this.disabled = false;
+            this.textContent = old;
+            return;
+          }
+
+          var r = await sb.from('join_requests').insert({
+            email: email.toLowerCase(),
+            name: name || null,
+            reason: reason || null,
+            status: 'pending'
+          });
+
+          if(r.error) throw r.error;
+
+          show('提交成功！请等待管理员审核，通过后你会收到邀请邮件','ok');
+          document.getElementById('applyEmail').value = '';
+          document.getElementById('applyName').value = '';
+          document.getElementById('applyReason').value = '';
+          setTimeout(function(){
+            document.getElementById('applyModal').classList.remove('show');
+          }, 2500);
+        }catch(e){
+          show('提交失败：' + (e.message || '未知错误'), 'err');
+        }
+        this.disabled = false;
+        this.textContent = old;
+      };
+    }
+
+    /* ---------- 邀请用户（管理员） ---------- */
+    var btnInviteUser = document.getElementById('btnInviteUser');
+    if(btnInviteUser){
+      btnInviteUser.onclick = function(){
+        document.getElementById('inviteEmail').value = '';
+        document.getElementById('inviteMsg').className = 'msg';
+        document.getElementById('inviteModal').classList.add('show');
+        setTimeout(function(){ document.getElementById('inviteEmail').focus(); }, 80);
+      };
+    }
+
+    var inviteCancel = document.getElementById('inviteCancel');
+    if(inviteCancel){
+      inviteCancel.onclick = function(){
+        document.getElementById('inviteModal').classList.remove('show');
+      };
+    }
+
+    var inviteOk = document.getElementById('inviteOk');
+    if(inviteOk){
+      inviteOk.onclick = async function(){
+        var email = document.getElementById('inviteEmail').value.trim();
+        var msg = document.getElementById('inviteMsg');
+        function show(txt, type){
+          msg.textContent = txt;
+          msg.className = 'msg show ' + (type || '');
+        }
+
+        if(!email){ show('请输入邮箱','err'); return; }
+        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
+
+        this.disabled = true;
+        var old = this.textContent;
+        this.textContent = '发送中…';
+
+        try{
+          var r = await sb.functions.invoke('invite-user', { body: { email: email } });
+          if(r.error) throw r.error;
+          if(r.data && r.data.error) throw new Error(r.data.error);
+          show('邀请邮件已发送到 ' + email, 'ok');
+          document.getElementById('inviteEmail').value = '';
+        }catch(e){
+          show('邀请失败：' + (e.message || '未知错误'), 'err');
+        }
+        this.disabled = false;
+        this.textContent = old;
+      };
+    }
+
+    /* ---------- 待审批列表（管理员） ---------- */
+    var joinReqShowAll = false;
+
+    async function refreshJoinReqBadge(){
+      try{
+        var r = await sb.from('join_requests')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'pending');
+        var count = r.count || 0;
+        var badge = document.getElementById('joinReqBadge');
+        if(!badge) return;
+        if(count > 0){
+          badge.textContent = count;
+          badge.style.display = '';
+        } else {
+          badge.style.display = 'none';
+        }
+      }catch(e){}
+    }
+
+    async function renderJoinReqList(){
+      var el = document.getElementById('joinReqList');
+      if(!el) return;
+      el.innerHTML = '<div class="empty">加载中…</div>';
+
+      var query = sb.from('join_requests').select('*').order('created_at', { ascending: false });
+      if(!joinReqShowAll) query = query.eq('status', 'pending');
+
+      var r = await query;
+      if(r.error){
+        el.innerHTML = '<div class="empty" style="color:#c4304a">加载失败：' + r.error.message + '</div>';
+        return;
+      }
+
+      var list = r.data || [];
+      if(!list.length){
+        el.innerHTML = '<div class="empty">暂无申请</div>';
+        return;
+      }
+
+      function fmtTime(ts){
+        var d = new Date(ts);
+        function p(n){ return n<10?'0'+n:''+n; }
+        return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+      }
+
+      function escHtml(s){
+        return String(s==null?'':s).replace(/[&<>"]/g, function(c){
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+        });
+      }
+
+      el.innerHTML = list.map(function(item){
+        var isPending = item.status === 'pending';
+        var statusTag = '';
+        if(item.status === 'approved') statusTag = '<span style="background:#e9f8ee;color:#1f8a45;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已通过</span>';
+        else if(item.status === 'rejected') statusTag = '<span style="background:#ffe9ec;color:#c4304a;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已拒绝</span>';
+        else statusTag = '<span style="background:#fff4d6;color:#a86a00;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">待审批</span>';
+
+        return ''
+          + '<div style="border:1px solid #e2e8f5;border-radius:10px;padding:12px 14px;background:#fbfcff" data-id="'+item.id+'">'
+          +   '<div style="font-size:14.5px;font-weight:600;color:#26304a;margin-bottom:4px">'+escHtml(item.email)+statusTag+'</div>'
+          +   '<div style="font-size:12.5px;color:#98a1b5;margin-bottom:8px">'
+          +     (item.name ? '姓名：'+escHtml(item.name)+' · ' : '')
+          +     '提交于 '+fmtTime(item.created_at)
+          +   '</div>'
+          +   (item.reason ? '<div style="font-size:13px;color:#5a6376;background:#f7f9ff;padding:8px 10px;border-radius:7px;margin-bottom:8px;line-height:1.7">'+escHtml(item.reason)+'</div>' : '')
+          +   (isPending
+              ? '<div style="display:flex;gap:6px;justify-content:flex-end">'
+                + '<button class="small ghost" data-act="reject" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">拒绝</button>'
+                + '<button class="small primary" data-act="approve" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">通过并发送邀请</button>'
+                + '</div>'
+              : '')
+          + '</div>';
+      }).join('');
+    }
+
+    var btnJoinRequests = document.getElementById('btnJoinRequests');
+    if(btnJoinRequests){
+      btnJoinRequests.onclick = async function(){
+        joinReqShowAll = false;
+        document.getElementById('joinReqShowAll').textContent = '显示全部（含已处理）';
+        document.getElementById('joinReqModal').classList.add('show');
+        await renderJoinReqList();
+      };
+    }
+
+    var joinReqClose = document.getElementById('joinReqClose');
+    if(joinReqClose){
+      joinReqClose.onclick = function(){
+        document.getElementById('joinReqModal').classList.remove('show');
+      };
+    }
+
+    var joinReqRefresh = document.getElementById('joinReqRefresh');
+    if(joinReqRefresh){
+      joinReqRefresh.onclick = async function(){
+        await renderJoinReqList();
+        await refreshJoinReqBadge();
+      };
+    }
+
+    var joinReqShowAll = document.getElementById('joinReqShowAll');
+    if(joinReqShowAll){
+      joinReqShowAll.onclick = async function(){
+        joinReqShowAll = !joinReqShowAll;
+        this.textContent = joinReqShowAll ? '只显示待审批' : '显示全部（含已处理）';
+        await renderJoinReqList();
+      };
+    }
+
+    /* 变量名冲突，重新声明 */
+    var _showAllState = false;
+    var joinReqShowAllBtn = document.getElementById('joinReqShowAll');
+    if(joinReqShowAllBtn){
+      joinReqShowAllBtn.onclick = async function(){
+        _showAllState = !_showAllState;
+        this.textContent = _showAllState ? '只显示待审批' : '显示全部（含已处理）';
+        joinReqShowAll = _showAllState;
+        await renderJoinReqList();
+      };
+    }
+
+    var joinReqList = document.getElementById('joinReqList');
+    if(joinReqList){
+      joinReqList.addEventListener('click', async function(e){
+        var btn = e.target.closest('button[data-act]');
+        if(!btn) return;
+        var act = btn.dataset.act;
+        var id = btn.dataset.id;
+        var email = btn.dataset.email;
+
+        if(act === 'approve'){
+          if(!confirm('确定通过 '+email+' 的申请吗？\n\n会立即给对方发邀请邮件。')) return;
+          btn.disabled = true;
+          btn.textContent = '发送中…';
+
+          try{
+            var r = await sb.functions.invoke('invite-user', { body: { email: email } });
+            if(r.error) throw r.error;
+            if(r.data && r.data.error) throw new Error(r.data.error);
+
+            await sb.from('join_requests').update({
+              status: 'approved',
+              reviewed_at: new Date().toISOString()
+            }).eq('id', id);
+
+            alert('已通过并发送邀请给 ' + email);
+            await renderJoinReqList();
+            await refreshJoinReqBadge();
+          }catch(err){
+            alert('发送邀请失败：' + (err.message || '未知错误') + '\n\n可能原因：邮箱已注册过，或邮件服务暂时不可用。');
+            btn.disabled = false;
+            btn.textContent = '通过并发送邀请';
+          }
+        }
+        else if(act === 'reject'){
+          var reason = prompt('拒绝 '+email+' 的申请（可填写理由，对方看不到）：', '');
+          if(reason === null) return;
+
+          btn.disabled = true;
+          try{
+            await sb.from('join_requests').update({
+              status: 'rejected',
+              reviewed_at: new Date().toISOString(),
+              reject_reason: reason || null
+            }).eq('id', id);
+
+            await renderJoinReqList();
+            await refreshJoinReqBadge();
+          }catch(err){
+            alert('操作失败：' + (err.message || '未知错误'));
+            btn.disabled = false;
+          }
+        }
+      });
+    }
+
+    /* ---------- 登录成功后显示管理员按钮 ---------- */
+    function checkAdminAndShow(){
+      var chip = document.getElementById('userChip');
+      var adminTag = document.getElementById('adminTag');
+      var isAdmin = adminTag && adminTag.style.display !== 'none';
+
+      if(isAdmin){
+        var btn1 = document.getElementById('btnInviteUser');
+        var btn2 = document.getElementById('btnJoinRequests');
+        if(btn1) btn1.style.display = '';
+        if(btn2) btn2.style.display = '';
+        refreshJoinReqBadge();
+        setInterval(refreshJoinReqBadge, 60000);
+      }
+    }
+
+    /* 每 500ms 检查一次登录状态（简单粗暴，但有效） */
+    var checkCount = 0;
+    var checkTimer = setInterval(function(){
+      checkCount++;
+      checkAdminAndShow();
+      if(checkCount > 60) clearInterval(checkTimer);
+    }, 500);
+
+    /* 立即检查一次 */
+    setTimeout(checkAdminAndShow, 1000);
+
+  });
 
 })();
 </script>
