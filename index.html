@@ -9,7 +9,9 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#eef1f7;color:#1f2430;-webkit-font-smoothing:antialiased;font-size:16px}
-body.bb-open{overflow:hidden}
+body.bb-open,body.hw-open{overflow:hidden}
+
+/* ============ 顶栏 ============ */
 .topbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid #e1e6f0;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .bar-row{display:flex;align-items:center;gap:8px;padding:8px 16px;flex-wrap:wrap}
 .bar-row.tabs{padding-top:0;padding-bottom:10px;gap:8px;overflow-x:auto}
@@ -22,6 +24,8 @@ body.bb-open{overflow:hidden}
 .user-chip b{color:#2a5ae0;font-weight:700}
 .user-chip .admin-tag{background:#ffe9c2;color:#a86a00;font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
 .spacer{flex:1}
+
+/* ============ 通用按钮 ============ */
 button{font-family:inherit;font-size:15px;cursor:pointer;border:1px solid #d5dbe8;background:#fff;color:#2b3448;padding:8px 16px;border-radius:8px;transition:.15s;white-space:nowrap}
 button:hover{background:#f2f6ff;border-color:#9db6ff}
 button:active{transform:scale(.97)}
@@ -37,6 +41,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .bar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tab{padding:8px 18px;border-radius:20px;font-size:15.5px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
 .tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-weight:600}
+
+/* ============ 试卷页面 ============ */
 #paperView{padding:6px 0 60px}
 .page{position:relative;max-width:1080px;margin:20px auto;background:#fff;border-radius:16px;box-shadow:0 4px 22px rgba(30,40,70,.09);padding:34px 46px 56px;min-height:320px}
 canvas.ink{position:absolute;left:0;top:0;z-index:5;pointer-events:none;border-radius:16px;touch-action:none}
@@ -53,59 +59,36 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .panel.answer{background:#eefaf1;border-left:5px solid #43b96c}
 .panel.analysis{background:#fff8e8;border-left:5px solid #f0b429}
-.panel.analysis{background:#fff8e8;border-left:5px solid #f0b429}
 .panel.similar{background:#f4f7ff;border-left:5px solid #7d9bf5;padding:16px 18px}
 .panel.homework{background:#f0f7ff;border-left:5px solid #4a90e2;padding:16px 18px}
 .similar-head,.homework-head{font-size:17px;font-weight:800;margin-bottom:14px;letter-spacing:.5px}
 .similar-head{color:#3b6ef5}
 .homework-head{color:#2f7ad4}
 
-/* /* 答案面板：答案 + 计算过程 */
-function renderAnswerFieldsHTML(q){
-  var blocks = '';
-  if(q.answer && String(q.answer).trim()){
-    blocks += fieldBlockHTML('✅ 答案','ans', q.answer);
-  }
-  if(q.calc && String(q.calc).trim()){
-    blocks += fieldBlockHTML('📐 计算过程','calc', q.calc);
-  }
-  if(!blocks){
-    blocks = '<div class="field-val empty">该题暂无答案</div>';
-  }
-  return blocks;
-}
+/* ============ 结构化字段（独立成行） ============ */
+.field-block{display:block;padding:14px 0;border-bottom:1px dashed rgba(0,0,0,.1)}
+.field-block:first-child{padding-top:2px}
+.field-block:last-child{border-bottom:none;padding-bottom:2px}
+.field-label{display:inline-flex;align-items:center;gap:6px;font-size:16px;font-weight:800;letter-spacing:.5px;padding:3px 12px;border-radius:20px;margin-bottom:10px}
+.field-label.ans{background:#d4f5de;color:#1a7a3d}
+.field-label.ana{background:#ffefcc;color:#a86a00}
+.field-label.calc{background:#dbeafe;color:#1d4ed8}
+.field-label.reason{background:#e9defa;color:#6d28d9}
+.field-label.pitfall{background:#ffe4e6;color:#be123c}
+.field-val{display:block;font-size:19px;line-height:2;color:#1f2430;white-space:pre-wrap;word-break:break-word;padding-left:4px}
+.field-val.empty{color:#b8c0d0;font-style:italic;font-size:17px}
 
-/* 解析面板：解析 + 算理 + 知识易错点 */
-function renderAnalysisFieldsHTML(q){
-  var blocks = '';
-  if(q.analysis && String(q.analysis).trim()){
-    blocks += fieldBlockHTML('📝 解析','ana', q.analysis);
-  }
-  if(q.reason && String(q.reason).trim()){
-    blocks += fieldBlockHTML('💡 算理','reason', q.reason);
-  }
-  if(q.pitfall && String(q.pitfall).trim()){
-    blocks += fieldBlockHTML('⚠️ 知识易错点','pitfall', q.pitfall);
-  }
-  if(!blocks){
-    blocks = '<div class="field-val empty">该题暂无解析</div>';
-  }
-  return blocks;
-}
-
-/* 举一反三 / 作业内部的字段紧凑一点 */
+/* ============ 举一反三 / 作业子题 ============ */
+.subq{background:#fff;border:1px solid #dfe7fa;border-radius:12px;padding:16px 20px;margin:14px 0}
 .subq .field-block{padding:10px 0}
 .subq .field-label{font-size:14px;padding:2px 10px;margin-bottom:8px}
 .subq .field-val{font-size:17px;line-height:1.9}
-
-.subq{background:#fff;border:1px solid #dfe7fa;border-radius:12px;padding:16px 20px;margin:14px 0}
 .sub-title{font-size:15.5px;font-weight:800;color:#5c7cf0;margin-bottom:10px;letter-spacing:.5px}
 .subq .sub-title{color:#2f7ad4}
 .sub-stem{font-size:19px;line-height:2;white-space:pre-wrap;letter-spacing:.2px;font-weight:500}
 .subq .btns{margin-top:14px}
 .subq button{font-size:14.5px;padding:7px 16px}
 .panel.sub-answer{background:#eefaf1;border-left:5px solid #43b96c;font-size:18px;padding:12px 18px}
-.panel.sub-analysis{background:#fff8e8;border-left:5px solid #f0b429;font-size:18px;padding:12px 18px}
 .panel.sub-analysis{background:#fff8e8;border-left:5px solid #f0b429;font-size:18px;padding:12px 18px}
 .empty{color:#98a1b5;font-size:15.5px;padding:10px 0}
 .sim-nav{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:16px;border-top:1px dashed #cddaf5;flex-wrap:wrap}
@@ -114,40 +97,79 @@ function renderAnalysisFieldsHTML(q){
 .sim-nav button{font-size:15px;padding:8px 17px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
 .sim-nav button:disabled{opacity:.35;cursor:not-allowed}
 .sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
-</style>
-<style>
-/* ================================================================
-   作业管理
-   ================================================================ */
-#hwView{display:none;padding-bottom:60px}
-.hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
-.hw-title{font-weight:800;font-size:18px;color:#23304d}
-.hw-container{max-width:1080px;margin:20px auto;padding:0 16px}
-.hw-set{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(30,40,70,.08);margin-bottom:18px;overflow:hidden}
-.hw-set-head{display:flex;align-items:center;gap:10px;padding:15px 22px;background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border-bottom:1px solid #e2e8f5;flex-wrap:wrap}
-.hw-set-name{font-size:18px;font-weight:800;color:#2a5ae0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hw-badge{font-size:12.5px;font-weight:600;color:#3b6ef5;background:#fff;border:1px solid #d6e2ff;padding:2px 11px;border-radius:20px}
-.hw-date{font-size:12.5px;color:#98a1b5;font-weight:400}
-.hw-set-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-.hw-set-body{padding:6px 22px 18px}
-.hw-set-body.collapsed{display:none}
-.hw-q{padding:20px 0;border-bottom:1px dashed #e6eaf2}
-.hw-q:last-child{border-bottom:none}
-.hw-q .stem{font-size:20px;line-height:2}
-.hw-q .field-val{font-size:18px}
-.hw-q .field-label{font-size:14.5px}
-.hw-explain{background:#f8fbff;border-left:4px solid #93b8ff;border-radius:8px;padding:12px 16px}
-.hw-explain .line{margin:6px 0}
-.hw-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
-.hw-item>label{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;min-width:0;font-size:15.5px}
-.hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hw-item input[type=checkbox]{accent-color:#3b6ef5;width:19px;height:19px;flex-shrink:0}
-.hw-item select{font-family:inherit;font-size:15px;border:1px solid #d5dbe8;border-radius:7px;padding:8px 11px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
-.used-tag{font-size:12px;color:#c4304a;background:#ffe9ec;padding:2px 8px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:600}
 
-/* ================================================================
-   通用弹窗
-   ================================================================ */
+/* ============ 图形 / 配图 ============ */
+.q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
+.q-figure:hover{border-color:#cbd5e1}
+.q-figure img{display:block;height:auto;border-radius:8px;border:1px solid #e6eaf2;background:#fafbfd;user-select:none}
+.q-figure .fig-handle{position:absolute;right:-8px;bottom:-8px;width:20px;height:20px;border-radius:50%;background:#3b6ef5;border:2px solid #fff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.28);opacity:0;transition:opacity .15s;touch-action:none;z-index:22}
+.q-figure:hover .fig-handle{opacity:1}
+.q-figure .fig-tools{position:absolute;top:-38px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(17,24,39,.95);border-radius:9px;padding:4px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;z-index:25}
+.q-figure:hover .fig-tools{opacity:1;pointer-events:auto}
+.q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:12px;padding:5px 10px;border-radius:5px;cursor:pointer;font-family:inherit}
+.q-figure .fig-tools button:hover{background:rgba(255,255,255,.18)}
+.fig-stage{position:relative;display:inline-block;line-height:0;user-select:none;max-width:100%;touch-action:none}
+.fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.fig-region{position:absolute;border:2px solid rgba(59,130,246,.9);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s;touch-action:none}
+.fig-region:hover{background:rgba(59,130,246,.2)}
+.fig-region.selected{border-color:#10b981;background:rgba(16,185,129,.16);z-index:5}
+.fig-region .rg-check{position:absolute;top:-12px;left:-12px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
+.fig-region .rg-check:hover{border-color:#3b6ef5}
+.fig-region.selected .rg-check{background:#10b981;border-color:#10b981;color:#fff}
+.fig-region .h{position:absolute;width:13px;height:13px;background:#fff;border:2px solid #3b6ef5;border-radius:50%;box-sizing:border-box;z-index:6;touch-action:none}
+.fig-region.selected .h{border-color:#10b981}
+.h.nw{left:-7px;top:-7px;cursor:nwse-resize}
+.h.n{left:50%;top:-7px;margin-left:-7px;cursor:ns-resize}
+.h.ne{right:-7px;top:-7px;cursor:nesw-resize}
+.h.e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.h.se{right:-7px;bottom:-7px;cursor:nwse-resize}
+.h.s{left:50%;bottom:-7px;margin-left:-7px;cursor:ns-resize}
+.h.sw{left:-7px;bottom:-7px;cursor:nesw-resize}
+.h.w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.fig-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px dashed #e3e8f0}
+.fig-thumb{position:relative;border:2px solid #e3e8f0;border-radius:8px;padding:4px;cursor:pointer;background:#fff;transition:border-color .12s,transform .12s;max-width:150px}
+.fig-thumb:hover{border-color:#93c5fd;transform:translateY(-2px)}
+.fig-thumb.selected{border-color:#10b981}
+.fig-thumb canvas{display:block;max-width:138px;max-height:96px;height:auto;border-radius:4px}
+.fig-thumb .thumb-tag{font-size:11.5px;color:#98a1b5;text-align:center;margin-top:4px}
+.fig-thumb .thumb-check{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:transparent;line-height:1;padding:0;z-index:3}
+.fig-thumb.selected .thumb-check{background:#10b981;border-color:#10b981;color:#fff}
+.fig-empty{font-size:13.5px;color:#f59e0b;padding:18px;text-align:center;width:100%}
+.fig-editor-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #e3e8f0;flex-wrap:wrap}
+.fig-editor-bar .left{display:flex;gap:8px;flex-wrap:wrap}
+.fig-editor-bar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.count-badge{font-size:13px;color:#3b6ef5;background:#eff6ff;padding:5px 13px;border-radius:20px;font-weight:700}
+
+/* ============ 图文分配弹窗 ============ */
+.assign-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow:auto;padding:2px;margin:14px 0}
+.assign-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid #e2e8f5;border-radius:12px;background:#fbfcff;flex-wrap:wrap}
+.assign-row .fig-preview{flex-shrink:0;width:110px;height:78px;border-radius:8px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.assign-row .fig-preview img{max-width:100%;max-height:100%;display:block}
+.assign-row .assign-fields{flex:1;min-width:0;display:flex;gap:8px;flex-wrap:wrap}
+.assign-row .af-group{display:flex;flex-direction:column;gap:4px;min-width:160px;flex:1}
+.assign-row .af-group label{font-size:12.5px;color:#7a8399;font-weight:700;padding-left:2px}
+.assign-row select{font-family:inherit;font-size:14.5px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;width:100%}
+.assign-row select:focus{border-color:#3b6ef5}
+
+/* ============ 拖拽上传覆盖层 ============ */
+.drag-overlay{position:fixed;inset:0;z-index:500;background:rgba(59,130,246,.12);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:4px dashed #3b6ef5;display:none;align-items:center;justify-content:center;pointer-events:none}
+.drag-overlay.show{display:flex}
+.drag-overlay .drag-inner{background:#fff;border-radius:22px;padding:40px 56px;text-align:center;box-shadow:0 24px 70px rgba(59,110,245,.35);border:1px solid #d6e2ff;max-width:88vw}
+.drag-overlay .drag-icon{font-size:60px;line-height:1;margin-bottom:16px}
+.drag-overlay .drag-title{font-size:22px;font-weight:800;color:#2a5ae0;margin-bottom:8px;letter-spacing:.5px}
+.drag-overlay .drag-sub{font-size:13.5px;color:#7a8399;line-height:1.8}
+.drag-overlay .drag-sub b{color:#3b6ef5}
+body.dragging-file *{cursor:copy !important}
+
+/* ============ 多图选择弹窗 ============ */
+.multi-img-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:58vh;overflow:auto;padding:2px;margin:12px 0}
+.multi-img-item{border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;background:#fbfcff;transition:.15s;text-align:center}
+.multi-img-item:hover{border-color:#3b6ef5;transform:translateY(-2px);box-shadow:0 8px 20px rgba(59,110,245,.22)}
+.multi-img-item img{width:100%;height:118px;object-fit:cover;display:block;background:#fff}
+.multi-img-item .name{font-size:12px;color:#5a6376;padding:7px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.multi-img-tip{font-size:13px;color:#98a1b5;text-align:center;padding:4px 0}
+
+/* ============ 通用弹窗 ============ */
 .modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.5);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
 .modal-mask.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow:auto;padding:26px 28px 24px;box-shadow:0 18px 50px rgba(20,28,50,.3)}
@@ -191,108 +213,39 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}
 th,td{padding:10px 13px;text-align:left;border-bottom:1px solid #eef1f7;white-space:nowrap}
 th{background:#f7f9ff;font-weight:700;color:#3a4560;position:sticky;top:0;z-index:1}
 tr:last-child td{border-bottom:none}
-.save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.94);color:#fff;font-size:14px;padding:10px 18px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
-.save-hint.show{opacity:1;transform:translateY(0)}
 .toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:14px;padding:11px 22px;border-radius:9px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.94);color:#fff;font-size:14px;padding:10px 18px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
+.save-hint.show{opacity:1;transform:translateY(0)}
 
-/* ================================================================
-   图形 / 配图
-   ================================================================ */
-.q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
-.q-figure:hover{border-color:#cbd5e1}
-.q-figure img{display:block;height:auto;border-radius:8px;border:1px solid #e6eaf2;background:#fafbfd;user-select:none}
-.q-figure .fig-handle{position:absolute;right:-8px;bottom:-8px;width:20px;height:20px;border-radius:50%;background:#3b6ef5;border:2px solid #fff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.28);opacity:0;transition:opacity .15s;touch-action:none;z-index:22}
-.q-figure:hover .fig-handle{opacity:1}
-.q-figure .fig-tools{position:absolute;top:-38px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(17,24,39,.95);border-radius:9px;padding:4px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;z-index:25}
-.q-figure:hover .fig-tools{opacity:1;pointer-events:auto}
-.q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:12px;padding:5px 10px;border-radius:5px;cursor:pointer;font-family:inherit}
-.q-figure .fig-tools button:hover{background:rgba(255,255,255,.18)}
-.fig-stage{position:relative;display:inline-block;line-height:0;user-select:none;max-width:100%;touch-action:none}
-.fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
-.fig-region{position:absolute;border:2px solid rgba(59,130,246,.9);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s;touch-action:none}
-.fig-region:hover{background:rgba(59,130,246,.2)}
-.fig-region.selected{border-color:#10b981;background:rgba(16,185,129,.16);z-index:5}
-.fig-region .rg-check{position:absolute;top:-12px;left:-12px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
-.fig-region .rg-check:hover{border-color:#3b6ef5}
-.fig-region.selected .rg-check{background:#10b981;border-color:#10b981;color:#fff}
-.fig-region .h{position:absolute;width:13px;height:13px;background:#fff;border:2px solid #3b6ef5;border-radius:50%;box-sizing:border-box;z-index:6;touch-action:none}
-.fig-region.selected .h{border-color:#10b981}
-.h.nw{left:-7px;top:-7px;cursor:nwse-resize}
-.h.n{left:50%;top:-7px;margin-left:-7px;cursor:ns-resize}
-.h.ne{right:-7px;top:-7px;cursor:nesw-resize}
-.h.e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
-.h.se{right:-7px;bottom:-7px;cursor:nwse-resize}
-.h.s{left:50%;bottom:-7px;margin-left:-7px;cursor:ns-resize}
-.h.sw{left:-7px;bottom:-7px;cursor:nesw-resize}
-.h.w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
-.fig-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px dashed #e3e8f0}
-.fig-thumb{position:relative;border:2px solid #e3e8f0;border-radius:8px;padding:4px;cursor:pointer;background:#fff;transition:border-color .12s,transform .12s;max-width:150px}
-.fig-thumb:hover{border-color:#93c5fd;transform:translateY(-2px)}
-.fig-thumb.selected{border-color:#10b981}
-.fig-thumb canvas{display:block;max-width:138px;max-height:96px;height:auto;border-radius:4px}
-.fig-thumb .thumb-tag{font-size:11.5px;color:#98a1b5;text-align:center;margin-top:4px}
-.fig-thumb .thumb-check{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:transparent;line-height:1;padding:0;z-index:3}
-.fig-thumb.selected .thumb-check{background:#10b981;border-color:#10b981;color:#fff}
-.fig-empty{font-size:13.5px;color:#f59e0b;padding:18px;text-align:center;width:100%}
-.fig-editor-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #e3e8f0;flex-wrap:wrap}
-.fig-editor-bar .left{display:flex;gap:8px;flex-wrap:wrap}
-.fig-editor-bar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.count-badge{font-size:13px;color:#3b6ef5;background:#eff6ff;padding:5px 13px;border-radius:20px;font-weight:700}
+/* ============ 作业管理 ============ */
+#hwView{display:none;padding-bottom:60px}
+.hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
+.hw-title{font-weight:800;font-size:18px;color:#23304d}
+.hw-container{max-width:1080px;margin:20px auto;padding:0 16px}
+.hw-set{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(30,40,70,.08);margin-bottom:18px;overflow:hidden}
+.hw-set-head{display:flex;align-items:center;gap:10px;padding:15px 22px;background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border-bottom:1px solid #e2e8f5;flex-wrap:wrap}
+.hw-set-name{font-size:18px;font-weight:800;color:#2a5ae0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hw-badge{font-size:12.5px;font-weight:600;color:#3b6ef5;background:#fff;border:1px solid #d6e2ff;padding:2px 11px;border-radius:20px}
+.hw-date{font-size:12.5px;color:#98a1b5;font-weight:400}
+.hw-set-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.hw-set-body{padding:6px 22px 18px}
+.hw-set-body.collapsed{display:none}
+.hw-q{padding:20px 0;border-bottom:1px dashed #e6eaf2}
+.hw-q:last-child{border-bottom:none}
+.hw-q .stem{font-size:20px;line-height:2}
+.hw-q .field-val{font-size:18px}
+.hw-q .field-label{font-size:14.5px}
+.hw-explain{background:#f8fbff;border-left:4px solid #93b8ff;border-radius:8px;padding:12px 16px}
+.hw-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
+.hw-item>label{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;min-width:0;font-size:15.5px}
+.hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hw-item input[type=checkbox]{accent-color:#3b6ef5;width:19px;height:19px;flex-shrink:0}
+.hw-item select{font-family:inherit;font-size:15px;border:1px solid #d5dbe8;border-radius:7px;padding:8px 11px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
+.used-tag{font-size:12px;color:#c4304a;background:#ffe9ec;padding:2px 8px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:600}
 
-/* ================================================================
-   ★ 图形分配弹窗（可选 主题目 / 举一反三 / 作业）
-   ================================================================ */
-.assign-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow:auto;padding:2px;margin:14px 0}
-.assign-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid #e2e8f5;border-radius:12px;background:#fbfcff;flex-wrap:wrap}
-.assign-row .fig-preview{flex-shrink:0;width:110px;height:78px;border-radius:8px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.assign-row .fig-preview img{max-width:100%;max-height:100%;display:block}
-.assign-row .assign-fields{flex:1;min-width:0;display:flex;gap:8px;flex-wrap:wrap}
-.assign-row .af-group{display:flex;flex-direction:column;gap:4px;min-width:160px;flex:1}
-.assign-row .af-group label{font-size:12.5px;color:#7a8399;font-weight:700;padding-left:2px}
-.assign-row select{font-family:inherit;font-size:14.5px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;width:100%}
-.assign-row select:focus{border-color:#3b6ef5}
-.assign-row .kind-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700}
-.assign-row .kind-badge.main{background:#e5edff;color:#3b6ef5}
-.assign-row .kind-badge.sim{background:#e9f8ee;color:#1f8a45}
-.assign-row .kind-badge.hw{background:#fff8e8;color:#a86a00}
-
-/* ================================================================
-   拖拽上传覆盖层
-   ================================================================ */
-.drag-overlay{position:fixed;inset:0;z-index:500;background:rgba(59,130,246,.12);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:4px dashed #3b6ef5;display:none;align-items:center;justify-content:center;pointer-events:none}
-.drag-overlay.show{display:flex}
-.drag-overlay .drag-inner{background:#fff;border-radius:22px;padding:40px 56px;text-align:center;box-shadow:0 24px 70px rgba(59,110,245,.35);border:1px solid #d6e2ff;max-width:88vw}
-.drag-overlay .drag-icon{font-size:60px;line-height:1;margin-bottom:16px;animation:dlBounce .9s ease-in-out infinite alternate}
-@keyframes dlBounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
-.drag-overlay .drag-title{font-size:22px;font-weight:800;color:#2a5ae0;margin-bottom:8px;letter-spacing:.5px}
-.drag-overlay .drag-sub{font-size:13.5px;color:#7a8399;line-height:1.8}
-.drag-overlay .drag-sub b{color:#3b6ef5}
-body.dragging-file *{cursor:copy !important}
-
-/* ================================================================
-   多图选择弹窗
-   ================================================================ */
-.multi-img-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:58vh;overflow:auto;padding:2px;margin:12px 0}
-.multi-img-item{border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;background:#fbfcff;transition:.15s;text-align:center}
-.multi-img-item:hover{border-color:#3b6ef5;transform:translateY(-2px);box-shadow:0 8px 20px rgba(59,110,245,.22)}
-.multi-img-item img{width:100%;height:118px;object-fit:cover;display:block;background:#fff}
-.multi-img-item .name{font-size:12px;color:#5a6376;padding:7px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.multi-img-tip{font-size:13px;color:#98a1b5;text-align:center;padding:4px 0}
-
-/* ================================================================
-   左下角浮动涂抹工具条
-   ================================================================ */
-.ink-dock{
-  position:fixed;left:16px;bottom:16px;z-index:120;
-  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
-  background:rgba(255,255,255,.97);
-  border:1px solid #e4eaf8;border-radius:16px;
-  padding:10px 15px;
-  box-shadow:0 10px 30px rgba(30,40,70,.18);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  max-width:calc(100vw - 260px);
-}
+/* ============ 左下浮动涂抹工具条 ============ */
+.ink-dock{position:fixed;left:16px;bottom:16px;z-index:120;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(255,255,255,.97);border:1px solid #e4eaf8;border-radius:16px;padding:10px 15px;box-shadow:0 10px 30px rgba(30,40,70,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:calc(100vw - 260px)}
 .ink-dock .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
 .ink-dock .swatch{width:34px;height:34px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
 .ink-dock .swatch:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
@@ -304,40 +257,17 @@ body.dragging-file *{cursor:copy !important}
 .ink-dock .size-btn.active i{background:#3b6ef5}
 .ink-dock button.act{font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600}
 
-/* ================================================================
-   右下角浮动翻页控件（上一题 / 下一题 / 页码）
-   ================================================================ */
-.page-nav{
-  position:fixed;right:16px;bottom:16px;z-index:120;
-  display:flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.97);
-  border:1px solid #e4eaf8;border-radius:16px;
-  padding:10px 13px;
-  box-shadow:0 10px 30px rgba(30,40,70,.18);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
-.page-nav button{
-  min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;
-  border-radius:11px;display:flex;align-items:center;justify-content:center;
-  background:#fff;border:1px solid #d5dbe8;color:#3a4560;font-weight:700;
-}
+/* ============ 右下浮动翻页控件 ============ */
+.page-nav{position:fixed;right:16px;bottom:16px;z-index:120;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.97);border:1px solid #e4eaf8;border-radius:16px;padding:10px 13px;box-shadow:0 10px 30px rgba(30,40,70,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.page-nav button{min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #d5dbe8;color:#3a4560;font-weight:700}
 .page-nav button:hover{background:#f2f6ff;border-color:#9db6ff;color:#2a5ae0}
-.page-nav .page-ind{
-  font-size:15px;font-weight:800;color:#3a4560;
-  min-width:74px;text-align:center;user-select:none;
-  padding:0 4px;letter-spacing:.3px;
-}
+.page-nav .page-ind{font-size:15px;font-weight:800;color:#3a4560;min-width:74px;text-align:center;user-select:none;padding:0 4px;letter-spacing:.3px}
 .page-nav .page-ind b{color:#3b6ef5;font-size:17px}
 .page-nav .dock-sep{width:1px;height:26px;background:#e4eaf8;margin:0 2px;flex-shrink:0}
+body.bb-open .ink-dock,body.bb-open .page-nav{display:none !important}
+body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 
-body.bb-open .ink-dock,
-body.bb-open .page-nav{display:none !important}
-body.hw-open .ink-dock,
-body.hw-open .page-nav{display:none !important}
-
-/* ================================================================
-   ★ 小黑板（全屏自适应，手机电脑都能写）
-   ================================================================ */
+/* ============ 小黑板（全屏自适应） ============ */
 #bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column;overflow:hidden}
 #bbView.show{display:flex}
 .bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:5}
@@ -348,46 +278,11 @@ body.hw-open .page-nav{display:none !important}
 .bb-tabs{display:flex;gap:6px;padding:8px 14px;background:#12151c;border-bottom:1px solid #262b38;overflow-x:auto;flex-shrink:0}
 .bb-tab{padding:6px 16px;border-radius:18px;font-size:13.5px;background:#232734;border:1px solid #2f3444;color:#98a1b5;cursor:pointer;white-space:nowrap}
 .bb-tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
-
-/* 舞台：自适应填满剩余空间，横竖屏都不变形 */
-.bb-stage-wrap{
-  flex:1;min-height:0;position:relative;
-  display:flex;align-items:center;justify-content:center;
-  padding:16px;
-  overflow:hidden;
-}
-.bb-stage{
-  position:relative;
-  width:100%;height:100%;
-  max-width:100%;max-height:100%;
-  background:#141820;
-  border-radius:12px;
-  box-shadow:0 8px 30px rgba(0,0,0,.5);
-  overflow:hidden;
-  border:1px solid #262b38;
-  display:flex;align-items:center;justify-content:center;
-}
+.bb-stage-wrap{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden}
+.bb-stage{position:relative;width:100%;height:100%;max-width:100%;max-height:100%;background:#141820;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.5);overflow:hidden;border:1px solid #262b38;display:flex;align-items:center;justify-content:center}
 .bb-stage.light{background:#ffffff;border-color:#cbd5e1}
-/* 画布自适应：按容器比例铺满，内部坐标仍是 1600×1000 */
-.bb-stage canvas{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  display:block;
-  touch-action:none;
-  cursor:crosshair;
-}
-
-/* 小黑板浮动工具条 */
-.bb-ink-dock{
-  position:absolute;left:16px;bottom:16px;z-index:30;
-  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
-  background:rgba(23,26,34,.96);
-  border:1px solid #2f3444;border-radius:16px;
-  padding:10px 15px;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  max-width:calc(100vw - 260px);
-}
+.bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+.bb-ink-dock{position:absolute;left:16px;bottom:16px;z-index:30;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(23,26,34,.96);border:1px solid #2f3444;border-radius:16px;padding:10px 15px;box-shadow:0 10px 30px rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:calc(100vw - 260px)}
 .bb-ink-dock .dock-sep{width:1px;height:24px;background:#2f3444;margin:0 3px;flex-shrink:0}
 .bb-swatch{width:34px;height:34px;padding:0;border-radius:9px;border:2px solid #2f3444;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
 .bb-swatch:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
@@ -397,35 +292,17 @@ body.hw-open .page-nav{display:none !important}
 .bb-size i{display:block;border-radius:50%;background:#7a8399}
 .bb-size.active{border-color:#6ea8ff;background:rgba(110,168,255,.15)}
 .bb-size.active i{background:#6ea8ff}
-.bb-ink-dock button.act{
-  font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600;
-  background:#232734;border:1px solid #2f3444;color:#e6e8ee;
-}
+.bb-ink-dock button.act{font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600;background:#232734;border:1px solid #2f3444;color:#e6e8ee}
 .bb-ink-dock button.act:hover{background:#2a2f3d;border-color:#3d455c}
-
-.bb-page-nav{
-  position:absolute;right:16px;bottom:16px;z-index:30;
-  display:flex;align-items:center;gap:6px;
-  background:rgba(23,26,34,.96);
-  border:1px solid #2f3444;border-radius:16px;
-  padding:10px 13px;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
-.bb-page-nav button{
-  min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;
-  border-radius:11px;display:flex;align-items:center;justify-content:center;
-  background:#232734;border:1px solid #2f3444;color:#e6e8ee;font-weight:700;
-}
+.bb-page-nav{position:absolute;right:16px;bottom:16px;z-index:30;display:flex;align-items:center;gap:6px;background:rgba(23,26,34,.96);border:1px solid #2f3444;border-radius:16px;padding:10px 13px;box-shadow:0 10px 30px rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.bb-page-nav button{min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#232734;border:1px solid #2f3444;color:#e6e8ee;font-weight:700}
 .bb-page-nav button:hover{background:#2a2f3d;border-color:#3d455c}
 .bb-page-nav .page-ind{font-size:15px;font-weight:800;color:#e6e8ee;min-width:74px;text-align:center;user-select:none;padding:0 4px;letter-spacing:.3px}
 .bb-page-nav .page-ind b{color:#6ea8ff;font-size:17px}
 .bb-page-nav .dock-sep{width:1px;height:26px;background:#2f3444;margin:0 2px;flex-shrink:0}
 .bb-page-nav button.act{font-size:13.5px;min-width:auto;padding:0 14px;height:42px;font-weight:600}
 
-/* ================================================================
-   分享题目多选 UI
-   ================================================================ */
+/* ============ 分享题目多选 Tab ============ */
 .pick-tabs{display:flex;gap:6px;margin:14px 0 4px;border-bottom:2px solid #e4eaf8;flex-wrap:wrap}
 .pick-tab{padding:10px 18px;border:none;background:transparent;color:#7a8399;font-size:14.5px;font-weight:700;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;display:inline-flex;align-items:center;gap:6px}
 .pick-tab:hover{background:#f4f7ff;color:#3b6ef5}
@@ -449,9 +326,16 @@ body.hw-open .page-nav{display:none !important}
 .pick-stat{font-size:13.5px;color:#5c7cf0;font-weight:700;background:#f4f7ff;border:1px solid #dfe7fa;border-radius:8px;padding:8px 15px;display:inline-flex;align-items:center;gap:8px}
 .pick-stat b{color:#3b6ef5;font-size:17px}
 
-/* ================================================================
-   响应式（手机 / 平板）
-   ================================================================ */
+/* ============ 导入方式选择 ============ */
+.import-choice-list{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+.import-choice-card{border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s}
+.import-choice-card:hover{border-color:#3b6ef5;background:#f0f5ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,110,245,.18)}
+.import-choice-card .ttl{font-size:17px;font-weight:800;margin-bottom:6px}
+.import-choice-card .desc{font-size:14px;color:#5a6376;line-height:1.7}
+.import-choice-card[data-choice="new"] .ttl{color:#2a5ae0}
+.import-choice-card[data-choice="merge"] .ttl{color:#1f8a45}
+
+/* ============ 响应式 ============ */
 @media (max-width:760px){
   body{font-size:15px}
   .bar-row{padding:7px 10px;gap:6px}
@@ -499,8 +383,6 @@ body.hw-open .page-nav{display:none !important}
   .pick-tab .cnt{min-width:18px;font-size:10.5px}
   .pick-item{padding:10px 12px}
   .pick-item .txt{font-size:14px}
-
-  /* 左下工具条 & 右下翻页控件 —— 移动端缩小 */
   .ink-dock{left:8px;bottom:8px;padding:7px 9px;gap:5px;border-radius:13px;max-width:56vw}
   .ink-dock .dock-sep{height:20px;margin:0 1px}
   .ink-dock .swatch{width:28px;height:28px;border-radius:8px}
@@ -511,7 +393,6 @@ body.hw-open .page-nav{display:none !important}
   .page-nav button{min-width:36px;height:36px;font-size:15px;border-radius:9px;padding:0 9px}
   .page-nav .page-ind{font-size:13px;min-width:56px}
   .page-nav .page-ind b{font-size:14.5px}
-
   .bb-ink-dock{left:8px;bottom:8px;padding:7px 9px;gap:5px;border-radius:13px;max-width:56vw}
   .bb-ink-dock .dock-sep{height:20px;margin:0 1px}
   .bb-swatch{width:28px;height:28px;border-radius:8px}
@@ -523,12 +404,10 @@ body.hw-open .page-nav{display:none !important}
   .bb-page-nav .page-ind{font-size:13px;min-width:56px}
   .bb-page-nav .page-ind b{font-size:14.5px}
   .bb-page-nav button.act{height:36px;padding:0 10px;font-size:11.5px}
-
   .bb-stage-wrap{padding:8px}
   .bb-bar{padding:6px 10px;gap:5px}
   .bb-title{font-size:14px}
   .bb-bar button.primary{font-size:13px;padding:7px 13px}
-
   .drag-overlay .drag-inner{padding:26px 32px}
   .drag-overlay .drag-icon{font-size:42px;margin-bottom:10px}
   .drag-overlay .drag-title{font-size:17px}
@@ -542,11 +421,11 @@ body.hw-open .page-nav{display:none !important}
 </head>
 <body>
 
-<!-- ===== 认证弹窗 ===== -->
+<!-- ============ 认证弹窗 ============ -->
 <div class="modal-mask show" id="authModal" style="z-index:300">
   <div class="modal" style="max-width:440px">
     <h3 id="authTitle">登录 / 注册</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <div class="hint" style="padding:10px 14px;font-size:13px">
       每个账号拥有独立的试卷空间。注册后会自动分配一个唯一用户 ID，用于识别和分享。
     </div>
     <div class="form-field">
@@ -570,14 +449,14 @@ body.hw-open .page-nav{display:none !important}
       <button class="ghost" id="btnToggleMode">切换到注册</button>
       <button class="primary" id="btnAuthSubmit">登录</button>
     </div>
-<div style="text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #eef1f7">
-  <span style="font-size:13px;color:#7a8399">还没有账号？</span>
-  <a href="javascript:void(0)" id="btnOpenApply" style="font-size:13.5px;color:#3b6ef5;font-weight:600;margin-left:6px;text-decoration:none;cursor:pointer">申请加入 →</a >
-</div>
+    <div style="text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #eef1f7">
+      <span style="font-size:13px;color:#7a8399">还没有账号？</span>
+      <a href="javascript:void(0)" id="btnOpenApply" style="font-size:13.5px;color:#3b6ef5;font-weight:600;margin-left:6px;text-decoration:none;cursor:pointer">申请加入 →</a>
+    </div>
   </div>
 </div>
 
-<!-- ===== 顶栏 ===== -->
+<!-- ============ 顶栏 ============ -->
 <header class="topbar">
   <div class="bar-row">
     <div class="brand">
@@ -599,21 +478,19 @@ body.hw-open .page-nav{display:none !important}
         <span>ID：<b id="userCodeLabel">-</b></span>
         <span class="admin-tag" id="adminTag" style="display:none">管理员</span>
         <button class="ghost small" id="btnAdminPanel" style="display:none">分享管理</button>
-  <button class="ghost small" id="btnInviteUser" style="display:none">邀请用户</button>
-<button class="ghost small" id="btnJoinRequests" style="display:none">
-  待审批 <span id="joinReqBadge" style="background:#ff4d4f;color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;display:none">0</span>
-</button> 
-<button class="ghost small" id="btnLogout">退出</button>
+        <button class="ghost small" id="btnInviteUser" style="display:none">邀请用户</button>
+        <button class="ghost small" id="btnJoinRequests" style="display:none">待审批 <span id="joinReqBadge" style="background:#ff4d4f;color:#fff;font-size:11px;padding:1px 6px;border-radius:10px;margin-left:4px;display:none">0</span></button>
+        <button class="ghost small" id="btnLogout">退出</button>
       </div>
     </div>
   </div>
   <div class="bar-row tabs" id="tabs"></div>
 </header>
 
-<!-- ===== 试卷页面 ===== -->
+<!-- ============ 试卷页面 ============ -->
 <main id="paperView"></main>
 
-<!-- ===== 左下角浮动涂抹工具条（试卷页面） ===== -->
+<!-- ============ 左下角浮动涂抹工具条 ============ -->
 <div class="ink-dock" id="inkDock">
   <button class="swatch" data-color="#ffe066" style="--c:#ffe066" title="黄色"></button>
   <button class="swatch" data-color="#8ce99a" style="--c:#8ce99a" title="绿色"></button>
@@ -629,17 +506,17 @@ body.hw-open .page-nav{display:none !important}
   <button class="act" id="btnExitInk">退出涂抹</button>
 </div>
 
-<!-- ===== 右下角浮动翻页控件（上一题 / 下一页 / 顶部） ===== -->
+<!-- ============ 右下角浮动翻页控件 ============ -->
 <div class="page-nav" id="pageNav">
   <button id="btnPrevPage" title="上一页">◀</button>
   <span class="page-ind"><b id="pageCur">1</b> / <span id="pageTotal">1</span></span>
   <button id="btnNextPage" title="下一页">▶</button>
   <span class="dock-sep"></span>
-  <button id="btnNextQuestion" title="跳到下一题" class="primary">下一题 ▸</button>
+  <button id="btnNextQuestion" class="primary" title="跳到下一题">下一题 ▸</button>
   <button id="btnTopPage" title="回到顶部">↑</button>
 </div>
 
-<!-- ===== 作业管理视图 ===== -->
+<!-- ============ 作业管理视图 ============ -->
 <section id="hwView">
   <div class="hw-bar">
     <div class="hw-title">📋 作业管理</div>
@@ -650,7 +527,7 @@ body.hw-open .page-nav{display:none !important}
   <div class="hw-container" id="hwContainer"></div>
 </section>
 
-<!-- ===== 小黑板（全屏自适应） ===== -->
+<!-- ============ 小黑板 ============ -->
 <section id="bbView">
   <div class="bb-bar">
     <div class="bb-title">📝 电子黑板</div>
@@ -666,8 +543,6 @@ body.hw-open .page-nav{display:none !important}
   <div class="bb-stage-wrap">
     <div class="bb-stage" id="bbStage">
       <canvas id="bbCanvas"></canvas>
-
-      <!-- 小黑板左下角浮动涂抹工具条 -->
       <div class="bb-ink-dock">
         <button class="bb-swatch active" data-color="#ffffff" style="--c:#ffffff" title="白色"></button>
         <button class="bb-swatch" data-color="#ffe066" style="--c:#ffe066" title="黄色"></button>
@@ -684,8 +559,6 @@ body.hw-open .page-nav{display:none !important}
         <button class="act" id="bbUndo">撤销</button>
         <button class="act" id="bbClear">清空本页</button>
       </div>
-
-      <!-- 小黑板右下角浮动翻页控件 -->
       <div class="bb-page-nav">
         <button id="bbPrevPage" title="上一页">◀</button>
         <span class="page-ind"><b id="bbPageCur">1</b> / <span id="bbPageTotal">1</span></span>
@@ -698,25 +571,20 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </section>
 
-<!-- 隐藏的图片选择输入（支持多选） -->
 <input type="file" id="fileInput" accept="image/*" hidden multiple>
 
-<!-- 拖拽覆盖层 -->
 <div class="drag-overlay" id="dragOverlay">
   <div class="drag-inner">
     <div class="drag-icon">🖼</div>
     <div class="drag-title">松开鼠标，开始识别图像</div>
-    <div class="drag-sub">
-      支持 PNG / JPG / GIF / WEBP / SVG 等格式<br>
-      可一次拖入 <b>多张图片</b>，也可以直接 <b>Ctrl + V 粘贴截图</b>
-    </div>
+    <div class="drag-sub">支持 PNG / JPG / GIF / WEBP / SVG 等格式<br>可一次拖入 <b>多张图片</b>，也可以直接 <b>Ctrl + V 粘贴截图</b></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 <div class="save-hint" id="saveHint">已自动保存</div>
 
-<!-- ===== 我的试卷 ===== -->
+<!-- ============ 我的试卷 ============ -->
 <div class="modal-mask" id="papersModal">
   <div class="modal">
     <h3>我的试卷</h3>
@@ -734,7 +602,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 分享链接 ===== -->
+<!-- ============ 分享链接 ============ -->
 <div class="modal-mask" id="shareModal">
   <div class="modal" style="max-width:600px">
     <h3>分享链接</h3>
@@ -752,7 +620,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 分享题目（三 Tab 多选） ===== -->
+<!-- ============ 分享题目（三 Tab 多选） ============ -->
 <div class="modal-mask" id="pickQuestionModal">
   <div class="modal wide">
     <h3>选择要分享的题目</h3>
@@ -760,31 +628,20 @@ body.hw-open .page-nav{display:none !important}
       按顺序选：<b>① 试卷 → ② 大题</b>，然后在下方三个分类里勾选要分享的内容。<br>
       三个分类 <b>默认全部勾选</b>，可手动取消。<b>图形会自动跟着分享，涂鸦不分享。</b>
     </div>
-
     <div class="form-field">
       <label>① 选择试卷</label>
       <select id="pickQPaperSelect"></select>
     </div>
-
     <div class="form-field">
       <label>② 选择大题（决定下方候选范围）</label>
       <select id="pickQSectionSelect"></select>
     </div>
-
     <div class="pick-tabs" id="pickTabs">
-      <button class="pick-tab active" data-ptab="main">
-        📝 试卷题目 <span class="cnt" data-cnt="main">0</span>
-      </button>
-      <button class="pick-tab" data-ptab="similar">
-        🔁 举一反三 <span class="cnt" data-cnt="similar">0</span>
-      </button>
-      <button class="pick-tab" data-ptab="homework">
-        📋 配套作业 <span class="cnt" data-cnt="homework">0</span>
-      </button>
+      <button class="pick-tab active" data-ptab="main">📝 试卷题目 <span class="cnt" data-cnt="main">0</span></button>
+      <button class="pick-tab" data-ptab="similar">🔁 举一反三 <span class="cnt" data-cnt="similar">0</span></button>
+      <button class="pick-tab" data-ptab="homework">📋 配套作业 <span class="cnt" data-cnt="homework">0</span></button>
     </div>
-
     <div class="pick-list" id="pickQuestionList"></div>
-
     <div class="modal-actions" style="justify-content:space-between;align-items:center;flex-wrap:wrap">
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="ghost small" id="pickSelectAll">本页全选</button>
@@ -793,7 +650,6 @@ body.hw-open .page-nav{display:none !important}
       </div>
       <span class="pick-stat" id="pickStat">已选 <b>0</b> 项</span>
     </div>
-
     <div class="modal-actions right">
       <button id="pickQuestionCancel">取消</button>
       <button class="primary" id="pickQuestionConfirm">生成分享链接</button>
@@ -801,7 +657,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 接收试题 ===== -->
+<!-- ============ 接收试题 ============ -->
 <div class="modal-mask" id="receiveQuestionModal">
   <div class="modal" style="max-width:520px">
     <h3>接收分享的试题</h3>
@@ -821,7 +677,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 管理员面板 ===== -->
+<!-- ============ 管理员面板 ============ -->
 <div class="modal-mask" id="adminModal">
   <div class="modal" style="max-width:900px">
     <h3>分享管理（仅管理员可见）</h3>
@@ -830,23 +686,16 @@ body.hw-open .page-nav{display:none !important}
     <div class="table-wrap" id="adminTableWrap">
       <table id="adminTable">
         <thead>
-          <tr>
-            <th>接受时间</th>
-            <th>试卷名称</th>
-            <th>分享者 ID</th>
-            <th>接受者 ID</th>
-          </tr>
+          <tr><th>接受时间</th><th>试卷名称</th><th>分享者 ID</th><th>接受者 ID</th></tr>
         </thead>
         <tbody id="adminTbody"></tbody>
       </table>
     </div>
-    <div class="modal-actions right">
-      <button id="btnAdminClose">关闭</button>
-    </div>
+    <div class="modal-actions right"><button id="btnAdminClose">关闭</button></div>
   </div>
 </div>
 
-<!-- ===== 图形编辑器 ===== -->
+<!-- ============ 图形编辑器 ============ -->
 <div class="modal-mask" id="figEditorModal">
   <div class="modal wide">
     <h3>选择图像区域</h3>
@@ -873,7 +722,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 图形批量分配（★ 新增：可选主题目 / 举一反三第N题 / 作业第N题） ===== -->
+<!-- ============ 图形批量分配（可选主题目/举一反三/作业） ============ -->
 <div class="modal-mask" id="assignModal">
   <div class="modal wide">
     <h3>分配图像到题目</h3>
@@ -890,7 +739,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 生成新作业 ===== -->
+<!-- ============ 生成新作业 ============ -->
 <div class="modal-mask" id="hwModal">
   <div class="modal">
     <h3>生成新作业 · 选择题目与数量</h3>
@@ -910,7 +759,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 添加题目到作业单 ===== -->
+<!-- ============ 添加题目到作业单 ============ -->
 <div class="modal-mask" id="addQModal">
   <div class="modal">
     <h3>添加题目到作业单</h3>
@@ -926,7 +775,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 导入试卷 ===== -->
+<!-- ============ 导入试卷 ============ -->
 <div class="modal-mask" id="importModal">
   <div class="modal">
     <h3>导入试卷（粘贴文字即可）</h3>
@@ -938,18 +787,17 @@ body.hw-open .page-nav{display:none !important}
 1. 题干第一行
 题干第二行
 答案：A
-解析：解题过程......
 计算过程：......
 算理：......
 知识易错点：......
+解析：......
 举一反三：
-- 变式题干 | 变式答案 | 变式解析
+- 变式题干 | 变式答案 | 变式解析 | 计算过程 | 算理 | 易错点
 作业：
-- 作业题干 | 作业答案 | 作业解析
+- 作业题干 | 作业答案 | 作业解析 | 计算过程 | 算理 | 易错点
 二、填空题
 1. 填空题题干
-答案：......
-解析：......</span>
+答案：......</span>
     </div>
     <textarea id="importText" spellcheck="false" placeholder="在此粘贴试卷文字......"></textarea>
     <div class="modal-actions right">
@@ -960,24 +808,24 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== ★ 导入方式选择（新建 / 合并） ===== -->
+<!-- ============ 导入方式选择 ============ -->
 <div class="modal-mask" id="importChoiceModal">
   <div class="modal" style="max-width:560px">
     <h3>导入方式</h3>
     <div class="hint" style="padding:12px 15px;font-size:13.5px">
       检测到已解析的试卷内容。请选择导入方式：
     </div>
-    <div class="import-choice-list" style="display:flex;flex-direction:column;gap:12px;margin:14px 0">
-      <div class="import-choice-card" data-choice="new" style="border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s">
-        <div style="font-size:17px;font-weight:800;color:#2a5ae0;margin-bottom:6px">🆕 创建新试卷</div>
-        <div style="font-size:14px;color:#5a6376;line-height:1.7">
+    <div class="import-choice-list">
+      <div class="import-choice-card" data-choice="new">
+        <div class="ttl">🆕 创建新试卷</div>
+        <div class="desc">
           把导入内容作为一份全新的试卷保存，不影响当前试卷。<br>
           试卷名称使用导入文字中的标题（<code># 标题</code>）。
         </div>
       </div>
-      <div class="import-choice-card" data-choice="merge" style="border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s">
-        <div style="font-size:17px;font-weight:800;color:#1f8a45;margin-bottom:6px">🔗 合并到当前试卷</div>
-        <div style="font-size:14px;color:#5a6376;line-height:1.7">
+      <div class="import-choice-card" data-choice="merge">
+        <div class="ttl">🔗 合并到当前试卷</div>
+        <div class="desc">
           把导入内容作为新的大题，<b>追加到当前试卷已有大题的后面</b>。<br>
           当前试卷：「<b id="importChoicePaperName">-</b>」
         </div>
@@ -989,7 +837,7 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ===== 多图选择弹窗 ===== -->
+<!-- ============ 多图选择弹窗 ============ -->
 <div class="modal-mask" id="multiImgModal">
   <div class="modal">
     <h3>选择要处理的图片</h3>
@@ -1005,9 +853,72 @@ body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
+<!-- ============ 邀请用户（管理员） ============ -->
+<div class="modal-mask" id="inviteModal">
+  <div class="modal" style="max-width:480px">
+    <h3>邀请用户</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      输入对方邮箱，系统会发送一封邀请邮件，对方点邮件里的链接即可设置密码登录。
+    </div>
+    <div class="form-field">
+      <label>对方邮箱</label>
+      <input type="email" id="inviteEmail" placeholder="user@example.com" autocomplete="off">
+    </div>
+    <div class="msg" id="inviteMsg"></div>
+    <div class="modal-actions right">
+      <button id="inviteCancel">取消</button>
+      <button class="primary" id="inviteOk">发送邀请</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 待审批面板（管理员） ============ -->
+<div class="modal-mask" id="joinReqModal">
+  <div class="modal wide">
+    <h3>待审批的申请</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      点"通过"会立即给对方发送邀请邮件；点"拒绝"会标记为已拒绝（不会发邮件）。
+    </div>
+    <div class="modal-actions" style="margin-bottom:8px">
+      <button id="joinReqRefresh" class="ghost small">刷新列表</button>
+      <button id="joinReqShowAll" class="ghost small">显示全部（含已处理）</button>
+    </div>
+    <div id="joinReqList" style="max-height:52vh;overflow:auto;display:flex;flex-direction:column;gap:9px"></div>
+    <div class="modal-actions right">
+      <button id="joinReqClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 申请加入弹窗 ============ -->
+<div class="modal-mask" id="applyModal" style="z-index:400">
+  <div class="modal" style="max-width:480px">
+    <h3>申请加入</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      提交申请后，管理员审核通过会给你发一封邀请邮件，点邮件里的链接设置密码即可使用。
+    </div>
+    <div class="form-field">
+      <label>邮箱 <span style="color:#c4304a">*</span></label>
+      <input type="email" id="applyEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="form-field">
+      <label>你的姓名 / 昵称</label>
+      <input type="text" id="applyName" placeholder="例如：张三老师" autocomplete="name">
+    </div>
+    <div class="form-field">
+      <label>申请理由（可选）</label>
+      <textarea id="applyReason" rows="3" placeholder="例如：我是 XX 学校的数学老师……" style="width:100%;font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px;resize:vertical"></textarea>
+    </div>
+    <div class="msg" id="applyMsg"></div>
+    <div class="modal-actions right">
+      <button id="applyCancel">取消</button>
+      <button class="primary" id="applySubmit">提交申请</button>
+    </div>
+  </div>
+</div>
+
 <script>
-/*
-================================================================
+/* ================================================================
 配置：把下面两个值换成你自己的 Supabase 项目信息
 Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
 ================================================================ */
@@ -1053,18 +964,8 @@ function toast(msg){
 
 /* ================================================================
 ★ 结构化字段规范化
-   —— 每一道题/变式/作业都统一成：
-      {
-        stem:     题干
-        answer:   答案
-        analysis: 解析
-        calc:     计算过程
-        reason:   算理
-        pitfall:  知识易错点
-        similar:  [子题...]
-        homework: [子题...]
-        figure:   配图 {src,width,side}
-      }
+   每道题/变式/作业统一成：
+   { stem, answer, analysis, calc, reason, pitfall, similar, homework, figure }
 ================================================================ */
 function normalizeQuestion(q){
   q = q || {};
@@ -1094,14 +995,13 @@ function normalizeSection(s){
 
 function normalizeExamData(e){
   e = e || {};
-  var out = {
+  return {
     title: e.title || '试卷讲解',
     sections: Array.isArray(e.sections) ? e.sections.map(normalizeSection) : [],
     blackboard: e.blackboard || { pages:[{strokes:[]}], current:0, theme:'dark' },
     homeworkSets: Array.isArray(e.homeworkSets) ? e.homeworkSets : [],
     usedKeys: Array.isArray(e.usedKeys) ? e.usedKeys : []
   };
-  return out;
 }
 
 /* ================================================================
@@ -1121,11 +1021,8 @@ var saveTimer = null;
 var exam = { title:'', sections:[], blackboard:null, homeworkSets:[], usedKeys:[] };
 
 var addTargetId = null;
-
-/* 多图选择临时缓存 */
 var pendingMultiImages = [];
 
-/* 小黑板状态 */
 var bbState = { color:'#ffffff', size:8, erase:false };
 var bbCanvas = null, bbCtx = null, bbCurrentStroke = null;
 var BB_W = 1600, BB_H = 1000;
@@ -1147,7 +1044,7 @@ function ensureBlackboard(){
 var authMode = 'login';
 
 function setAuthMode(m){
-  authMode=m;
+  authMode = m;
   $('#authTitle').textContent = m==='login' ? '登录' : '注册新账号';
   $('#btnToggleMode').textContent = m==='login' ? '切换到注册' : '切换到登录';
   $('#btnAuthSubmit').textContent = m==='login' ? '登录' : '注册';
@@ -1167,9 +1064,9 @@ function validateUserCode(code){
 }
 
 async function checkUserCodeUnique(code){
-  var r = await sb.from('profiles').select('id').eq('user_code', code).maybeSingle();
+  var r = await sb.from('profiles').select('id').eq('user_code', code).limit(1);
   if(r.error && r.error.code !== 'PGRST116') throw r.error;
-  return !r.data;
+  return !(r.data && r.data.length);
 }
 
 $('#btnAuthSubmit').onclick = async function(){
@@ -1183,7 +1080,7 @@ $('#btnAuthSubmit').onclick = async function(){
   this.textContent = '处理中...';
 
   try{
-    if(authMode==='login'){
+    if(authMode === 'login'){
       var r = await sb.auth.signInWithPassword({ email: email, password: pwd });
       if(r.error) throw r.error;
       await afterLogin();
@@ -1191,26 +1088,14 @@ $('#btnAuthSubmit').onclick = async function(){
       var code = $('#authCode').value.trim();
       var nick = $('#authNick').value.trim();
       var err = validateUserCode(code);
-      if(err){
-        showMsg('#authMsg',err,'err');
-        this.disabled=false; this.textContent=oldTxt; return;
-      }
+      if(err){ showMsg('#authMsg',err,'err'); this.disabled=false; this.textContent=oldTxt; return; }
       var unique = await checkUserCodeUnique(code);
-      if(!unique){
-        showMsg('#authMsg','该用户 ID 已被占用，请换一个','err');
-        this.disabled=false; this.textContent=oldTxt; return;
-      }
+      if(!unique){ showMsg('#authMsg','该用户 ID 已被占用，请换一个','err'); this.disabled=false; this.textContent=oldTxt; return; }
       var rr = await sb.auth.signUp({ email: email, password: pwd });
       if(rr.error) throw rr.error;
-      if(!rr.data.user){
-        showMsg('#authMsg','注册成功，请到邮箱确认后再登录','ok');
-        this.disabled=false; this.textContent=oldTxt; return;
-      }
+      if(!rr.data.user){ showMsg('#authMsg','注册成功，请到邮箱确认后再登录','ok'); this.disabled=false; this.textContent=oldTxt; return; }
       var ins = await sb.from('profiles').insert({
-        id: rr.data.user.id,
-        user_code: code,
-        display_name: nick || code,
-        is_admin: false
+        id: rr.data.user.id, user_code: code, display_name: nick || code, is_admin: false
       });
       if(ins.error) throw ins.error;
       showMsg('#authMsg','注册成功！','ok');
@@ -1232,28 +1117,31 @@ async function afterLogin(){
   if(!u.data || !u.data.user){ return; }
   currentUser = u.data.user;
 
-  var pr = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+  var pr = await sb.from('profiles').select('*').eq('id', currentUser.id).limit(1);
   if(pr.error && pr.error.code !== 'PGRST116') throw pr.error;
+  var prof = (pr.data && pr.data[0]) || null;
 
-  if(!pr.data){
+  if(!prof){
     var auto = 'u_' + Math.random().toString(36).slice(2,10);
     var ins = await sb.from('profiles').insert({
-      id: currentUser.id,
-      user_code: auto,
-      display_name: auto,
-      is_admin: false
+      id: currentUser.id, user_code: auto, display_name: auto, is_admin: false
     });
     if(ins.error) throw ins.error;
-    pr = await sb.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    var pr2 = await sb.from('profiles').select('*').eq('id', currentUser.id).limit(1);
+    prof = (pr2.data && pr2.data[0]) || null;
   }
 
-  currentProfile = pr.data;
+  currentProfile = prof;
 
   $('#authModal').classList.remove('show');
   $('#userChip').style.display = 'flex';
-  $('#userCodeLabel').textContent = currentProfile.user_code;
-  $('#adminTag').style.display = currentProfile.is_admin ? '' : 'none';
-  $('#btnAdminPanel').style.display = currentProfile.is_admin ? '' : 'none';
+  $('#userCodeLabel').textContent = currentProfile ? currentProfile.user_code : '-';
+  var isAdmin = currentProfile && currentProfile.is_admin;
+  $('#adminTag').style.display = isAdmin ? '' : 'none';
+  $('#btnAdminPanel').style.display = isAdmin ? '' : 'none';
+  $('#btnInviteUser').style.display = isAdmin ? '' : 'none';
+  $('#btnJoinRequests').style.display = isAdmin ? '' : 'none';
+  if(isAdmin) refreshJoinReqBadge();
 
   await handleShareLink();
   await loadPapers();
@@ -1264,6 +1152,237 @@ $('#btnLogout').onclick = async function(){
   await sb.auth.signOut();
   location.reload();
 };
+
+/* ================================================================
+申请加入（未登录用户可见）
+================================================================ */
+var btnOpenApply = document.getElementById('btnOpenApply');
+if(btnOpenApply){
+  btnOpenApply.onclick = function(){
+    document.getElementById('applyEmail').value = '';
+    document.getElementById('applyName').value = '';
+    document.getElementById('applyReason').value = '';
+    var m = document.getElementById('applyMsg');
+    if(m) m.className = 'msg';
+    document.getElementById('applyModal').classList.add('show');
+    setTimeout(function(){ document.getElementById('applyEmail').focus(); }, 80);
+  };
+}
+document.getElementById('applyCancel').onclick = function(){
+  document.getElementById('applyModal').classList.remove('show');
+};
+document.getElementById('applySubmit').onclick = async function(){
+  var email = document.getElementById('applyEmail').value.trim();
+  var name = document.getElementById('applyName').value.trim();
+  var reason = document.getElementById('applyReason').value.trim();
+  var msg = document.getElementById('applyMsg');
+  function show(txt, type){ msg.textContent = txt; msg.className = 'msg show ' + (type || ''); }
+
+  if(!email){ show('请填写邮箱','err'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
+
+  this.disabled = true;
+  var old = this.textContent;
+  this.textContent = '提交中...';
+
+  try{
+    var exist = await sb.from('join_requests')
+      .select('id,status').eq('email', email.toLowerCase())
+      .in('status', ['pending','approved']).limit(1);
+
+    if(exist.data && exist.data.length){
+      if(exist.data[0].status === 'pending'){
+        show('你已经提交过申请了，请耐心等待管理员审核', 'err');
+      } else {
+        show('该邮箱已通过审核，请直接登录或查收邀请邮件', 'err');
+      }
+      this.disabled = false; this.textContent = old; return;
+    }
+
+    var r = await sb.from('join_requests').insert({
+      email: email.toLowerCase(), name: name || null, reason: reason || null, status: 'pending'
+    });
+    if(r.error) throw r.error;
+
+    show('提交成功！请等待管理员审核，通过后你会收到邀请邮件', 'ok');
+    document.getElementById('applyEmail').value = '';
+    document.getElementById('applyName').value = '';
+    document.getElementById('applyReason').value = '';
+    setTimeout(function(){ document.getElementById('applyModal').classList.remove('show'); }, 2500);
+  } catch(e){
+    show('提交失败：' + (e.message||'未知错误'), 'err');
+  }
+  this.disabled = false;
+  this.textContent = old;
+};
+
+/* ================================================================
+邀请用户（管理员）
+================================================================ */
+var btnInviteUser = document.getElementById('btnInviteUser');
+if(btnInviteUser){
+  btnInviteUser.onclick = function(){
+    document.getElementById('inviteEmail').value = '';
+    document.getElementById('inviteMsg').className = 'msg';
+    document.getElementById('inviteModal').classList.add('show');
+    setTimeout(function(){ document.getElementById('inviteEmail').focus(); }, 80);
+  };
+}
+document.getElementById('inviteCancel').onclick = function(){
+  document.getElementById('inviteModal').classList.remove('show');
+};
+document.getElementById('inviteOk').onclick = async function(){
+  var email = document.getElementById('inviteEmail').value.trim();
+  var msg = document.getElementById('inviteMsg');
+  function show(txt, type){ msg.textContent = txt; msg.className = 'msg show ' + (type || ''); }
+
+  if(!email){ show('请输入邮箱','err'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
+
+  this.disabled = true;
+  var old = this.textContent;
+  this.textContent = '发送中...';
+
+  try{
+    var r = await sb.functions.invoke('invite-user', { body: { email: email } });
+    if(r.error) throw r.error;
+    if(r.data && r.data.error) throw new Error(r.data.error);
+    show('邀请邮件已发送到 ' + email, 'ok');
+    document.getElementById('inviteEmail').value = '';
+  } catch(e){
+    show('邀请失败：' + (e.message||'未知错误'), 'err');
+  }
+  this.disabled = false;
+  this.textContent = old;
+};
+
+/* ================================================================
+待审批列表（管理员）
+================================================================ */
+var joinReqShowAll = false;
+
+async function refreshJoinReqBadge(){
+  try{
+    var r = await sb.from('join_requests').select('id', {count:'exact', head:true}).eq('status','pending');
+    var count = r.count || 0;
+    var badge = document.getElementById('joinReqBadge');
+    if(!badge) return;
+    if(count > 0){ badge.textContent = count; badge.style.display = ''; }
+    else { badge.style.display = 'none'; }
+  }catch(e){}
+}
+
+async function renderJoinReqList(){
+  var el = document.getElementById('joinReqList');
+  if(!el) return;
+  el.innerHTML = '<div class="empty">加载中...</div>';
+
+  var query = sb.from('join_requests').select('*').order('created_at', { ascending: false });
+  if(!joinReqShowAll) query = query.eq('status', 'pending');
+  var r = await query;
+  if(r.error){ el.innerHTML = '<div class="empty" style="color:#c4304a">加载失败：' + r.error.message + '</div>'; return; }
+  var list = r.data || [];
+  if(!list.length){ el.innerHTML = '<div class="empty">暂无申请</div>'; return; }
+
+  function fmtTime(ts){
+    var d = new Date(ts);
+    function p(n){ return n<10?'0'+n:''+n; }
+    return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+  }
+  function escHtml(s){
+    return String(s==null?'':s).replace(/[&<>"]/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+    });
+  }
+
+  el.innerHTML = list.map(function(item){
+    var statusTag = '';
+    if(item.status === 'approved') statusTag = '<span style="background:#e9f8ee;color:#1f8a45;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已通过</span>';
+    else if(item.status === 'rejected') statusTag = '<span style="background:#ffe9ec;color:#c4304a;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已拒绝</span>';
+    else statusTag = '<span style="background:#fff4d6;color:#a86a00;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">待审批</span>';
+
+    return '' +
+      '<div style="border:1px solid #e2e8f5;border-radius:10px;padding:12px 14px;background:#fbfcff" data-id="'+item.id+'">' +
+        '<div style="font-size:14.5px;font-weight:600;color:#26304a;margin-bottom:4px">'+escHtml(item.email)+statusTag+'</div>' +
+        '<div style="font-size:12.5px;color:#98a1b5;margin-bottom:8px">' +
+          (item.name ? '姓名：'+escHtml(item.name)+'　' : '') +
+          '提交于 '+fmtTime(item.created_at) +
+        '</div>' +
+        (item.reason ? '<div style="font-size:13px;color:#5a6376;background:#f7f9ff;padding:8px 10px;border-radius:7px;margin-bottom:8px;line-height:1.7">'+escHtml(item.reason)+'</div>' : '') +
+        '<div style="display:flex;gap:6px;justify-content:flex-end">' +
+          '<button class="small ghost" data-act="reject" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">拒绝</button>' +
+          '<button class="small primary" data-act="approve" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">通过并发送邀请</button>' +
+        '</div>' +
+      '</div>';
+  }).join('');
+}
+
+var btnJoinRequests = document.getElementById('btnJoinRequests');
+if(btnJoinRequests){
+  btnJoinRequests.onclick = async function(){
+    joinReqShowAll = false;
+    document.getElementById('joinReqModal').classList.add('show');
+    await renderJoinReqList();
+  };
+}
+document.getElementById('joinReqClose').onclick = function(){
+  document.getElementById('joinReqModal').classList.remove('show');
+};
+document.getElementById('joinReqRefresh').onclick = function(){ renderJoinReqList(); };
+document.getElementById('joinReqShowAll').onclick = function(){
+  joinReqShowAll = !joinReqShowAll;
+  this.textContent = joinReqShowAll ? '只看待审批' : '显示全部（含已处理）';
+  renderJoinReqList();
+};
+
+var joinReqListEl = document.getElementById('joinReqList');
+if(joinReqListEl){
+  joinReqListEl.addEventListener('click', async function(e){
+    var btn = e.target.closest('button[data-act]');
+    if(!btn) return;
+    var act = btn.dataset.act;
+    var id = btn.dataset.id;
+    var email = btn.dataset.email;
+
+    if(act === 'approve'){
+      if(!confirm('确定通过 '+email+' 的申请吗？\n\n会立即给对方发邀请邮件。')) return;
+      btn.disabled = true;
+      btn.textContent = '发送中...';
+      try{
+        var r = await sb.functions.invoke('invite-user', { body: { email: email } });
+        if(r.error) throw r.error;
+        if(r.data && r.data.error) throw new Error(r.data.error);
+        await sb.from('join_requests').update({
+          status: 'approved',
+          reviewed_at: new Date().toISOString()
+        }).eq('id', id);
+        alert('已通过并发送邀请给 ' + email);
+        await renderJoinReqList();
+        await refreshJoinReqBadge();
+      } catch(err){
+        alert('发送邀请失败：' + (err.message||'未知错误') + '\n\n可能原因：邮箱已注册过，或邮件服务暂时不可用。');
+        btn.disabled = false;
+        btn.textContent = '通过并发送邀请';
+      }
+    } else if(act === 'reject'){
+      var reason = prompt('拒绝 ' + email + ' 的申请（可填写理由，对方看不到）：', '');
+      if(reason === null) return;
+      btn.disabled = true;
+      try{
+        await sb.from('join_requests').update({
+          status: 'rejected',
+          reviewed_at: new Date().toISOString(),
+          reject_reason: reason || null
+        }).eq('id', id);
+        await renderJoinReqList();
+        await refreshJoinReqBadge();
+      } catch(err){
+        alert('操作失败：' + (err.message||'未知错误'));
+        btn.disabled = false;
+      }
+    }
+  });
+}
 
 /* ================================================================
 分享链接处理（整卷 / 单题 / 多选 三合一）
@@ -1281,7 +1400,6 @@ async function handleShareLink(){
   }
 }
 
-/* 把收到的条目追加到当前试卷末尾 */
 function appendItemsToPaper(items, sourceLabel){
   if(!exam.sections) exam.sections = [];
   var targetSec;
@@ -1295,24 +1413,22 @@ function appendItemsToPaper(items, sourceLabel){
 
   items.forEach(function(it){
     var q = normalizeQuestion({
-      stem:     it.stem     || '',
-      answer:   it.answer   || '',
+      stem: it.stem || '',
+      answer: it.answer || '',
       analysis: it.analysis || '',
-      calc:     it.calc     || '',
-      reason:   it.reason   || '',
-      pitfall:  it.pitfall  || '',
-      similar:  it.similar  || [],
+      calc: it.calc || '',
+      reason: it.reason || '',
+      pitfall: it.pitfall || '',
+      similar: it.similar || [],
       homework: it.homework || [],
-      figure:   it.figure   || null
+      figure: it.figure || null
     });
     q._sharedFrom = sourceLabel || null;
     q._sharedKind = it.kind || 'main';
 
-    if(it.kind === 'similar'){
-      q.stem = '【举一反三】' + q.stem;
-    } else if(it.kind === 'homework'){
-      q.stem = '【配套作业】' + q.stem;
-    }
+    if(it.kind === 'similar') q.stem = '【举一反三】' + q.stem;
+    else if(it.kind === 'homework') q.stem = '【配套作业】' + q.stem;
+
     targetSec.questions.push(q);
   });
 
@@ -1359,8 +1475,7 @@ async function receiveShareById(shareId){
 
     var go = confirm(
       '你收到了来自用户【'+ownerCode+'】分享的 '+items.length+' 项内容：\n\n'+
-      previews+'\n\n'+
-      '点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
+      previews+'\n\n点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
     );
     if(!go) return { cancelled: true };
 
@@ -1392,15 +1507,12 @@ async function receiveShareById(shareId){
 
   /* ---------- 整卷分支 ---------- */
   var go2 = confirm(
-    '你收到了来自用户【'+ownerCode+'】分享的试卷：\n\n'+
-    '「'+paperName+'」\n\n'+
-    '点击"确定"会在你的账号下创建一份全新的副本。'
+    '你收到了来自用户【'+ownerCode+'】分享的试卷：\n\n「'+paperName+'」\n\n点击"确定"会在你的账号下创建一份全新的副本。'
   );
   if(!go2) return { cancelled: true };
 
   var myId = currentUser.id;
   var finalName = paperName + '（来自 ' + ownerCode + '）';
-
   var incoming = normalizeExamData(Object.assign({}, snapshot, { title: finalName }));
   incoming.title = finalName;
 
@@ -1433,6 +1545,66 @@ async function receiveShareById(shareId){
   return { ok: true };
 }
 
+/* ================================================================
+接收试题（顶栏按钮入口）
+================================================================ */
+$('#btnReceiveQuestion').onclick = function(){
+  $('#receiveShareInput').value = '';
+  $('#receiveMsg').className = 'msg';
+  $('#receiveQuestionModal').classList.add('show');
+  setTimeout(function(){ $('#receiveShareInput').focus(); }, 80);
+};
+$('#receiveCancel').onclick = function(){
+  $('#receiveQuestionModal').classList.remove('show');
+};
+$('#receiveOk').onclick = async function(){
+  var v = $('#receiveShareInput').value.trim();
+  if(!v){ showMsg('#receiveMsg','请输入链接或分享 ID','err'); return; }
+  var m = v.match(/[?&]share=([^&\s]+)/);
+  var shareId = m ? decodeURIComponent(m[1]) : v;
+  if(!shareId){ showMsg('#receiveMsg','链接里没找到分享 ID','err'); return; }
+
+  this.disabled = true;
+  var old = this.textContent;
+  this.textContent = '接收中...';
+
+  try{
+    var result = await receiveShareById(shareId);
+    if(result && result.ok){ $('#receiveQuestionModal').classList.remove('show'); }
+  }catch(e){
+    showMsg('#receiveMsg', '接收失败：'+(e.message||'未知错误'), 'err');
+  }
+  this.disabled = false;
+  this.textContent = old;
+};
+
+/* ================================================================
+管理员面板
+================================================================ */
+$('#btnAdminPanel').onclick = async function(){
+  if(!currentProfile || !currentProfile.is_admin) return;
+  $('#adminModal').classList.add('show');
+
+  var sr = await sb.from('shares').select('id', {count:'exact', head:true});
+  var ar = await sb.from('share_accepts').select('*', {count:'exact'}).order('accepted_at',{ascending:false}).limit(500);
+
+  var totalShares = sr.count || 0;
+  var accepts = ar.data || [];
+  var distinctUsers = {};
+  accepts.forEach(function(x){ distinctUsers[x.accepted_by_code] = 1; });
+  var uniqueUsers = Object.keys(distinctUsers).length;
+
+  $('#adminStats').innerHTML =
+    '<div class="stat-card"><div class="num">'+totalShares+'</div><div class="lbl">已生成分享总数</div></div>'+
+    '<div class="stat-card"><div class="num">'+accepts.length+'</div><div class="lbl">已被接受次数</div></div>'+
+    '<div class="stat-card"><div class="num">'+uniqueUsers+'</div><div class="lbl">接受过的用户数</div></div>';
+
+  $('#adminTbody').innerHTML = accepts.map(function(x){
+    var ds = fmtDate(x.accepted_at);
+    return '<tr><td>'+ds+'</td><td>'+esc(x.paper_name||'')+'</td><td>'+esc(x.owner_code||'')+'</td><td>'+esc(x.accepted_by_code||'')+'</td></tr>';
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#98a1b5;padding:20px">暂无记录</td></tr>';
+};
+$('#btnAdminClose').onclick = function(){ $('#adminModal').classList.remove('show'); };
 /* ================================================================
 试卷数据层
 ================================================================ */
@@ -1470,15 +1642,12 @@ async function loadPapers(preferId){
 }
 
 async function openPaper(id){
-  var r = await sb.from('papers').select('*').eq('id', id).maybeSingle();
+  var r = await sb.from('papers').select('*').eq('id', id).limit(1);
   if(r.error){ console.error(r.error); return; }
-  if(!r.data) return;
+  if(!r.data || !r.data.length) return;
 
-  currentPaper = r.data;
-
-  /* 旧数据规范化：补齐 calc / reason / pitfall 等字段 */
+  currentPaper = r.data[0];
   exam = normalizeExamData(currentPaper.data || {});
-
   ensureBlackboard();
 
   simMemory = currentPaper.sim_memory || {};
@@ -1529,6 +1698,7 @@ async function saveCurrentPaper(){
   if(idx>=0){
     papers[idx].name = payload.name;
     papers[idx].updated_at = payload.updated_at;
+    papers[idx].data = exam;
   }
 }
 
@@ -1536,26 +1706,21 @@ function scheduleSave(){
   if(saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(function(){ saveTimer=null; saveCurrentPaper(); }, 900);
 }
-/* ================================================================
-★★★ 渲染：结构化字段（答案 / 计算过程 / 算理 / 易错点 / 解析）
-    各自独立成行
-================================================================ */
 
-/* 生成一个字段块 HTML，如果内容为空也显示占位，方便老师补全 */
-function fieldBlockHTML(labelText, labelClass, valueText, emptyTip){
+/* ================================================================
+★ 结构化字段渲染
+   答案面板 = 答案 + 计算过程
+   解析面板 = 解析 + 算理 + 知识易错点
+================================================================ */
+function fieldBlockHTML(labelText, labelClass, valueText){
   var v = String(valueText || '').trim();
-  var isEmpty = !v;
+  if(!v) return '';
   return '<div class="field-block">'+
     '<span class="field-label '+labelClass+'">'+labelText+'</span>'+
-    '<span class="field-val'+(isEmpty?' empty':'')+'">'+esc(isEmpty ? (emptyTip||'（暂未填写）') : v)+'</span>'+
+    '<span class="field-val">'+esc(v)+'</span>'+
   '</div>';
 }
 
-/* 渲染一道题的完整字段区（答案 / 解析 / 计算过程 / 算理 / 易错点）
-   顺序：答案 → 计算过程 → 算理 → 知识易错点 → 解析
-*/
-function renderFieldsHTML(q, isSub){
-  /* 答案面板：答案 + 计算过程 */
 function renderAnswerFieldsHTML(q){
   var blocks = '';
   if(q.answer && String(q.answer).trim()){
@@ -1570,7 +1735,6 @@ function renderAnswerFieldsHTML(q){
   return blocks;
 }
 
-/* 解析面板：解析 + 算理 + 知识易错点 */
 function renderAnalysisFieldsHTML(q){
   var blocks = '';
   if(q.analysis && String(q.analysis).trim()){
@@ -1588,10 +1752,9 @@ function renderAnalysisFieldsHTML(q){
   return blocks;
 }
 
-/* 兼容旧调用（防止遗漏处报错） */
-function renderFieldsHTML(q, isSub){
-  return renderAnswerFieldsHTML(q);
-}
+/* ================================================================
+渲染试卷
+================================================================ */
 function renderTabs(){
   $('#tabs').innerHTML = exam.sections.map(function(s,i){
     return '<button class="tab" data-page="'+i+'">'+esc(s.name)+'</button>';
@@ -1605,7 +1768,7 @@ function buildSimilarArea(list,si,qi){
   var startIdx = simMemory[si+'-'+qi] || 0;
   if(startIdx<0||startIdx>=list.length) startIdx = 0;
 
-    var items = list.map(function(s,i){
+  var items = list.map(function(s,i){
     return '<div class="subq sim-item" data-sub="'+i+'"'+(i===startIdx?'':' style="display:none"')+'>'+
       '<div class="sub-title">举一反三 · 第 '+(i+1)+' 题</div>'+
       '<div class="sub-stem">'+esc(s.stem)+'</div>'+
@@ -1630,8 +1793,7 @@ function buildSimilarArea(list,si,qi){
 
 function buildHomeworkArea(list){
   if(!list||!list.length) return '<div class="empty">该题暂无配套作业</div>';
-
-    return list.map(function(s,i){
+  return list.map(function(s,i){
     return '<div class="subq" data-sub="'+i+'">'+
       '<div class="sub-title">作业 · 第 '+(i+1)+' 题</div>'+
       '<div class="sub-stem">'+esc(s.stem)+'</div>'+
@@ -1643,6 +1805,7 @@ function buildHomeworkArea(list){
       '<div class="panel sub-analysis">'+renderAnalysisFieldsHTML(s)+'</div>'+
     '</div>';
   }).join('');
+}
 
 function figureHTML(q){
   if(!q.figure) return '';
@@ -1679,6 +1842,27 @@ function questionHTML(q,si,qi){
     figureHTML(q)+
   '</div>';
 }
+
+function renderPaper(){
+  $('#paperView').innerHTML = exam.sections.map(function(sec,si){
+    var qs = sec.questions.map(function(q,qi){ return questionHTML(q,si,qi); }).join('');
+    return '<div class="page" data-page="'+si+'"><canvas class="ink"></canvas><div class="content"><div class="sec-title">'+esc(sec.name)+'</div>'+qs+'</div></div>';
+  }).join('');
+
+  $$('#paperView .page').forEach(attachInk);
+  $$('#paperView .q-figure').forEach(attachFigureInteraction);
+
+  if(resizeObserver) resizeObserver.disconnect();
+  resizeObserver = new ResizeObserver(function(){
+    $$('#paperView .page').forEach(function(p){
+      if(p.style.display!=='none') fitCanvas(p);
+    });
+  });
+  $$('#paperView .page').forEach(function(p){ resizeObserver.observe(p); });
+
+  updatePageNav();
+}
+
 function showPageInternal(i){
   var n = exam.sections.length; if(!n) return;
   if(i<0||i>=n) i = 0;
@@ -1704,14 +1888,10 @@ function showPage(i){ showPageInternal(i); scheduleSave(); }
 function updatePageNav(){
   var total = exam.sections.length || 1;
   var cur = (state.page || 0) + 1;
-  var curEl = $('#pageCur');
-  var totalEl = $('#pageTotal');
-  if(curEl) curEl.textContent = cur;
-  if(totalEl) totalEl.textContent = total;
-  var prev = $('#btnPrevPage');
-  var next = $('#btnNextPage');
-  if(prev) prev.disabled = (state.page <= 0);
-  if(next) next.disabled = (state.page >= total - 1);
+  var curEl = $('#pageCur'); if(curEl) curEl.textContent = cur;
+  var totalEl = $('#pageTotal'); if(totalEl) totalEl.textContent = total;
+  var prev = $('#btnPrevPage'); if(prev) prev.disabled = (state.page <= 0);
+  var next = $('#btnNextPage'); if(next) next.disabled = (state.page >= total - 1);
 }
 
 function attachFigureInteraction(wrap){
@@ -1719,7 +1899,6 @@ function attachFigureInteraction(wrap){
   var handle = wrap.querySelector('.fig-handle');
   var tools = wrap.querySelector('.fig-tools');
   if(!img || !handle || !tools) return;
-
   var qEl = wrap.closest('.q');
   if(!qEl) return;
   var si = +qEl.dataset.si, qi = +qEl.dataset.qi;
@@ -1760,8 +1939,7 @@ function attachFigureInteraction(wrap){
         if(!confirm('删除该图形？')) return;
         q.figure = null;
         renderPaper(); showPageInternal(state.page);
-        scheduleSave();
-        toast('已删除图形');
+        scheduleSave(); toast('已删除图形');
       } else if(act === 'fig-side'){
         q.figure.side = q.figure.side === 'left' ? 'right' : 'left';
         renderPaper(); showPageInternal(state.page); scheduleSave();
@@ -1869,7 +2047,7 @@ function attachInk(page){
 }
 
 /* ================================================================
-电子黑板（全屏自适应）
+电子黑板
 ================================================================ */
 function bbInit(){
   bbCanvas = document.getElementById('bbCanvas');
@@ -1878,7 +2056,6 @@ function bbInit(){
   bbCtx = bbCanvas.getContext('2d');
   bbBindPointer();
 }
-
 function bbApplyTheme(){
   var bb = ensureBlackboard();
   var stage = document.getElementById('bbStage');
@@ -1888,7 +2065,6 @@ function bbApplyTheme(){
     b.classList.toggle('active', b.dataset.theme === bb.theme);
   });
 }
-
 function bbRenderTabs(){
   var bb = ensureBlackboard();
   var el = document.getElementById('bbTabs');
@@ -1897,31 +2073,22 @@ function bbRenderTabs(){
   }).join('');
   bbUpdatePageNav();
 }
-
 function bbUpdatePageNav(){
   var bb = ensureBlackboard();
   var cur = (bb.current||0)+1;
   var total = bb.pages.length || 1;
-  var curEl = $('#bbPageCur');
-  var totalEl = $('#bbPageTotal');
-  if(curEl) curEl.textContent = cur;
-  if(totalEl) totalEl.textContent = total;
-  var prev = $('#bbPrevPage');
-  var next = $('#bbNextPage');
-  if(prev) prev.disabled = (bb.current <= 0);
-  if(next) next.disabled = (bb.current >= total - 1);
+  var curEl = $('#bbPageCur'); if(curEl) curEl.textContent = cur;
+  var totalEl = $('#bbPageTotal'); if(totalEl) totalEl.textContent = total;
+  var prev = $('#bbPrevPage'); if(prev) prev.disabled = (bb.current <= 0);
+  var next = $('#bbNextPage'); if(next) next.disabled = (bb.current >= total - 1);
 }
-
 function bbDrawStroke(s){
   if(!bbCtx) return;
   var ctx = bbCtx;
   ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
   ctx.globalAlpha = 1;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.strokeStyle = s.color;
-  ctx.fillStyle = s.color;
-  ctx.lineWidth = s.size;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.strokeStyle = s.color; ctx.fillStyle = s.color; ctx.lineWidth = s.size;
   var pts = s.points;
   if(!pts || !pts.length) return;
   if(pts.length === 1){
@@ -1935,22 +2102,17 @@ function bbDrawStroke(s){
   for(var i=1;i<pts.length;i++) ctx.lineTo(pts[i].x*BB_W, pts[i].y*BB_H);
   ctx.stroke();
 }
-
 function bbDrawSegment(s, a, b){
   if(!bbCtx) return;
   var ctx = bbCtx;
   ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
-  ctx.globalAlpha = 1;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.strokeStyle = s.color;
-  ctx.lineWidth = s.size;
+  ctx.globalAlpha = 1; ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.strokeStyle = s.color; ctx.lineWidth = s.size;
   ctx.beginPath();
   ctx.moveTo(a.x*BB_W, a.y*BB_H);
   ctx.lineTo(b.x*BB_W, b.y*BB_H);
   ctx.stroke();
 }
-
 function bbRedraw(){
   if(!bbCtx) return;
   bbCtx.clearRect(0,0,BB_W,BB_H);
@@ -1959,7 +2121,6 @@ function bbRedraw(){
   if(!page) return;
   page.strokes.forEach(bbDrawStroke);
 }
-
 function bbPointerPos(e){
   var rect = bbCanvas.getBoundingClientRect();
   if(rect.width < 1 || rect.height < 1) return { x:0, y:0 };
@@ -1968,7 +2129,6 @@ function bbPointerPos(e){
     y: clamp((e.clientY - rect.top) / rect.height, 0, 1)
   };
 }
-
 function bbBindPointer(){
   bbCanvas.addEventListener('pointerdown', function(e){
     if(e.pointerType === 'mouse' && e.button !== 0) return;
@@ -1988,7 +2148,6 @@ function bbBindPointer(){
     try{ bbCanvas.setPointerCapture(e.pointerId); }catch(_){}
     bbDrawStroke(stroke);
   });
-
   bbCanvas.addEventListener('pointermove', function(e){
     if(!bbCurrentStroke) return;
     e.preventDefault();
@@ -2002,7 +2161,6 @@ function bbBindPointer(){
     pts.push(p);
     bbDrawSegment(bbCurrentStroke, last, p);
   });
-
   function end(e){
     if(!bbCurrentStroke) return;
     if(e && e.pointerId !== undefined){
@@ -2017,72 +2175,49 @@ function bbBindPointer(){
     if(bbCurrentStroke) end(e);
   });
 }
-
 function bbSwitchPage(i){
   var bb = ensureBlackboard();
   if(i<0 || i>=bb.pages.length) return;
   bb.current = i;
-  bbRenderTabs();
-  bbRedraw();
-  scheduleSave();
+  bbRenderTabs(); bbRedraw(); scheduleSave();
 }
-
 function bbAddPage(){
   var bb = ensureBlackboard();
   bb.pages.push({ strokes: [] });
   bb.current = bb.pages.length - 1;
-  bbRenderTabs();
-  bbRedraw();
-  scheduleSave();
+  bbRenderTabs(); bbRedraw(); scheduleSave();
 }
-
 function bbDelPage(){
   var bb = ensureBlackboard();
   if(bb.pages.length <= 1){ toast('至少保留一页'); return; }
   if(!confirm('删除当前页？')) return;
   bb.pages.splice(bb.current, 1);
   if(bb.current >= bb.pages.length) bb.current = bb.pages.length - 1;
-  bbRenderTabs();
-  bbRedraw();
-  scheduleSave();
+  bbRenderTabs(); bbRedraw(); scheduleSave();
 }
-
 function bbUndo(){
   var bb = ensureBlackboard();
   var page = bb.pages[bb.current];
   if(!page || !page.strokes.length){ toast('没有可撤销的笔迹'); return; }
   page.strokes.pop();
-  bbRedraw();
-  scheduleSave();
+  bbRedraw(); scheduleSave();
 }
-
 function bbClear(){
   var bb = ensureBlackboard();
   var page = bb.pages[bb.current];
   if(!page || !page.strokes.length){ toast('当前页是空的'); return; }
   if(!confirm('清空当前页的所有笔迹？')) return;
   page.strokes = [];
-  bbRedraw();
-  scheduleSave();
+  bbRedraw(); scheduleSave();
 }
-
 function enterBlackboard(){
   ensureBlackboard();
   document.getElementById('bbView').classList.add('show');
   document.body.classList.add('bb-open');
   if(!bbCanvas) bbInit();
-  bbApplyTheme();
-  bbRenderTabs();
-  bbRedraw();
-  /* 进入后触发一次 resize，让 canvas 铺满容器 */
-  setTimeout(function(){
-    if(bbCanvas){
-      var rect = bbCanvas.getBoundingClientRect();
-      if(rect.width && rect.height){ bbRedraw(); }
-    }
-  }, 60);
+  bbApplyTheme(); bbRenderTabs(); bbRedraw();
+  setTimeout(function(){ if(bbCanvas) bbRedraw(); }, 60);
 }
-
 function exitBlackboard(){
   document.getElementById('bbView').classList.remove('show');
   document.body.classList.remove('bb-open');
@@ -2093,7 +2228,6 @@ function exitBlackboard(){
 举一反三导航
 ================================================================ */
 function simGetPanel(q){ return q ? q.querySelector(':scope > .q-main > .panel.similar') : null; }
-
 function simUpdateNav(panel,cur,total){
   var lbl = panel.querySelector('.sim-cur'); if(lbl) lbl.textContent = cur+1;
   var prev = panel.querySelector('[data-act="sim-prev"]');
@@ -2101,7 +2235,6 @@ function simUpdateNav(panel,cur,total){
   if(prev) prev.disabled = (cur===0);
   if(next) next.disabled = (cur===total-1);
 }
-
 function simCurrentIndex(panel){
   var items = $$('.sim-item', panel);
   for(var i=0;i<items.length;i++){
@@ -2109,7 +2242,6 @@ function simCurrentIndex(panel){
   }
   return 0;
 }
-
 function simMove(q,delta){
   var panel = simGetPanel(q); if(!panel) return;
   var items = $$('.sim-item', panel); if(!items.length) return;
@@ -2121,7 +2253,6 @@ function simMove(q,delta){
   scheduleSave();
   requestAnimationFrame(function(){ var p=q.closest('.page'); if(p) fitCanvas(p); });
 }
-
 function simExit(q){
   var panel = simGetPanel(q);
   if(panel){
@@ -2135,9 +2266,7 @@ function simExit(q){
   var allQ = $$('.q', page), idx = allQ.indexOf(q);
   requestAnimationFrame(function(){ fitCanvas(page); });
   if(idx>-1 && idx<allQ.length-1){
-    setTimeout(function(){
-      allQ[idx+1].scrollIntoView({behavior:'smooth',block:'start'});
-    }, 60);
+    setTimeout(function(){ allQ[idx+1].scrollIntoView({behavior:'smooth',block:'start'}); }, 60);
   } else {
     var pages = $$('#paperView .page'), pi = pages.indexOf(page);
     if(pi>-1 && pi<pages.length-1){
@@ -2146,7 +2275,6 @@ function simExit(q){
     }
   }
 }
-
 function simRestore(q){
   var panel = simGetPanel(q); if(!panel) return;
   var items = $$('.sim-item', panel); if(!items.length) return;
@@ -2191,31 +2319,26 @@ $('#paperView').addEventListener('click', function(e){
   else if(act==='sim-next') simMove(q,+1);
   else if(act==='sim-exit') simExit(q);
 });
+
 /* ================================================================
-★ 左右滑动切题（触屏 + 鼠标拖拽都支持）
+左右滑动切题（触屏 + 鼠标拖拽）
 ================================================================ */
 (function setupSwipePage(){
   var swipe = { startX:0, startY:0, tracking:false, moved:false, startTime:0 };
-  var SWIPE_MIN_X = 60;      /* 水平最小滑动距离 */
-  var SWIPE_MAX_Y = 50;      /* 垂直最大偏移（避免纵向滚动误触发） */
-  var SWIPE_MAX_MS = 700;    /* 滑动时间上限 */
+  var SWIPE_MIN_X = 60, SWIPE_MAX_Y = 50, SWIPE_MAX_MS = 700;
 
   function shouldIgnore(el){
     if(!el) return true;
-    /* 忽略在涂抹模式下的滑动（涂抹有自己的 canvas 事件） */
     if(document.body.classList.contains('ink-on')) return true;
-    /* 忽略在可滚动/可交互元素内的滑动 */
     if(el.closest('.bb-ink-dock, .bb-page-nav, .ink-dock, .page-nav')) return true;
     if(el.closest('.fig-region, .fig-stage, canvas.ink')) return true;
     if(el.closest('input, textarea, select')) return true;
     if(el.closest('.modal-mask.show')) return true;
     return false;
   }
-
   function onStart(e){
-    if(e.touches && e.touches.length > 1) return;   /* 多指不处理 */
-    var target = e.target;
-    if(shouldIgnore(target)) return;
+    if(e.touches && e.touches.length > 1) return;
+    if(shouldIgnore(e.target)) return;
     var t = e.touches ? e.touches[0] : e;
     swipe.startX = t.clientX;
     swipe.startY = t.clientY;
@@ -2223,7 +2346,6 @@ $('#paperView').addEventListener('click', function(e){
     swipe.tracking = true;
     swipe.moved = false;
   }
-
   function onMove(e){
     if(!swipe.tracking) return;
     var t = e.touches ? e.touches[0] : e;
@@ -2231,40 +2353,30 @@ $('#paperView').addEventListener('click', function(e){
     var dy = t.clientY - swipe.startY;
     if(Math.abs(dx) > 8 || Math.abs(dy) > 8) swipe.moved = true;
   }
-
   function onEnd(e){
     if(!swipe.tracking) return;
     swipe.tracking = false;
-
-    var t = (e.changedTouches && e.changedTouches[0]) ||
-            (e.touches && e.touches[0]) || e;
+    var t = (e.changedTouches && e.changedTouches[0]) || (e.touches && e.touches[0]) || e;
     var dx = t.clientX - swipe.startX;
     var dy = t.clientY - swipe.startY;
     var dt = Date.now() - swipe.startTime;
-
     if(dt > SWIPE_MAX_MS) return;
     if(Math.abs(dy) > SWIPE_MAX_Y) return;
     if(Math.abs(dx) < SWIPE_MIN_X) return;
     if(Math.abs(dx) < Math.abs(dy) * 1.5) return;
 
     if(dx < 0){
-      /* 左滑 → 下一页 */
       if(state.page < exam.sections.length - 1){
         showPage(state.page + 1);
         window.scrollTo({top:0, behavior:'smooth'});
         toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
-      } else {
-        toast('已经是最后一页');
-      }
+      } else toast('已经是最后一页');
     } else {
-      /* 右滑 → 上一页 */
       if(state.page > 0){
         showPage(state.page - 1);
         window.scrollTo({top:0, behavior:'smooth'});
         toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
-      } else {
-        toast('已经是第一页');
-      }
+      } else toast('已经是第一页');
     }
   }
 
@@ -2273,15 +2385,13 @@ $('#paperView').addEventListener('click', function(e){
   paperView.addEventListener('touchmove', onMove, {passive:true});
   paperView.addEventListener('touchend', onEnd, {passive:true});
   paperView.addEventListener('touchcancel', function(){ swipe.tracking = false; }, {passive:true});
-
-  /* 鼠标拖拽（桌面端） */
   paperView.addEventListener('mousedown', onStart);
   window.addEventListener('mousemove', onMove);
   window.addEventListener('mouseup', onEnd);
 })();
 
 /* ================================================================
-左下角浮动涂抹工具条 & 右下角翻页控件
+左下涂抹条 & 右下翻页控件
 ================================================================ */
 $$('#inkDock .swatch').forEach(function(b){
   b.onclick = function(){
@@ -2294,7 +2404,6 @@ $$('#inkDock .swatch').forEach(function(b){
     b.classList.add('active');
   };
 });
-
 $$('#inkDock .size-btn').forEach(function(b){
   b.onclick = function(){
     state.size = +b.dataset.size;
@@ -2304,13 +2413,11 @@ $$('#inkDock .size-btn').forEach(function(b){
     b.classList.add('active');
   };
 });
-
 $('#btnExitInk').onclick = function(){
   state.inkOn = false;
   document.body.classList.remove('ink-on');
   $$('#inkDock .swatch').forEach(function(x){x.classList.remove('active');});
 };
-
 $('#btnClearInk').onclick = function(){
   if(!confirm('清空当前所有涂抹？')) return;
   strokes.clear();
@@ -2319,54 +2426,37 @@ $('#btnClearInk').onclick = function(){
   });
   scheduleSave();
 };
-
 $('#btnPrevPage').onclick = function(){
   if(state.page <= 0) return;
   showPage(state.page - 1);
   window.scrollTo({top:0, behavior:'smooth'});
 };
-
 $('#btnNextPage').onclick = function(){
   if(state.page >= exam.sections.length - 1) return;
   showPage(state.page + 1);
   window.scrollTo({top:0, behavior:'smooth'});
 };
-
-/* ★ 下一题按钮：在当前页内滚动到下一道题；如果已在最后一题，则翻到下一页第一题 */
 $('#btnNextQuestion').onclick = function(){
   var curPage = document.querySelector('#paperView .page[data-page="'+state.page+'"]');
   if(curPage){
     var qs = $$('.q', curPage);
-    /* 找到当前视口内最上方的题，跳到它之后一题 */
     var idx = -1;
     for(var i=0;i<qs.length;i++){
       var r = qs[i].getBoundingClientRect();
       if(r.bottom > 100){ idx = i - 1; break; }
     }
-    if(idx < -1) idx = -1;
-
     if(idx < qs.length - 1){
       var target = qs[idx + 1];
-      if(target){
-        target.scrollIntoView({behavior:'smooth', block:'start'});
-        return;
-      }
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); return; }
     }
   }
-  /* 已是当前页最后一题 → 翻到下一页 */
   if(state.page < exam.sections.length - 1){
     showPage(state.page + 1);
     window.scrollTo({top:0, behavior:'smooth'});
     toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
-  } else {
-    toast('已经是最后一题');
-  }
+  } else toast('已经是最后一题');
 };
-
-$('#btnTopPage').onclick = function(){
-  window.scrollTo({top:0, behavior:'smooth'});
-};
-
+$('#btnTopPage').onclick = function(){ window.scrollTo({top:0, behavior:'smooth'}); };
 $('#tabs').addEventListener('click', function(e){
   var t = e.target.closest('.tab'); if(!t) return;
   showPage(+t.dataset.page);
@@ -2384,7 +2474,6 @@ $$('#bbView .bb-swatch').forEach(function(b){
     b.classList.add('active');
   };
 });
-
 $$('#bbView .bb-size').forEach(function(b){
   b.onclick = function(){
     bbState.size = +b.dataset.size;
@@ -2392,32 +2481,26 @@ $$('#bbView .bb-size').forEach(function(b){
     b.classList.add('active');
   };
 });
-
 $$('.bb-theme').forEach(function(b){
   b.onclick = function(){
     ensureBlackboard().theme = b.dataset.theme;
-    bbApplyTheme();
-    scheduleSave();
+    bbApplyTheme(); scheduleSave();
   };
 });
-
 $('#bbTabs').addEventListener('click', function(e){
   var t = e.target.closest('.bb-tab'); if(!t) return;
   bbSwitchPage(+t.dataset.i);
 });
-
 $('#bbPrevPage').onclick = function(){
   var bb = ensureBlackboard();
   if(bb.current <= 0) return;
   bbSwitchPage(bb.current - 1);
 };
-
 $('#bbNextPage').onclick = function(){
   var bb = ensureBlackboard();
   if(bb.current >= bb.pages.length - 1) return;
   bbSwitchPage(bb.current + 1);
 };
-
 $('#bbAddPage').onclick = bbAddPage;
 $('#bbDelPage').onclick = bbDelPage;
 $('#bbUndo').onclick = bbUndo;
@@ -2448,12 +2531,10 @@ function renderPapersList(){
     '</div>';
   }).join('') || '<div class="empty">暂无试卷</div>';
 }
-
 $('#paperNameBtn').onclick = function(){
   renderPapersList();
   $('#papersModal').classList.add('show');
 };
-
 $('#btnPapersClose').onclick = function(){ $('#papersModal').classList.remove('show'); };
 
 $('#papersList').addEventListener('click', async function(e){
@@ -2486,7 +2567,6 @@ $('#papersList').addEventListener('click', async function(e){
     }
     return;
   }
-
   var it = e.target.closest('.paper-item');
   if(it){
     var pid = it.dataset.id;
@@ -2503,18 +2583,15 @@ $('#papersList').addEventListener('click', async function(e){
 $('#btnNewPaper').onclick = async function(){
   var nn = prompt('新试卷名称：', '未命名试卷');
   if(nn===null) return; nn = nn.trim() || '未命名试卷';
-
   var blank = normalizeExamData({
     title: nn,
     sections: [{ name:'一、题目', questions:[{stem:'（点击"导入试卷"粘贴题目文字）'}] }]
   });
-
   var r = await sb.from('papers').insert({
     owner_id: currentUser.id, name: nn, data: blank,
     saved_homework:null, sim_memory:{}, current_page:0, strokes:{}
   }).select().single();
   if(r.error){ alert('创建失败：'+r.error.message); return; }
-
   papers.unshift(r.data);
   await openPaper(r.data.id);
   renderPapersList();
@@ -2531,51 +2608,36 @@ $('#btnNewPaper').onclick = async function(){
 $('#btnShareCurrent').onclick = async function(){
   if(!currentPaper){ alert('请先打开一份试卷'); return; }
   await saveCurrentPaper();
-
   var r = await sb.from('shares').insert({
-    paper_id: currentPaper.id,
-    paper_name: currentPaper.name,
-    owner_id: currentUser.id,
-    owner_code: currentProfile.user_code,
+    paper_id: currentPaper.id, paper_name: currentPaper.name,
+    owner_id: currentUser.id, owner_code: currentProfile.user_code,
     snapshot: exam
   }).select().single();
   if(r.error){ alert('生成分享失败：'+r.error.message); return; }
-
   var url = location.origin + location.pathname + '?share=' + r.data.id;
   $('#shareLinkInput').value = url;
   $('#shareMsg').className = 'msg';
   $('#papersModal').classList.remove('show');
   $('#shareModal').classList.add('show');
 };
-
 $('#btnCopyShare').onclick = function(){
   var inp = $('#shareLinkInput');
   inp.select(); inp.setSelectionRange(0, 99999);
-  try{
-    document.execCommand('copy');
-    showMsg('#shareMsg','已复制到剪贴板','ok');
-  }catch(e){
+  try{ document.execCommand('copy'); showMsg('#shareMsg','已复制到剪贴板','ok'); }
+  catch(e){
     navigator.clipboard && navigator.clipboard.writeText(inp.value).then(function(){
       showMsg('#shareMsg','已复制到剪贴板','ok');
     });
   }
 };
-
 $('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('show'); };
 
 /* ================================================================
 分享题目（三 Tab 多选）
 ================================================================ */
-var pickQState = {
-  paperId: null,
-  si: 0,
-  tab: 'main',
-  selection: {}
-};
+var pickQState = { paperId: null, si: 0, tab: 'main', selection: {} };
 
-function pickKey(si,qi,kind,idx){
-  return si+'-'+qi+'-'+kind+'-'+idx;
-}
+function pickKey(si,qi,kind,idx){ return si+'-'+qi+'-'+kind+'-'+idx; }
 
 function pickResetSelectionAll(){
   pickQState.selection = {};
@@ -2585,46 +2647,30 @@ function pickResetSelectionAll(){
   if(!sec) return;
   (sec.questions||[]).forEach(function(q,qi){
     pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = true;
-    (q.similar||[]).forEach(function(s,idx){
-      pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = true;
-    });
-    (q.homework||[]).forEach(function(h,idx){
-      pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = true;
-    });
+    (q.similar||[]).forEach(function(s,idx){ pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = true; });
+    (q.homework||[]).forEach(function(h,idx){ pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = true; });
   });
 }
-
 function pickSetTabAll(val){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
   var sec = paper.data.sections[pickQState.si];
   if(!sec) return;
   (sec.questions||[]).forEach(function(q,qi){
-    if(pickQState.tab === 'main'){
-      pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = val;
-    } else if(pickQState.tab === 'similar'){
-      (q.similar||[]).forEach(function(s,idx){
-        pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = val;
-      });
-    } else if(pickQState.tab === 'homework'){
-      (q.homework||[]).forEach(function(h,idx){
-        pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = val;
-      });
-    }
+    if(pickQState.tab === 'main') pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = val;
+    else if(pickQState.tab === 'similar') (q.similar||[]).forEach(function(s,idx){ pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = val; });
+    else if(pickQState.tab === 'homework') (q.homework||[]).forEach(function(h,idx){ pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = val; });
   });
 }
-
 function pickCountTab(){
   var counts = { main:{all:0, sel:0}, similar:{all:0, sel:0}, homework:{all:0, sel:0} };
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return counts;
   var sec = paper.data.sections[pickQState.si];
   if(!sec) return counts;
-
   (sec.questions||[]).forEach(function(q,qi){
     counts.main.all += 1;
     if(pickQState.selection[pickKey(pickQState.si,qi,'main',0)]) counts.main.sel++;
-
     (q.similar||[]).forEach(function(s,idx){
       counts.similar.all += 1;
       if(pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)]) counts.similar.sel++;
@@ -2636,7 +2682,6 @@ function pickCountTab(){
   });
   return counts;
 }
-
 function pickUpdateTabsUI(){
   var c = pickCountTab();
   Object.keys(c).forEach(function(k){
@@ -2650,7 +2695,6 @@ function pickUpdateTabsUI(){
   var stat = $('#pickStat');
   if(stat) stat.innerHTML = '已选 <b>'+totalSel+'</b> 项';
 }
-
 function pickRenderList(){
   var el = $('#pickQuestionList');
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
@@ -2664,7 +2708,6 @@ function pickRenderList(){
     el.innerHTML = '<div class="pick-empty">该大题下暂无题目</div>';
     return;
   }
-
   var rows = [];
   qs.forEach(function(q,qi){
     if(pickQState.tab === 'main'){
@@ -2672,24 +2715,18 @@ function pickRenderList(){
       var sel = !!pickQState.selection[key];
       var first = String(q.stem||'').split('\n')[0];
       if(first.length > 60) first = first.slice(0,60)+'...';
-      var figTag = (q.figure && q.figure.src)
-        ? '<span class="badge fig">🖼 有图</span>' : '';
+      var figTag = (q.figure && q.figure.src) ? '<span class="badge fig">🖼 有图</span>' : '';
       rows.push(
         '<label class="pick-item'+(sel?' selected':'')+'" data-pkey="'+key+'">'+
           '<input type="checkbox"'+(sel?' checked':'')+'>'+
           '<div class="body">'+
             '<div class="txt"><span class="badge main">题目</span> 第 '+(qi+1)+' 题：'+esc(first)+'</div>'+
-            '<div class="meta">'+figTag+
-              '<span>举一反三 '+(q.similar||[]).length+' 题</span>'+
-              '<span>作业 '+(q.homework||[]).length+' 题</span>'+
-            '</div>'+
+            '<div class="meta">'+figTag+'<span>举一反三 '+(q.similar||[]).length+' 题</span><span>作业 '+(q.homework||[]).length+' 题</span></div>'+
           '</div>'+
         '</label>'
       );
     } else if(pickQState.tab === 'similar'){
-      var list = q.similar || [];
-      if(!list.length) return;
-      list.forEach(function(s,idx){
+      (q.similar||[]).forEach(function(s,idx){
         var key = pickKey(pickQState.si,qi,'similar',idx);
         var sel = !!pickQState.selection[key];
         var first = String(s.stem||'').split('\n')[0];
@@ -2705,9 +2742,7 @@ function pickRenderList(){
         );
       });
     } else if(pickQState.tab === 'homework'){
-      var list2 = q.homework || [];
-      if(!list2.length) return;
-      list2.forEach(function(h,idx){
+      (q.homework||[]).forEach(function(h,idx){
         var key = pickKey(pickQState.si,qi,'homework',idx);
         var sel = !!pickQState.selection[key];
         var first = String(h.stem||'').split('\n')[0];
@@ -2724,25 +2759,21 @@ function pickRenderList(){
       });
     }
   });
-
-  if(!rows.length){
-    el.innerHTML = '<div class="pick-empty">该分类下暂无内容</div>';
-  } else {
-    el.innerHTML = rows.join('');
-  }
-
+  el.innerHTML = rows.length ? rows.join('') : '<div class="pick-empty">该分类下暂无内容</div>';
   pickUpdateTabsUI();
 }
 
-$('#btnShareQuestion').onclick = function(){
+$('#btnShareQuestion').onclick = async function(){
   if(!papers.length){ toast('还没有试卷'); return; }
+  if(currentPaper) await saveCurrentPaper();
+  var fresh = await sb.from('papers').select('id,name,updated_at,created_at,data')
+    .eq('owner_id', currentUser.id).order('updated_at', { ascending: false });
+  if(!fresh.error && fresh.data) papers = fresh.data;
 
   var pSel = $('#pickQPaperSelect');
   pSel.innerHTML = papers.map(function(p){
     var qn = 0;
-    ((p.data && p.data.sections) || []).forEach(function(s){
-      qn += (s.questions||[]).length;
-    });
+    ((p.data && p.data.sections) || []).forEach(function(s){ qn += (s.questions||[]).length; });
     var cur = (currentPaper && p.id === currentPaper.id) ? ' ★ 当前' : '';
     return '<option value="'+p.id+'">'+esc(p.name)+cur+'（'+qn+' 题）</option>';
   }).join('');
@@ -2750,7 +2781,6 @@ $('#btnShareQuestion').onclick = function(){
   pickQState.paperId = pSel.value;
   pickQState.si = 0;
   pickQState.tab = 'main';
-
   refreshPickQSections();
   pickResetSelectionAll();
   $$('#pickTabs .pick-tab').forEach(function(b){
@@ -2759,7 +2789,6 @@ $('#btnShareQuestion').onclick = function(){
   pickRenderList();
   $('#pickQuestionModal').classList.add('show');
 };
-
 $('#pickQPaperSelect').onchange = function(){
   pickQState.paperId = this.value;
   pickQState.si = 0;
@@ -2767,135 +2796,67 @@ $('#pickQPaperSelect').onchange = function(){
   pickResetSelectionAll();
   pickRenderList();
 };
-
 function refreshPickQSections(){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   var secSel = $('#pickQSectionSelect');
   var secs = (paper && paper.data && paper.data.sections) || [];
-  if(!secs.length){
-    secSel.innerHTML = '<option>（该试卷暂无大题）</option>';
-    pickQState.si = 0;
-    return;
-  }
+  if(!secs.length){ secSel.innerHTML = '<option>（该试卷暂无大题）</option>'; pickQState.si = 0; return; }
   secSel.innerHTML = secs.map(function(s, i){
     var n = (s.questions||[]).length;
     return '<option value="'+i+'">'+esc(s.name || ('大题'+(i+1)))+'（'+n+' 题）</option>';
   }).join('');
-  secSel.value = '0';
-  pickQState.si = 0;
+  secSel.value = '0'; pickQState.si = 0;
 }
-
 $('#pickQSectionSelect').onchange = function(){
   pickQState.si = parseInt(this.value, 10) || 0;
-  pickResetSelectionAll();
-  pickRenderList();
+  pickResetSelectionAll(); pickRenderList();
 };
-
 $('#pickTabs').addEventListener('click', function(e){
   var t = e.target.closest('.pick-tab'); if(!t) return;
   pickQState.tab = t.dataset.ptab;
-  $$('#pickTabs .pick-tab').forEach(function(b){
-    b.classList.toggle('active', b === t);
-  });
+  $$('#pickTabs .pick-tab').forEach(function(b){ b.classList.toggle('active', b === t); });
   pickRenderList();
 });
-
 $('#pickQuestionList').addEventListener('change', function(e){
-  var cb = e.target.closest('input[type=checkbox]');
-  if(!cb) return;
-  var wrap = cb.closest('.pick-item');
-  if(!wrap) return;
-  var key = wrap.dataset.pkey;
-  pickQState.selection[key] = cb.checked;
+  var cb = e.target.closest('input[type=checkbox]'); if(!cb) return;
+  var wrap = cb.closest('.pick-item'); if(!wrap) return;
+  pickQState.selection[wrap.dataset.pkey] = cb.checked;
   wrap.classList.toggle('selected', cb.checked);
   pickUpdateTabsUI();
 });
-
 $('#pickQuestionList').addEventListener('click', function(e){
   if(e.target.tagName === 'INPUT') return;
-  var wrap = e.target.closest('.pick-item');
-  if(!wrap) return;
-  var cb = wrap.querySelector('input[type=checkbox]');
-  if(!cb) return;
+  var wrap = e.target.closest('.pick-item'); if(!wrap) return;
+  var cb = wrap.querySelector('input[type=checkbox]'); if(!cb) return;
   cb.checked = !cb.checked;
   pickQState.selection[wrap.dataset.pkey] = cb.checked;
   wrap.classList.toggle('selected', cb.checked);
   pickUpdateTabsUI();
 });
-
-$('#pickSelectAll').onclick = function(){
-  pickSetTabAll(true);
-  pickRenderList();
-};
-$('#pickSelectNone').onclick = function(){
-  pickSetTabAll(false);
-  pickRenderList();
-};
-$('#pickSelectAllTabs').onclick = function(){
-  pickResetSelectionAll();
-  pickRenderList();
-  toast('已全选所有分类');
-};
-
-$('#pickQuestionCancel').onclick = function(){
-  $('#pickQuestionModal').classList.remove('show');
-};
+$('#pickSelectAll').onclick = function(){ pickSetTabAll(true); pickRenderList(); };
+$('#pickSelectNone').onclick = function(){ pickSetTabAll(false); pickRenderList(); };
+$('#pickSelectAllTabs').onclick = function(){ pickResetSelectionAll(); pickRenderList(); toast('已全选所有分类'); };
+$('#pickQuestionCancel').onclick = function(){ $('#pickQuestionModal').classList.remove('show'); };
 
 $('#pickQuestionConfirm').onclick = async function(){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
-
   var items = [];
   var sec = paper.data.sections[pickQState.si];
   if(!sec){ alert('试卷结构异常'); return; }
 
   (sec.questions||[]).forEach(function(q,qi){
     if(pickQState.selection[pickKey(pickQState.si,qi,'main',0)]){
-      items.push({
-        kind: 'main',
-        stem: q.stem || '',
-        answer: q.answer || '',
-        analysis: q.analysis || '',
-        calc: q.calc || '',
-        reason: q.reason || '',
-        pitfall: q.pitfall || '',
-        similar: q.similar || [],
-        homework: q.homework || [],
-        figure: q.figure || null
-      });
+      items.push({ kind:'main', stem:q.stem||'', answer:q.answer||'', analysis:q.analysis||'', calc:q.calc||'', reason:q.reason||'', pitfall:q.pitfall||'', similar:q.similar||[], homework:q.homework||[], figure:q.figure||null });
     }
     (q.similar||[]).forEach(function(s,idx){
       if(pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)]){
-        items.push({
-          kind: 'similar',
-          stem: s.stem || '',
-          answer: s.answer || '',
-          analysis: s.analysis || '',
-          calc: s.calc || '',
-          reason: s.reason || '',
-          pitfall: s.pitfall || '',
-          similar: [],
-          homework: [],
-          figure: null,
-          _fromQuestion: qi+1
-        });
+        items.push({ kind:'similar', stem:s.stem||'', answer:s.answer||'', analysis:s.analysis||'', calc:s.calc||'', reason:s.reason||'', pitfall:s.pitfall||'', similar:[], homework:[], figure:null, _fromQuestion:qi+1 });
       }
     });
     (q.homework||[]).forEach(function(h,idx){
       if(pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)]){
-        items.push({
-          kind: 'homework',
-          stem: h.stem || '',
-          answer: h.answer || '',
-          analysis: h.analysis || '',
-          calc: h.calc || '',
-          reason: h.reason || '',
-          pitfall: h.pitfall || '',
-          similar: [],
-          homework: [],
-          figure: null,
-          _fromQuestion: qi+1
-        });
+        items.push({ kind:'homework', stem:h.stem||'', answer:h.answer||'', analysis:h.analysis||'', calc:h.calc||'', reason:h.reason||'', pitfall:h.pitfall||'', similar:[], homework:[], figure:null, _fromQuestion:qi+1 });
       }
     });
   });
@@ -2909,111 +2870,32 @@ $('#pickQuestionConfirm').onclick = async function(){
 
   try{
     var r = await sb.from('shares').insert({
-      paper_id: paper.id,
-      paper_name: paper.name,
-      owner_id: currentUser.id,
-      owner_code: currentProfile.user_code,
-      snapshot: {
-        __kind: 'multi',
-        items: items,
-        section_name: sec.name,
-        paper_name: paper.name
-      }
+      paper_id: paper.id, paper_name: paper.name,
+      owner_id: currentUser.id, owner_code: currentProfile.user_code,
+      snapshot: { __kind: 'multi', items: items, section_name: sec.name, paper_name: paper.name }
     }).select().single();
-
     if(r.error) throw r.error;
-
     var url = location.origin + location.pathname + '?share=' + r.data.id;
     $('#shareLinkInput').value = url;
     $('#shareMsg').className = 'msg';
     $('#pickQuestionModal').classList.remove('show');
     $('#shareModal').classList.add('show');
     toast('已生成分享链接（共 '+items.length+' 项）');
-  }catch(err){
+  } catch(err){
     console.error(err);
     alert('生成分享失败：'+(err.message||'未知错误'));
-  }finally{
+  } finally {
     btn.disabled = false;
     btn.textContent = oldTxt;
   }
 };
 /* ================================================================
-接收试题（顶栏按钮入口）
-================================================================ */
-$('#btnReceiveQuestion').onclick = function(){
-  $('#receiveShareInput').value = '';
-  $('#receiveMsg').className = 'msg';
-  $('#receiveQuestionModal').classList.add('show');
-  setTimeout(function(){ $('#receiveShareInput').focus(); }, 80);
-};
-
-$('#receiveCancel').onclick = function(){
-  $('#receiveQuestionModal').classList.remove('show');
-};
-
-$('#receiveOk').onclick = async function(){
-  var v = $('#receiveShareInput').value.trim();
-  if(!v){ showMsg('#receiveMsg','请输入链接或分享 ID','err'); return; }
-  var m = v.match(/[?&]share=([^&\s]+)/);
-  var shareId = m ? decodeURIComponent(m[1]) : v;
-  if(!shareId){ showMsg('#receiveMsg','链接里没找到分享 ID','err'); return; }
-
-  this.disabled = true;
-  var old = this.textContent;
-  this.textContent = '接收中...';
-
-  try{
-    var result = await receiveShareById(shareId);
-    if(result && result.ok){
-      $('#receiveQuestionModal').classList.remove('show');
-    }
-  }catch(e){
-    showMsg('#receiveMsg', '接收失败：'+(e.message||'未知错误'), 'err');
-  }
-  this.disabled = false;
-  this.textContent = old;
-};
-
-/* ================================================================
-管理员面板
-================================================================ */
-$('#btnAdminPanel').onclick = async function(){
-  if(!currentProfile || !currentProfile.is_admin) return;
-  $('#adminModal').classList.add('show');
-
-  var sr = await sb.from('shares').select('id', {count:'exact', head:true});
-  var ar = await sb.from('share_accepts').select('*', {count:'exact'}).order('accepted_at',{ascending:false}).limit(500);
-
-  var totalShares = sr.count || 0;
-  var accepts = ar.data || [];
-
-  var distinctUsers = {};
-  accepts.forEach(function(x){ distinctUsers[x.accepted_by_code] = 1; });
-  var uniqueUsers = Object.keys(distinctUsers).length;
-
-  $('#adminStats').innerHTML =
-    '<div class="stat-card"><div class="num">'+totalShares+'</div><div class="lbl">已生成分享总数</div></div>'+
-    '<div class="stat-card"><div class="num">'+accepts.length+'</div><div class="lbl">已被接受次数</div></div>'+
-    '<div class="stat-card"><div class="num">'+uniqueUsers+'</div><div class="lbl">接受过的用户数</div></div>';
-
-  $('#adminTbody').innerHTML = accepts.map(function(x){
-    var ds = fmtDate(x.accepted_at);
-    return '<tr><td>'+ds+'</td><td>'+esc(x.paper_name||'')+'</td><td>'+esc(x.owner_code||'')+'</td><td>'+esc(x.accepted_by_code||'')+'</td></tr>';
-  }).join('') || '<tr><td colspan="4" style="text-align:center;color:#98a1b5;padding:20px">暂无记录</td></tr>';
-};
-
-$('#btnAdminClose').onclick = function(){ $('#adminModal').classList.remove('show'); };
-
-/* ================================================================
-★★★ 图像导入总入口 ★★★
-支持：点击选图（可多选）、拖拽图片到页面任意处、Ctrl+V 粘贴截图
+图像导入总入口（点击选图 / 拖拽 / Ctrl+V 粘贴）
 ================================================================ */
 var assignItems = [];
+var dragOverlay = null;
 
-/* ---------- 入口1：点击「🖼 添加图像」按钮 ---------- */
-function pickImageFiles(){
-  $('#fileInput').click();
-}
+function pickImageFiles(){ $('#fileInput').click(); }
 
 function onFileInputChange(e){
   var files = Array.prototype.slice.call(e.target.files || []);
@@ -3021,9 +2903,6 @@ function onFileInputChange(e){
   if(!files.length) return;
   handleIncomingImages(files);
 }
-
-/* ---------- 入口2：拖拽到页面任意处 ---------- */
-var dragOverlay = null;
 
 function isImageFile(f){
   if(!f) return false;
@@ -3095,17 +2974,12 @@ function bindDragAndDrop(){
     e.preventDefault();
     if(dragOverlay) dragOverlay.classList.remove('show');
     document.body.classList.remove('dragging-file');
-
     var files = extractImageFiles(e.dataTransfer);
-    if(!files.length){
-      toast('没有检测到图片文件');
-      return;
-    }
+    if(!files.length){ toast('没有检测到图片文件'); return; }
     handleIncomingImages(files);
   }, false);
 }
 
-/* ---------- 入口3：Ctrl+V 粘贴截图 ---------- */
 function bindPasteImage(){
   window.addEventListener('paste', function(e){
     var a = document.activeElement;
@@ -3128,7 +3002,6 @@ function bindPasteImage(){
         if(isImageFile(cd.files[j])) files.push(cd.files[j]);
       }
     }
-
     if(!files.length) return;
 
     e.preventDefault();
@@ -3137,34 +3010,21 @@ function bindPasteImage(){
   }, false);
 }
 
-/* ---------- 核心：处理多个图片文件 ---------- */
 async function handleIncomingImages(files){
   if(files.length === 1){
     await loadOneImageIntoEditor(files[0]);
     return;
   }
-
   toast('正在加载 ' + files.length + ' 张图片…');
   var loaded = [];
   for(var i=0;i<files.length;i++){
     try{
       var item = await readImageFile(files[i], i);
       loaded.push(item);
-    }catch(e){
-      console.warn('读取失败', files[i] && files[i].name, e);
-    }
+    }catch(e){ console.warn('读取失败', files[i] && files[i].name, e); }
   }
-
-  if(!loaded.length){
-    toast('没有可用的图片');
-    return;
-  }
-
-  if(loaded.length === 1){
-    openFigEditorFromItem(loaded[0]);
-    return;
-  }
-
+  if(!loaded.length){ toast('没有可用的图片'); return; }
+  if(loaded.length === 1){ openFigEditorFromItem(loaded[0]); return; }
   pendingMultiImages = loaded;
   renderMultiImgModal(loaded);
   $('#multiImgModal').classList.add('show');
@@ -3198,17 +3058,12 @@ function openFigEditorFromItem(item){
     var canvas = imageToCanvas(img);
     openFigEditor(canvas);
   };
-  img.onerror = function(){
-    toast('图片加载失败');
-  };
+  img.onerror = function(){ toast('图片加载失败'); };
   img.src = item.dataUrl;
 }
 
 async function loadOneImageIntoEditor(file){
-  if(!isImageFile(file)){
-    toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）');
-    return;
-  }
+  if(!isImageFile(file)){ toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）'); return; }
   try{
     var item = await readImageFile(file, 0);
     openFigEditorFromItem(item);
@@ -3227,254 +3082,18 @@ function renderMultiImgModal(list){
     '</div>';
   }).join('');
 }
-
 $('#multiImgList').addEventListener('click', function(e){
-  var item = e.target.closest('.multi-img-item');
-  if(!item) return;
+  var item = e.target.closest('.multi-img-item'); if(!item) return;
   var idx = +item.dataset.i;
-  var it = pendingMultiImages[idx];
-  if(!it) return;
+  var it = pendingMultiImages[idx]; if(!it) return;
   $('#multiImgModal').classList.remove('show');
   pendingMultiImages = [];
   openFigEditorFromItem(it);
 });
-
 $('#multiImgCancel').onclick = function(){
   $('#multiImgModal').classList.remove('show');
   pendingMultiImages = [];
 };
-
-/* ================================================================
-图形识别 & 批量分配
-================================================================ */
-/* ★ 关键：先显示弹窗，再等两帧后 load，确保 canvas 布局完成 */
-function openFigEditor(sourceCanvas){
-  var modal = document.getElementById('figEditorModal');
-  modal.classList.add('show');
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      FigEditor.load(sourceCanvas);
-    });
-  });
-}
-
-/* 收集所有「可挂图的题目位置」：
-   - 每一道主题目
-   - 每一道主题目下的举一反三第 N 题
-   - 每一道主题目下的作业第 N 题
-*/
-function collectFigureTargets(){
-  var arr = [];
-  exam.sections.forEach(function(sec,si){
-    (sec.questions||[]).forEach(function(q,qi){
-      var qLabel = sec.name + ' · 第 ' + (qi+1) + ' 题';
-      var qShort = String(q.stem||'').replace(/\s+/g,' ').slice(0, 26);
-
-      /* 主题目 */
-      arr.push({
-        value: si+'-'+qi+'-main-0',
-        si: si, qi: qi, kind: 'main', idx: 0,
-        group: qLabel,
-        label: '【主题目】' + qShort,
-        badge: 'main'
-      });
-
-      /* 举一反三 */
-      (q.similar||[]).forEach(function(s, idx){
-        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 22);
-        arr.push({
-          value: si+'-'+qi+'-similar-'+idx,
-          si: si, qi: qi, kind: 'similar', idx: idx,
-          group: qLabel,
-          label: '【举一反三 '+(idx+1)+'】' + sShort,
-          badge: 'sim'
-        });
-      });
-
-      /* 作业 */
-      (q.homework||[]).forEach(function(h, idx){
-        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 22);
-        arr.push({
-          value: si+'-'+qi+'-homework-'+idx,
-          si: si, qi: qi, kind: 'homework', idx: idx,
-          group: qLabel,
-          label: '【作业 '+(idx+1)+'】' + hShort,
-          badge: 'hw'
-        });
-      });
-    });
-  });
-  return arr;
-}
-
-function showAssignModal(){
-  var selected = FigEditor.getSelected();
-  if(!selected.length){ toast('请至少勾选一个图形'); return; }
-
-  assignItems = selected.map(function(r){
-    var c = cropRegion(FigEditor.canvas, r, 600);
-    return { dataUrl: c.toDataURL('image/png') };
-  });
-
-  var targets = collectFigureTargets();
-  if(!targets.length){
-    toast('当前试卷还没有可插入的题目');
-    return;
-  }
-
-  var listEl = $('#assignList');
-  listEl.innerHTML = '';
-
-  /* 每张图一行：左预览 + 右归属题目下拉 + 插入位置下拉 */
-  assignItems.forEach(function(item, i){
-    var row = document.createElement('div');
-    row.className = 'assign-row';
-
-    /* 左：预览 */
-    var prev = document.createElement('div');
-    prev.className = 'fig-preview';
-    var img = document.createElement('img');
-    img.src = item.dataUrl;
-    prev.appendChild(img);
-    row.appendChild(prev);
-
-    /* 右：字段组 */
-    var fields = document.createElement('div');
-    fields.className = 'assign-fields';
-
-    /* 归属题目组 */
-    var g1 = document.createElement('div');
-    g1.className = 'af-group';
-    var l1 = document.createElement('label');
-    l1.textContent = '① 归属题目';
-    g1.appendChild(l1);
-    var selQ = document.createElement('select');
-    selQ.className = 'assign-q';
-    /* 用分组下拉：每个大题的题目归一组 */
-    var groupsMap = {};
-    targets.forEach(function(t){
-      if(!groupsMap[t.group]) groupsMap[t.group] = [];
-      groupsMap[t.group].push(t);
-    });
-    var qOnlyValues = [];   /* 只列主题目 */
-    targets.forEach(function(t){
-      if(t.kind === 'main'){
-        qOnlyValues.push({ value: t.si+'-'+t.qi, label: t.group });
-      }
-    });
-    var defaultQ = i < qOnlyValues.length ? qOnlyValues[i].value : qOnlyValues[0].value;
-    qOnlyValues.forEach(function(o){
-      var opt = document.createElement('option');
-      opt.value = o.value;
-      opt.textContent = o.label;
-      if(o.value === defaultQ) opt.selected = true;
-      selQ.appendChild(opt);
-    });
-    g1.appendChild(selQ);
-
-    /* 插入位置组 */
-    var g2 = document.createElement('div');
-    g2.className = 'af-group';
-    var l2 = document.createElement('label');
-    l2.textContent = '② 插入位置';
-    g2.appendChild(l2);
-    var selKind = document.createElement('select');
-    selKind.className = 'assign-kind';
-    g2.appendChild(selKind);
-
-    /* 根据归属题刷新"插入位置"选项 */
-    function refreshKindOptions(){
-      selKind.innerHTML = '';
-      var parts = selQ.value.split('-');
-      var si = +parts[0], qi = +parts[1];
-      var sec = exam.sections[si];
-      var q = sec && sec.questions[qi];
-      if(!q) return;
-      /* 主题目 */
-      var optMain = document.createElement('option');
-      optMain.value = si+'-'+qi+'-main-0';
-      optMain.textContent = '主题目下方';
-      selKind.appendChild(optMain);
-      /* 举一反三 */
-      (q.similar||[]).forEach(function(s, idx){
-        var o = document.createElement('option');
-        o.value = si+'-'+qi+'-similar-'+idx;
-        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 18);
-        o.textContent = '举一反三 第'+(idx+1)+'题：' + sShort;
-        selKind.appendChild(o);
-      });
-      /* 作业 */
-      (q.homework||[]).forEach(function(h, idx){
-        var o = document.createElement('option');
-        o.value = si+'-'+qi+'-homework-'+idx;
-        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 18);
-        o.textContent = '作业 第'+(idx+1)+'题：' + hShort;
-        selKind.appendChild(o);
-      });
-    }
-    selQ.addEventListener('change', refreshKindOptions);
-    refreshKindOptions();
-
-    fields.appendChild(g1);
-    fields.appendChild(g2);
-    row.appendChild(fields);
-
-    listEl.appendChild(row);
-  });
-
-  $('#figEditorModal').classList.remove('show');
-  $('#assignModal').classList.add('show');
-}
-
-/* ★ 确认插入：按 selQ + selKind 的 value 分派到主题目 / 举一反三 / 作业 */
-function confirmAssign(){
-  var rows = $$('#assignList .assign-row');
-  var insertCount = 0;
-
-  rows.forEach(function(row, i){
-    var selKind = row.querySelector('.assign-kind');
-    if(!selKind) return;
-    var parts = selKind.value.split('-');
-    var si = +parts[0], qi = +parts[1];
-    var kind = parts[2];             /* main | similar | homework */
-    var idx = +parts[3];
-
-    var sec = exam.sections[si];
-    var q = sec && sec.questions[qi];
-    if(!q) return;
-
-    var figData = {
-      src: assignItems[i].dataUrl,
-      width: 180,
-      side: 'right'
-    };
-
-    if(kind === 'main'){
-      q.figure = figData;
-    } else if(kind === 'similar'){
-      if(q.similar && q.similar[idx]){
-        q.similar[idx].figure = figData;
-      } else { return; }
-    } else if(kind === 'homework'){
-      if(q.homework && q.homework[idx]){
-        q.homework[idx].figure = figData;
-      } else { return; }
-    }
-    insertCount++;
-  });
-
-  $('#assignModal').classList.remove('show');
-  renderPaper();
-  showPageInternal(state.page);
-  requestAnimationFrame(function(){
-    $$('#paperView .page').forEach(function(p){
-      if(p.style.display!=='none') fitCanvas(p);
-    });
-  });
-  scheduleSave();
-  toast('已插入 ' + insertCount + ' 张图像');
-  assignItems = [];
-}
 
 /* ================================================================
 图形检测算法
@@ -3591,7 +3210,6 @@ function detectRegions(sourceCanvas){
   }
 
   regions.sort(function(a,b){ return b.w*b.h - a.w*a.h; });
-
   var kept = [];
   for(var i=0;i<regions.length;i++){
     var r = regions[i];
@@ -3620,16 +3238,6 @@ function cropRegion(sourceCanvas, r, maxW){
   return c;
 }
 
-function fileToImage(file){
-  return new Promise(function(resolve, reject){
-    var url = URL.createObjectURL(file);
-    var img = new Image();
-    img.onload = function(){ URL.revokeObjectURL(url); resolve(img); };
-    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('图片读取失败')); };
-    img.src = url;
-  });
-}
-
 function imageToCanvas(img, maxSide){
   maxSide = maxSide || 1600;
   var scale = Math.min(1, maxSide / Math.max(img.width, img.height));
@@ -3641,12 +3249,18 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-★★★ 图形编辑器（彻底修复版） ★★★
-根本修复：
-1) this.canvasEl 指向 DOM 中的 #figCanvas 元素，坐标计算用它
-2) toImageCoords 加保护，rect 为 0 时返回 {0,0}
-3) finish 只在「新建」时检查选区大小，移动/缩放不检查
+图形编辑器（彻底修复版）
 ================================================================ */
+function openFigEditor(sourceCanvas){
+  var modal = document.getElementById('figEditorModal');
+  modal.classList.add('show');
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      FigEditor.load(sourceCanvas);
+    });
+  });
+}
+
 var FigEditor = {
   canvas: null,
   canvasEl: null,
@@ -3703,7 +3317,6 @@ var FigEditor = {
   render: function(){
     var stage = document.getElementById('figStage');
     stage.querySelectorAll('.fig-region').forEach(function(el){ el.remove(); });
-
     var self = this;
     this.regions.forEach(function(r){
       var el = document.createElement('div');
@@ -3725,10 +3338,8 @@ var FigEditor = {
         hd.dataset.h = h;
         el.appendChild(hd);
       });
-
       stage.appendChild(el);
     });
-
     this.renderThumbs();
   },
 
@@ -3746,17 +3357,14 @@ var FigEditor = {
       div.className = 'fig-thumb' + (r.selected ? ' selected' : '');
       div.dataset.id = r.id;
       div.appendChild(c);
-
       var tag = document.createElement('div');
       tag.className = 'thumb-tag';
       tag.textContent = Math.round(r.w) + ' × ' + Math.round(r.h);
       div.appendChild(tag);
-
       var check = document.createElement('div');
       check.className = 'thumb-check';
       check.textContent = '✓';
       div.appendChild(check);
-
       div.onclick = function(e){
         e.stopPropagation();
         self.toggleSelect(r.id);
@@ -3769,14 +3377,7 @@ var FigEditor = {
     var r = this.regions.find(function(x){ return x.id === id; });
     if(!r) return;
     r.selected = !r.selected;
-    this.render();
-    this.updateUI();
-  },
-
-  setActive: function(id){
-    this.activeId = id;
-    this.render();
-    this.updateUI();
+    this.render(); this.updateUI();
   },
 
   updateUI: function(){
@@ -3793,17 +3394,13 @@ var FigEditor = {
   bindEvents: function(){
     var stage = document.getElementById('figStage');
     var self = this;
-
     stage.addEventListener('dragstart', function(e){ e.preventDefault(); });
     stage.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
     stage.addEventListener('pointerdown', function(e){
       if(!self.canvasEl) return;
       if(e.pointerType === 'mouse' && e.button !== 0) return;
-
-      e.preventDefault();
-      e.stopPropagation();
-
+      e.preventDefault(); e.stopPropagation();
       var pt = self.toImageCoords(e.clientX, e.clientY);
 
       if(e.target.classList.contains('rg-check')){
@@ -3820,11 +3417,9 @@ var FigEditor = {
           var orig1 = self.regions.find(function(r){ return r.id === id1; });
           if(!orig1) return;
           self.activeId = id1;
-          self.drag = {
-            type:'resize', id:id1, handle:handleEl.dataset.h,
+          self.drag = { type:'resize', id:id1, handle:handleEl.dataset.h,
             startX:e.clientX, startY:e.clientY,
-            orig:{ x:orig1.x, y:orig1.y, w:orig1.w, h:orig1.h }
-          };
+            orig:{ x:orig1.x, y:orig1.y, w:orig1.w, h:orig1.h } };
           try{ stage.setPointerCapture(e.pointerId); }catch(_){}
           return;
         }
@@ -3836,11 +3431,9 @@ var FigEditor = {
         var orig2 = self.regions.find(function(r){ return r.id === id2; });
         if(!orig2) return;
         self.activeId = id2;
-        self.drag = {
-          type:'move', id:id2,
+        self.drag = { type:'move', id:id2,
           startX:e.clientX, startY:e.clientY,
-          orig:{ x:orig2.x, y:orig2.y, w:orig2.w, h:orig2.h }
-        };
+          orig:{ x:orig2.x, y:orig2.y, w:orig2.w, h:orig2.h } };
         try{ stage.setPointerCapture(e.pointerId); }catch(_){}
         return;
       }
@@ -3848,11 +3441,9 @@ var FigEditor = {
       var newId = self.nextId++;
       self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
       self.activeId = newId;
-      self.drag = {
-        type:'create', id:newId,
+      self.drag = { type:'create', id:newId,
         startX:e.clientX, startY:e.clientY,
-        orig:{ x:pt.x, y:pt.y, w:0, h:0 }
-      };
+        orig:{ x:pt.x, y:pt.y, w:0, h:0 } };
       try{ stage.setPointerCapture(e.pointerId); }catch(_){}
       self.render(); self.updateUI();
     });
@@ -3860,7 +3451,6 @@ var FigEditor = {
     stage.addEventListener('pointermove', function(e){
       if(!self.drag || !self.canvasEl) return;
       e.preventDefault();
-
       var r = self.regions.find(function(x){ return x.id === self.drag.id; });
       if(!r) return;
       var orig = self.drag.orig;
@@ -3940,42 +3530,162 @@ var FigEditor = {
   }
 };
 
-/* 图形编辑器按钮事件 */
-$('#figEditorCancel').onclick = function(){
-  $('#figEditorModal').classList.remove('show');
-  FigEditor.clearAll();
-};
-$('#figEditorConfirm').onclick = showAssignModal;
-$('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
-$('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
-
-/* 换图按钮 */
-$('#figChangeImage').onclick = function(){
-  var picker = document.createElement('input');
-  picker.type = 'file';
-  picker.accept = 'image/*';
-  picker.onchange = async function(){
-    var f = picker.files && picker.files[0];
-    if(!f) return;
-    try{
-      var item = await readImageFile(f, 0);
-      var img = new Image();
-      img.onload = function(){
-        var newCanvas = imageToCanvas(img);
-        FigEditor.load(newCanvas);
-        toast('已换图，请重新选择区域');
-      };
-      img.onerror = function(){ toast('图片加载失败'); };
-      img.src = item.dataUrl;
-    }catch(e){
-      console.error(e);
-      toast('换图失败：' + (e.message || '未知错误'));
-    }
-  };
-  picker.click();
-};
 /* ================================================================
-★★★ 新版作业管理（核心） ★★★
+图文分配
+================================================================ */
+function collectFigureTargets(){
+  var arr = [];
+  exam.sections.forEach(function(sec,si){
+    (sec.questions||[]).forEach(function(q,qi){
+      var qLabel = sec.name + ' · 第 ' + (qi+1) + ' 题';
+      var qShort = String(q.stem||'').replace(/\s+/g,' ').slice(0, 26);
+      arr.push({ value: si+'-'+qi+'-main-0', si:si, qi:qi, kind:'main', idx:0, group:qLabel, label:'【主题目】'+qShort });
+      (q.similar||[]).forEach(function(s, idx){
+        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 22);
+        arr.push({ value: si+'-'+qi+'-similar-'+idx, si:si, qi:qi, kind:'similar', idx:idx, group:qLabel, label:'【举一反三 '+(idx+1)+'】'+sShort });
+      });
+      (q.homework||[]).forEach(function(h, idx){
+        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 22);
+        arr.push({ value: si+'-'+qi+'-homework-'+idx, si:si, qi:qi, kind:'homework', idx:idx, group:qLabel, label:'【作业 '+(idx+1)+'】'+hShort });
+      });
+    });
+  });
+  return arr;
+}
+
+function showAssignModal(){
+  var selected = FigEditor.getSelected();
+  if(!selected.length){ toast('请至少勾选一个图形'); return; }
+
+  assignItems = selected.map(function(r){
+    var c = cropRegion(FigEditor.canvas, r, 600);
+    return { dataUrl: c.toDataURL('image/png') };
+  });
+
+  var targets = collectFigureTargets();
+  if(!targets.length){ toast('当前试卷还没有可插入的题目'); return; }
+
+  var listEl = $('#assignList');
+  listEl.innerHTML = '';
+
+  var qOnlyValues = [];
+  targets.forEach(function(t){
+    if(t.kind === 'main') qOnlyValues.push({ value: t.si+'-'+t.qi, label: t.group });
+  });
+
+  assignItems.forEach(function(item, i){
+    var row = document.createElement('div');
+    row.className = 'assign-row';
+
+    var prev = document.createElement('div');
+    prev.className = 'fig-preview';
+    var img = document.createElement('img');
+    img.src = item.dataUrl;
+    prev.appendChild(img);
+    row.appendChild(prev);
+
+    var fields = document.createElement('div');
+    fields.className = 'assign-fields';
+
+    var g1 = document.createElement('div');
+    g1.className = 'af-group';
+    var l1 = document.createElement('label');
+    l1.textContent = '① 归属题目';
+    g1.appendChild(l1);
+    var selQ = document.createElement('select');
+    selQ.className = 'assign-q';
+    var defaultQ = i < qOnlyValues.length ? qOnlyValues[i].value : (qOnlyValues[0] && qOnlyValues[0].value);
+    qOnlyValues.forEach(function(o){
+      var opt = document.createElement('option');
+      opt.value = o.value; opt.textContent = o.label;
+      if(o.value === defaultQ) opt.selected = true;
+      selQ.appendChild(opt);
+    });
+    g1.appendChild(selQ);
+
+    var g2 = document.createElement('div');
+    g2.className = 'af-group';
+    var l2 = document.createElement('label');
+    l2.textContent = '② 插入位置';
+    g2.appendChild(l2);
+    var selKind = document.createElement('select');
+    selKind.className = 'assign-kind';
+    g2.appendChild(selKind);
+
+    function refreshKindOptions(){
+      selKind.innerHTML = '';
+      var parts = selQ.value.split('-');
+      var si = +parts[0], qi = +parts[1];
+      var sec = exam.sections[si];
+      var q = sec && sec.questions[qi];
+      if(!q) return;
+      var optMain = document.createElement('option');
+      optMain.value = si+'-'+qi+'-main-0';
+      optMain.textContent = '主题目下方';
+      selKind.appendChild(optMain);
+
+      (q.similar||[]).forEach(function(s, idx){
+        var o = document.createElement('option');
+        o.value = si+'-'+qi+'-similar-'+idx;
+        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 18);
+        o.textContent = '举一反三 第'+(idx+1)+'题：' + sShort;
+        selKind.appendChild(o);
+      });
+      (q.homework||[]).forEach(function(h, idx){
+        var o = document.createElement('option');
+        o.value = si+'-'+qi+'-homework-'+idx;
+        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 18);
+        o.textContent = '作业 第'+(idx+1)+'题：' + hShort;
+        selKind.appendChild(o);
+      });
+    }
+    selQ.addEventListener('change', refreshKindOptions);
+    refreshKindOptions();
+
+    fields.appendChild(g1);
+    fields.appendChild(g2);
+    row.appendChild(fields);
+    listEl.appendChild(row);
+  });
+
+  $('#figEditorModal').classList.remove('show');
+  $('#assignModal').classList.add('show');
+}
+
+function confirmAssign(){
+  var rows = $$('#assignList .assign-row');
+  var insertCount = 0;
+  rows.forEach(function(row, i){
+    var selKind = row.querySelector('.assign-kind');
+    if(!selKind) return;
+    var parts = selKind.value.split('-');
+    var si = +parts[0], qi = +parts[1];
+    var kind = parts[2];
+    var idx = +parts[3];
+    var sec = exam.sections[si];
+    var q = sec && sec.questions[qi];
+    if(!q) return;
+    var figData = { src: assignItems[i].dataUrl, width: 180, side: 'right' };
+    if(kind === 'main') q.figure = figData;
+    else if(kind === 'similar'){ if(q.similar && q.similar[idx]) q.similar[idx].figure = figData; else return; }
+    else if(kind === 'homework'){ if(q.homework && q.homework[idx]) q.homework[idx].figure = figData; else return; }
+    insertCount++;
+  });
+  $('#assignModal').classList.remove('show');
+  renderPaper();
+  showPageInternal(state.page);
+  requestAnimationFrame(function(){
+    $$('#paperView .page').forEach(function(p){
+      if(p.style.display!=='none') fitCanvas(p);
+    });
+  });
+  scheduleSave();
+  toast('已插入 ' + insertCount + ' 张图像');
+  assignItems = [];
+}
+
+/* ================================================================
+作业管理核心
 ================================================================ */
 function ensureHomeworkData(){
   if(!exam.homeworkSets) exam.homeworkSets = [];
@@ -3991,7 +3701,6 @@ function openHomeworkView(){
   renderHomeworkList();
   window.scrollTo(0,0);
 }
-
 function closeHomeworkView(){
   $('#hwView').style.display = 'none';
   $('#paperView').style.display = '';
@@ -4000,14 +3709,12 @@ function closeHomeworkView(){
   showPage(state.page);
   window.scrollTo(0,0);
 }
-
 function nextHwNo(){
   var max = 0;
   ensureHomeworkData();
   exam.homeworkSets.forEach(function(s){ if(s.no > max) max = s.no; });
   return max + 1;
 }
-
 function countUsed(si,qi,pool){
   var n = 0;
   if(pool){
@@ -4019,18 +3726,13 @@ function countUsed(si,qi,pool){
   }
   return n;
 }
-
 function keyToItem(key){
   if(key.indexOf("q-") === 0){
     var a = key.split("-");
     var si = +a[1], qi = +a[2];
     var q = exam.sections[si] && exam.sections[si].questions[qi];
     if(!q) return null;
-    return {
-      key:key, si:si, qi:qi, hi:-1,
-      stem:q.stem, answer:q.answer, analysis:q.analysis,
-      calc:q.calc, reason:q.reason, pitfall:q.pitfall
-    };
+    return { key:key, si:si, qi:qi, hi:-1, stem:q.stem, answer:q.answer, analysis:q.analysis, calc:q.calc, reason:q.reason, pitfall:q.pitfall };
   }
   var b = key.split("-");
   var si2 = +b[0], qi2 = +b[1], hi2 = +b[2];
@@ -4038,27 +3740,20 @@ function keyToItem(key){
   if(!q2) return null;
   var h = (q2.homework||[])[hi2];
   if(!h) return null;
-  return {
-    key:key, si:si2, qi:qi2, hi:hi2,
-    stem:h.stem, answer:h.answer, analysis:h.analysis,
-    calc:h.calc, reason:h.reason, pitfall:h.pitfall
-  };
+  return { key:key, si:si2, qi:qi2, hi:hi2, stem:h.stem, answer:h.answer, analysis:h.analysis, calc:h.calc, reason:h.reason, pitfall:h.pitfall };
 }
 
 function renderHomeworkList(){
   ensureHomeworkData();
   var list = exam.homeworkSets.slice().sort(function(a,b){ return a.no - b.no; });
-
   if(!list.length){
     $('#hwContainer').innerHTML = '<div class="page"><div class="empty">还没有作业。点击「+ 生成新作业」开始，系统会自动编号为「作业1」，下次为「作业2」。</div></div>';
     return;
   }
-
   $('#hwContainer').innerHTML = list.map(function(set){
     var body = set.items.length
       ? set.items.map(function(it,i){ return hwItemHTML(it,i); }).join('')
       : '<div class="empty">该作业暂无题目，可点击「+ 添加题目」。</div>';
-
     return '<div class="hw-set" data-id="'+set.id+'">'+
       '<div class="hw-set-head">'+
         '<div class="hw-set-name">📄 '+esc(set.name)+
@@ -4077,7 +3772,7 @@ function renderHomeworkList(){
   }).join('');
 }
 
-function hwItemHTML(it, i){
+function hwItemHTML(it,i){
   return '<div class="hw-q" data-key="'+esc(it.key)+'">'+
     '<div class="stem">'+(i+1)+'. '+esc(it.stem)+'</div>'+
     '<div class="btns">'+
@@ -4089,6 +3784,7 @@ function hwItemHTML(it, i){
     '<div class="panel hw-explain hw-ana">'+renderAnalysisFieldsHTML(it)+'</div>'+
   '</div>';
 }
+
 function openHwModal(){
   ensureHomeworkData();
   var html = '';
@@ -4122,38 +3818,25 @@ function doGenerateHomework(){
     var p = cb.value.split('-');
     picks.push({ si:+p[0], qi:+p[1], count:c });
   });
-
   if(!picks.length){ alert('请至少勾选一道题'); return; }
 
   var newItems = [], skipped = 0;
-
   picks.forEach(function(p){
     var sec = exam.sections[p.si]; if(!sec) return;
     var q = sec.questions[p.qi]; if(!q) return;
     var pool = q.homework || [];
     var avail = [];
-
     for(var i=0;i<pool.length;i++){
       var k = p.si+"-"+p.qi+"-"+i;
       if(exam.usedKeys.indexOf(k) >= 0) continue;
-      avail.push({
-        key:k, si:p.si, qi:p.qi, hi:i,
-        stem:pool[i].stem, answer:pool[i].answer, analysis:pool[i].analysis,
-        calc:pool[i].calc, reason:pool[i].reason, pitfall:pool[i].pitfall
-      });
+      avail.push({ key:k, si:p.si, qi:p.qi, hi:i, stem:pool[i].stem, answer:pool[i].answer, analysis:pool[i].analysis, calc:pool[i].calc, reason:pool[i].reason, pitfall:pool[i].pitfall });
     }
-
     if(!avail.length){
       var qk = "q-"+p.si+"-"+p.qi;
       if(exam.usedKeys.indexOf(qk) < 0){
-        avail.push({
-          key:qk, si:p.si, qi:p.qi, hi:-1,
-          stem:q.stem, answer:q.answer, analysis:q.analysis,
-          calc:q.calc, reason:q.reason, pitfall:q.pitfall
-        });
+        avail.push({ key:qk, si:p.si, qi:p.qi, hi:-1, stem:q.stem, answer:q.answer, analysis:q.analysis, calc:q.calc, reason:q.reason, pitfall:q.pitfall });
       }
     }
-
     var take = avail.slice(0, p.count);
     skipped += Math.max(0, p.count - take.length);
     newItems = newItems.concat(take);
@@ -4165,13 +3848,7 @@ function doGenerateHomework(){
   }
 
   var no = nextHwNo();
-  var set = {
-    id: uid('hw'),
-    no: no,
-    name: '作业' + no,
-    createdAt: new Date().toISOString(),
-    items: newItems
-  };
+  var set = { id: uid('hw'), no: no, name: '作业' + no, createdAt: new Date().toISOString(), items: newItems };
   exam.homeworkSets.push(set);
   newItems.forEach(function(it){
     if(exam.usedKeys.indexOf(it.key) < 0) exam.usedKeys.push(it.key);
@@ -4188,15 +3865,12 @@ function deleteHwSet(id){
   var set = exam.homeworkSets.find(function(s){ return s.id === id; });
   if(!set) return;
   if(!confirm('确定删除「'+set.name+'」吗？\n删除后其中题目将释放，可再次被新作业使用。')) return;
-
   set.items.forEach(function(it){
     var i = exam.usedKeys.indexOf(it.key);
     if(i >= 0) exam.usedKeys.splice(i,1);
   });
-
   exam.homeworkSets = exam.homeworkSets.filter(function(s){ return s.id !== id; });
-  scheduleSave();
-  renderHomeworkList();
+  scheduleSave(); renderHomeworkList();
   toast('已删除 ' + set.name);
 }
 
@@ -4208,8 +3882,7 @@ function renameHwSet(id){
   if(nn === null) return;
   nn = nn.trim(); if(!nn) return;
   set.name = nn;
-  scheduleSave();
-  renderHomeworkList();
+  scheduleSave(); renderHomeworkList();
 }
 
 function removeItemFromSet(setId, key){
@@ -4217,13 +3890,10 @@ function removeItemFromSet(setId, key){
   var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
   if(!set) return;
   if(!confirm('将该题从作业单中移出？移出后可再次被使用。')) return;
-
   set.items = set.items.filter(function(it){ return it.key !== key; });
   var i = exam.usedKeys.indexOf(key);
   if(i >= 0) exam.usedKeys.splice(i,1);
-
-  scheduleSave();
-  renderHomeworkList();
+  scheduleSave(); renderHomeworkList();
   toast('已移出');
 }
 
@@ -4232,7 +3902,6 @@ function openAddQModal(setId){
   addTargetId = setId;
   var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
   if(!set) return;
-
   var exist = {};
   (set.items||[]).forEach(function(it){ exist[it.key] = 1; });
 
@@ -4242,13 +3911,10 @@ function openAddQModal(setId){
       var pool = q.homework || [];
       var opts = [];
       if(pool.length){
-        pool.forEach(function(h,hi){
-          opts.push({ key: si+"-"+qi+"-"+hi, stem: h.stem, src: "题库" + (hi+1) });
-        });
+        pool.forEach(function(h,hi){ opts.push({ key: si+"-"+qi+"-"+hi, stem: h.stem, src: "题库"+(hi+1) }); });
       } else {
         opts.push({ key: "q-"+si+"-"+qi, stem: q.stem, src: "原题" });
       }
-
       opts.forEach(function(o){
         var used = exam.usedKeys.indexOf(o.key) >= 0;
         var inSet = exist[o.key];
@@ -4263,13 +3929,12 @@ function openAddQModal(setId){
       });
     });
   });
-
   $('#addQList').innerHTML = html || '<div class="empty">暂无可添加的题目</div>';
   $('#addQModal').classList.add('show');
 }
 
 /* ================================================================
-★★★ 导入解析（支持答案 / 计算过程 / 算理 / 知识易错点） ★★★
+导入解析（含答案/计算过程/算理/易错点/解析）
 ================================================================ */
 function parsePaperText(text){
   var result = { title:'试卷讲解', sections:[] };
@@ -4282,11 +3947,7 @@ function parsePaperText(text){
   }
   function startQ(stem){
     ensureSec();
-    curQ = {
-      stem:(stem||'').trim(),
-      answer:'', analysis:'', calc:'', reason:'', pitfall:'',
-      similar:[], homework:[]
-    };
+    curQ = { stem:(stem||'').trim(), answer:'', analysis:'', calc:'', reason:'', pitfall:'', similar:[], homework:[] };
     curSec.questions.push(curQ);
     block=null; lastField='stem';
   }
@@ -4330,7 +3991,6 @@ function parsePaperText(text){
     if(RE_SIM.test(line)){ if(curQ) block='similar'; lastField=null; continue; }
     if(RE_HW.test(line)){ if(curQ) block='homework'; lastField=null; continue; }
 
-    /* 举一反三 / 作业块里的每一行：题干 | 答案 | 解析 | 计算过程 | 算理 | 易错点 */
     if(block && curQ){
       if(!RE_SP.test(line)){
         var body = line.replace(/^[-*·•]\s*/,'').trim();
@@ -4338,11 +3998,11 @@ function parsePaperText(text){
           var parts = body.split('|').map(function(s){ return s.trim(); });
           var item = {
             stem: parts[0].replace(/^(?:变式|举一反三|作业|练习)\s*\d*\s*[:：]?\s*/,''),
-            answer:   parts[1]||'',
+            answer: parts[1]||'',
             analysis: parts[2]||'',
-            calc:     parts[3]||'',
-            reason:   parts[4]||'',
-            pitfall:  parts[5]||'',
+            calc: parts[3]||'',
+            reason: parts[4]||'',
+            pitfall: parts[5]||'',
             similar: [], homework: []
           };
           if(block==='similar') curQ.similar.push(item);
@@ -4390,7 +4050,7 @@ function parsePaperText(text){
   result.sections.forEach(function(s){
     s.questions = s.questions.filter(function(q){
       return q.stem||q.answer||q.analysis||q.calc||q.reason||q.pitfall
-          || (q.similar&&q.similar.length)||(q.homework&&q.homework.length);
+          || (q.similar&&q.similar.length) || (q.homework&&q.homework.length);
     });
   });
   result.sections = result.sections.filter(function(s){ return s.questions.length>0; });
@@ -4398,45 +4058,38 @@ function parsePaperText(text){
   result.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
   result.homeworkSets = [];
   result.usedKeys = [];
-
   return result;
 }
 
 /* ================================================================
-★★★ 导入方式选择（新建试卷 / 合并到当前试卷） ★★★
+导入方式选择（新建 / 合并）
 ================================================================ */
-var pendingImportData = null;   /* 暂存已解析的导入内容 */
+var pendingImportData = null;
 
 $('#btnImportOk').onclick = function(){
   var txt = $('#importText').value.trim();
   if(!txt){ alert('请先粘贴试卷文字内容'); return; }
   var parsed = parsePaperText(txt);
   if(!parsed.sections.length){ alert('没有识别到题目，请检查格式'); return; }
-
   pendingImportData = parsed;
-
-  /* 显示选择弹窗 */
   $('#importChoicePaperName').textContent = currentPaper ? currentPaper.name : '（未打开试卷）';
   $('#importModal').classList.remove('show');
   $('#importChoiceModal').classList.add('show');
 };
 
-/* 取消导入 */
 $('#importChoiceCancel').onclick = function(){
   pendingImportData = null;
   $('#importChoiceModal').classList.remove('show');
 };
 
-/* 点击两张卡片 */
 $('#importChoiceModal').addEventListener('click', function(e){
   var card = e.target.closest('.import-choice-card');
   if(!card) return;
   var choice = card.dataset.choice;
-  if(choice === 'new')     doImportAsNewPaper();
+  if(choice === 'new') doImportAsNewPaper();
   else if(choice === 'merge') doImportAsMerge();
 });
 
-/* --------- 方式1：创建新试卷 --------- */
 async function doImportAsNewPaper(){
   if(!pendingImportData) return;
   var parsed = pendingImportData;
@@ -4444,18 +4097,11 @@ async function doImportAsNewPaper(){
   $('#importChoiceModal').classList.remove('show');
 
   var newTitle = parsed.title || ('新试卷 ' + fmtDate(new Date()));
-  var newExam = normalizeExamData({
-    title: newTitle,
-    sections: parsed.sections,
-    homeworkSets: [],
-    usedKeys: []
-  });
+  var newExam = normalizeExamData({ title: newTitle, sections: parsed.sections, homeworkSets: [], usedKeys: [] });
   newExam.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
 
   var r = await sb.from('papers').insert({
-    owner_id: currentUser.id,
-    name: newTitle,
-    data: newExam,
+    owner_id: currentUser.id, name: newTitle, data: newExam,
     saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
   }).select().single();
   if(r.error){ alert('创建失败：'+r.error.message); return; }
@@ -4467,33 +4113,19 @@ async function doImportAsNewPaper(){
   toast('已生成新试卷「'+newTitle+'」，共 '+newExam.sections.length+' 个大题');
 }
 
-/* --------- 方式2：合并到当前试卷（追加到已有大题后面） --------- */
 async function doImportAsMerge(){
   if(!pendingImportData) return;
   var parsed = pendingImportData;
   pendingImportData = null;
   $('#importChoiceModal').classList.remove('show');
 
-  if(!currentPaper){
-    alert('当前没有打开的试卷，请先打开一份试卷再合并。');
-    return;
-  }
+  if(!currentPaper){ alert('当前没有打开的试卷，请先打开一份试卷再合并。'); return; }
 
-  /* 追加新大题（不覆盖已有内容） */
   if(!exam.sections) exam.sections = [];
-  parsed.sections.forEach(function(sec){
-    exam.sections.push(normalizeSection(sec));
-  });
-
-  /* 保留黑板 */
+  parsed.sections.forEach(function(sec){ exam.sections.push(normalizeSection(sec)); });
   ensureBlackboard();
-
-  /* 切换到最后一个大题，方便看到新内容 */
   state.page = exam.sections.length - 1;
-
-  renderTabs();
-  renderPaper();
-  showPageInternal(state.page);
+  renderTabs(); renderPaper(); showPageInternal(state.page);
   await saveCurrentPaper();
   window.scrollTo(0,0);
   toast('已合并 '+parsed.sections.length+' 个大题到「'+currentPaper.name+'」');
@@ -4505,27 +4137,49 @@ async function doImportAsMerge(){
 (function init(){
   var fileInput = $('#fileInput');
 
-  /* ===== 电子黑板入口 ===== */
   $('#btnBlackboard').onclick = enterBlackboard;
 
-  /* ===== 添加图像 ===== */
   $('#btnAddFigure').onclick = pickImageFiles;
   fileInput.onchange = onFileInputChange;
   bindDragAndDrop();
   bindPasteImage();
 
-  /* ===== 图形批量分配 ===== */
   $('#assignCancel').onclick = function(){
     $('#assignModal').classList.remove('show');
     $('#figEditorModal').classList.add('show');
   };
   $('#assignConfirm').onclick = confirmAssign;
 
-  /* ===== 作业管理入口 & 事件 ===== */
+  $('#figEditorCancel').onclick = function(){
+    $('#figEditorModal').classList.remove('show');
+    FigEditor.clearAll();
+  };
+  $('#figEditorConfirm').onclick = showAssignModal;
+  $('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
+  $('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
+  $('#figChangeImage').onclick = function(){
+    var picker = document.createElement('input');
+    picker.type = 'file'; picker.accept = 'image/*';
+    picker.onchange = async function(){
+      var f = picker.files && picker.files[0];
+      if(!f) return;
+      try{
+        var item = await readImageFile(f, 0);
+        var img = new Image();
+        img.onload = function(){ FigEditor.load(imageToCanvas(img)); toast('已换图，请重新选择区域'); };
+        img.onerror = function(){ toast('图片加载失败'); };
+        img.src = item.dataUrl;
+      }catch(e){
+        console.error(e);
+        toast('换图失败：' + (e.message || '未知错误'));
+      }
+    };
+    picker.click();
+  };
+
   $('#btnHomework').onclick = openHomeworkView;
   $('#btnHwBack').onclick = closeHomeworkView;
   $('#btnNewHw').onclick = openHwModal;
-
   $('#btnHwCancel').onclick = function(){ $('#hwModal').classList.remove('show'); };
   $('#btnHwAll').onclick = function(){
     $$('#hwList input[type=checkbox]').forEach(function(i){ if(!i.disabled) i.checked = true; });
@@ -4540,7 +4194,6 @@ async function doImportAsMerge(){
     ensureHomeworkData();
     var set = exam.homeworkSets.find(function(s){ return s.id === addTargetId; });
     if(!set) return;
-
     var added = 0;
     $$('#addQList input[type=checkbox]:checked').forEach(function(cb){
       var key = cb.value;
@@ -4551,7 +4204,6 @@ async function doImportAsMerge(){
       exam.usedKeys.push(key);
       added++;
     });
-
     if(!added){ toast('没有新增题目'); return; }
     scheduleSave();
     $('#addQModal').classList.remove('show');
@@ -4559,7 +4211,6 @@ async function doImportAsMerge(){
     toast('已添加 ' + added + ' 题到 ' + set.name);
   };
 
-  /* 作业容器事件委托 */
   $('#hwContainer').addEventListener('click', function(e){
     var setEl = e.target.closest('.hw-set'); if(!setEl) return;
     var id = setEl.dataset.id;
@@ -4578,7 +4229,7 @@ async function doImportAsMerge(){
       return;
     }
 
-        var qBtn = e.target.closest('button[data-hwq]');
+    var qBtn = e.target.closest('button[data-hwq]');
     if(qBtn){
       var hwq = qBtn.closest('.hw-q');
       var key = hwq.dataset.key;
@@ -4596,8 +4247,8 @@ async function doImportAsMerge(){
         removeItemFromSet(id, key);
       }
     }
+  });
 
-  /* ===== 导入试卷 ===== */
   $('#btnImport').onclick = function(){
     $('#importText').value = '';
     $('#importModal').classList.add('show');
@@ -4618,10 +4269,10 @@ async function doImportAsMerge(){
       '知识易错点：忘记保留负号；绝对值相加前误把 -3 与 -5 看成异号。',
       '解析：-3 与 -5 同为负数，取相同的符号"负"，把绝对值 3 和 5 相加得 8，所以结果是 -8。',
       '举一反三：',
-      '- 计算 (-7) + (-4) 的结果 | -11 | 同号相加，取负号，绝对值相加。 | (-7)+(-4) = -(7+4) = -11 | 同号相加法则 | 忘记加负号',
+      '- 计算 (-7) + (-4) 的结果 | -11 | 同号相加，取负号，绝对值相加。 | (-7)+(-4)=-11 | 同号相加法则 | 忘记加负号',
       '- 计算 (-6) + 9 的结果 | 3 | 异号相加，取绝对值较大的加数的符号。 | 9-6=3 | 异号相加取大数符号 | 符号判断错误',
       '作业：',
-      '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。 | -(8+2) = -10 | 同号相加法则 | 遗漏负号',
+      '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。 | -(8+2)=-10 | 同号相加法则 | 遗漏负号',
       '- 计算 (-4) + 7 的结果 | 3 | 异号相加，取正号。 | 7-4=3 | 异号相加取大数符号 | 符号判断错误',
       '- 计算 12 + (-20) 的结果 | -8 | 异号相加，取绝对值较大数的符号。 | 20-12=8，取负号 | 异号相加法则 | 忘记取负号',
       '',
@@ -4635,7 +4286,6 @@ async function doImportAsMerge(){
     ].join('\n');
   };
 
-  /* ===== 点击遮罩关闭弹窗 ===== */
   $$('.modal-mask').forEach(function(m){
     m.addEventListener('click', function(e){
       if(e.target === m){
@@ -4648,18 +4298,15 @@ async function doImportAsMerge(){
     });
   });
 
-  /* ===== 窗口尺寸变化：重绘涂鸦画布 & 黑板重绘 ===== */
   window.addEventListener('resize', function(){
     $$('#paperView .page').forEach(function(p){
       if(p.style.display!=='none') fitCanvas(p);
     });
-    /* 黑板在展示时重绘（尺寸自适应） */
     if(document.getElementById('bbView').classList.contains('show')){
       bbRedraw();
     }
   });
 
-  /* ===== Esc 退出小黑板 ===== */
   window.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && document.getElementById('bbView').classList.contains('show')){
       var anyModal = $$('.modal-mask').some(function(m){ return m.classList.contains('show'); });
@@ -4667,7 +4314,6 @@ async function doImportAsMerge(){
     }
   });
 
-  /* ===== 启动 ===== */
   (async function bootstrap(){
     var s = await sb.auth.getSession();
     if(s.data && s.data.session && s.data.session.user){
@@ -4684,426 +4330,6 @@ async function doImportAsMerge(){
       if(evt === 'SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
     });
   })();
-
-})();
-</script>
-<!-- ========== 邀请用户弹窗 ========== -->
-<div class="modal-mask" id="inviteModal">
-  <div class="modal" style="max-width:480px">
-    <h3>邀请新用户</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
-      输入对方邮箱，点击发送。对方会收到一封邀请邮件，点链接设置密码后即可登录你的网页。
-    </div>
-    <div class="form-field">
-      <label>对方邮箱</label>
-      <input type="email" id="inviteEmail" placeholder="user@example.com" autocomplete="off">
-    </div>
-    <div class="msg" id="inviteMsg"></div>
-    <div class="modal-actions right">
-      <button id="inviteCancel">取消</button>
-      <button class="primary" id="inviteOk">发送邀请</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== 待审批面板 ========== -->
-<div class="modal-mask" id="joinReqModal">
-  <div class="modal wide">
-    <h3>待审批的申请</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
-      点"通过"会立即给对方发邀请邮件；点"拒绝"会标记为已拒绝（不会发邮件）。
-    </div>
-    <div class="modal-actions" style="margin-bottom:8px">
-      <button id="joinReqRefresh" class="ghost small">刷新列表</button>
-      <button id="joinReqShowAll" class="ghost small">显示全部（含已处理）</button>
-    </div>
-    <div id="joinReqList" style="max-height:52vh;overflow:auto;display:flex;flex-direction:column;gap:9px"></div>
-    <div class="modal-actions right">
-      <button id="joinReqClose">关闭</button>
-    </div>
-  </div>
-</div>
-
-<!-- ========== 申请加入弹窗 ========== -->
-<div class="modal-mask" id="applyModal" style="z-index:400">
-  <div class="modal" style="max-width:480px">
-    <h3>申请加入</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
-      提交申请后，管理员审核通过会给你发一封邀请邮件，点邮件里的链接设置密码即可使用。
-    </div>
-    <div class="form-field">
-      <label>邮箱 <span style="color:#c4304a">*</span></label>
-      <input type="email" id="applyEmail" placeholder="you@example.com" autocomplete="email">
-    </div>
-    <div class="form-field">
-      <label>你的姓名 / 昵称</label>
-      <input type="text" id="applyName" placeholder="例如：张三老师" autocomplete="name">
-    </div>
-    <div class="form-field">
-      <label>申请理由（可选）</label>
-      <textarea id="applyReason" rows="3" placeholder="例如：我是XX学校的数学老师…"
-        style="width:100%;font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px;resize:vertical"></textarea>
-    </div>
-    <div class="msg" id="applyMsg"></div>
-    <div class="modal-actions right">
-      <button id="applyCancel">取消</button>
-      <button class="primary" id="applySubmit">提交申请</button>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ================================================================
-   申请加入 + 邀请用户 + 待审批（全部逻辑）
-   ================================================================ */
-(function(){
-
-  function ready(fn){
-    if(document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
-  }
-
-  ready(function(){
-
-    /* ---------- 申请加入（未登录用户可见） ---------- */
-    var btnOpenApply = document.getElementById('btnOpenApply');
-    if(btnOpenApply){
-      btnOpenApply.onclick = function(){
-        document.getElementById('applyEmail').value = '';
-        document.getElementById('applyName').value = '';
-        document.getElementById('applyReason').value = '';
-        var m = document.getElementById('applyMsg');
-        if(m) m.className = 'msg';
-        document.getElementById('applyModal').classList.add('show');
-        setTimeout(function(){ document.getElementById('applyEmail').focus(); }, 80);
-      };
-    }
-
-    var applyCancel = document.getElementById('applyCancel');
-    if(applyCancel){
-      applyCancel.onclick = function(){
-        document.getElementById('applyModal').classList.remove('show');
-      };
-    }
-
-    var applySubmit = document.getElementById('applySubmit');
-    if(applySubmit){
-      applySubmit.onclick = async function(){
-        var email = document.getElementById('applyEmail').value.trim();
-        var name = document.getElementById('applyName').value.trim();
-        var reason = document.getElementById('applyReason').value.trim();
-        var msg = document.getElementById('applyMsg');
-
-        function show(txt, type){
-          msg.textContent = txt;
-          msg.className = 'msg show ' + (type || '');
-        }
-
-        if(!email){ show('请填写邮箱','err'); return; }
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
-
-        this.disabled = true;
-        var old = this.textContent;
-        this.textContent = '提交中…';
-
-        try{
-          var exist = await sb.from('join_requests')
-            .select('id,status')
-            .eq('email', email.toLowerCase())
-            .in('status', ['pending','approved'])
-            .maybeSingle();
-
-          if(exist.data){
-            if(exist.data.status === 'pending'){
-              show('你已经提交过申请了，请耐心等待管理员审核','err');
-            } else {
-              show('该邮箱已通过审核，请直接登录或查收邀请邮件','err');
-            }
-            this.disabled = false;
-            this.textContent = old;
-            return;
-          }
-
-          var r = await sb.from('join_requests').insert({
-            email: email.toLowerCase(),
-            name: name || null,
-            reason: reason || null,
-            status: 'pending'
-          });
-
-          if(r.error) throw r.error;
-
-          show('提交成功！请等待管理员审核，通过后你会收到邀请邮件','ok');
-          document.getElementById('applyEmail').value = '';
-          document.getElementById('applyName').value = '';
-          document.getElementById('applyReason').value = '';
-          setTimeout(function(){
-            document.getElementById('applyModal').classList.remove('show');
-          }, 2500);
-        }catch(e){
-          show('提交失败：' + (e.message || '未知错误'), 'err');
-        }
-        this.disabled = false;
-        this.textContent = old;
-      };
-    }
-
-    /* ---------- 邀请用户（管理员） ---------- */
-    var btnInviteUser = document.getElementById('btnInviteUser');
-    if(btnInviteUser){
-      btnInviteUser.onclick = function(){
-        document.getElementById('inviteEmail').value = '';
-        document.getElementById('inviteMsg').className = 'msg';
-        document.getElementById('inviteModal').classList.add('show');
-        setTimeout(function(){ document.getElementById('inviteEmail').focus(); }, 80);
-      };
-    }
-
-    var inviteCancel = document.getElementById('inviteCancel');
-    if(inviteCancel){
-      inviteCancel.onclick = function(){
-        document.getElementById('inviteModal').classList.remove('show');
-      };
-    }
-
-    var inviteOk = document.getElementById('inviteOk');
-    if(inviteOk){
-      inviteOk.onclick = async function(){
-        var email = document.getElementById('inviteEmail').value.trim();
-        var msg = document.getElementById('inviteMsg');
-        function show(txt, type){
-          msg.textContent = txt;
-          msg.className = 'msg show ' + (type || '');
-        }
-
-        if(!email){ show('请输入邮箱','err'); return; }
-        if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ show('邮箱格式不对','err'); return; }
-
-        this.disabled = true;
-        var old = this.textContent;
-        this.textContent = '发送中…';
-
-        try{
-          var r = await sb.functions.invoke('invite-user', { body: { email: email } });
-          if(r.error) throw r.error;
-          if(r.data && r.data.error) throw new Error(r.data.error);
-          show('邀请邮件已发送到 ' + email, 'ok');
-          document.getElementById('inviteEmail').value = '';
-        }catch(e){
-          show('邀请失败：' + (e.message || '未知错误'), 'err');
-        }
-        this.disabled = false;
-        this.textContent = old;
-      };
-    }
-
-    /* ---------- 待审批列表（管理员） ---------- */
-    var joinReqShowAll = false;
-
-    async function refreshJoinReqBadge(){
-      try{
-        var r = await sb.from('join_requests')
-          .select('id', { count: 'exact', head: true })
-          .eq('status', 'pending');
-        var count = r.count || 0;
-        var badge = document.getElementById('joinReqBadge');
-        if(!badge) return;
-        if(count > 0){
-          badge.textContent = count;
-          badge.style.display = '';
-        } else {
-          badge.style.display = 'none';
-        }
-      }catch(e){}
-    }
-
-    async function renderJoinReqList(){
-      var el = document.getElementById('joinReqList');
-      if(!el) return;
-      el.innerHTML = '<div class="empty">加载中…</div>';
-
-      var query = sb.from('join_requests').select('*').order('created_at', { ascending: false });
-      if(!joinReqShowAll) query = query.eq('status', 'pending');
-
-      var r = await query;
-      if(r.error){
-        el.innerHTML = '<div class="empty" style="color:#c4304a">加载失败：' + r.error.message + '</div>';
-        return;
-      }
-
-      var list = r.data || [];
-      if(!list.length){
-        el.innerHTML = '<div class="empty">暂无申请</div>';
-        return;
-      }
-
-      function fmtTime(ts){
-        var d = new Date(ts);
-        function p(n){ return n<10?'0'+n:''+n; }
-        return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
-      }
-
-      function escHtml(s){
-        return String(s==null?'':s).replace(/[&<>"]/g, function(c){
-          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
-        });
-      }
-
-      el.innerHTML = list.map(function(item){
-        var isPending = item.status === 'pending';
-        var statusTag = '';
-        if(item.status === 'approved') statusTag = '<span style="background:#e9f8ee;color:#1f8a45;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已通过</span>';
-        else if(item.status === 'rejected') statusTag = '<span style="background:#ffe9ec;color:#c4304a;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">已拒绝</span>';
-        else statusTag = '<span style="background:#fff4d6;color:#a86a00;font-size:11.5px;padding:2px 8px;border-radius:10px;margin-left:6px">待审批</span>';
-
-        return ''
-          + '<div style="border:1px solid #e2e8f5;border-radius:10px;padding:12px 14px;background:#fbfcff" data-id="'+item.id+'">'
-          +   '<div style="font-size:14.5px;font-weight:600;color:#26304a;margin-bottom:4px">'+escHtml(item.email)+statusTag+'</div>'
-          +   '<div style="font-size:12.5px;color:#98a1b5;margin-bottom:8px">'
-          +     (item.name ? '姓名：'+escHtml(item.name)+' · ' : '')
-          +     '提交于 '+fmtTime(item.created_at)
-          +   '</div>'
-          +   (item.reason ? '<div style="font-size:13px;color:#5a6376;background:#f7f9ff;padding:8px 10px;border-radius:7px;margin-bottom:8px;line-height:1.7">'+escHtml(item.reason)+'</div>' : '')
-          +   (isPending
-              ? '<div style="display:flex;gap:6px;justify-content:flex-end">'
-                + '<button class="small ghost" data-act="reject" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">拒绝</button>'
-                + '<button class="small primary" data-act="approve" data-id="'+item.id+'" data-email="'+escHtml(item.email)+'">通过并发送邀请</button>'
-                + '</div>'
-              : '')
-          + '</div>';
-      }).join('');
-    }
-
-    var btnJoinRequests = document.getElementById('btnJoinRequests');
-    if(btnJoinRequests){
-      btnJoinRequests.onclick = async function(){
-        joinReqShowAll = false;
-        document.getElementById('joinReqShowAll').textContent = '显示全部（含已处理）';
-        document.getElementById('joinReqModal').classList.add('show');
-        await renderJoinReqList();
-      };
-    }
-
-    var joinReqClose = document.getElementById('joinReqClose');
-    if(joinReqClose){
-      joinReqClose.onclick = function(){
-        document.getElementById('joinReqModal').classList.remove('show');
-      };
-    }
-
-    var joinReqRefresh = document.getElementById('joinReqRefresh');
-    if(joinReqRefresh){
-      joinReqRefresh.onclick = async function(){
-        await renderJoinReqList();
-        await refreshJoinReqBadge();
-      };
-    }
-
-    var joinReqShowAll = document.getElementById('joinReqShowAll');
-    if(joinReqShowAll){
-      joinReqShowAll.onclick = async function(){
-        joinReqShowAll = !joinReqShowAll;
-        this.textContent = joinReqShowAll ? '只显示待审批' : '显示全部（含已处理）';
-        await renderJoinReqList();
-      };
-    }
-
-    /* 变量名冲突，重新声明 */
-    var _showAllState = false;
-    var joinReqShowAllBtn = document.getElementById('joinReqShowAll');
-    if(joinReqShowAllBtn){
-      joinReqShowAllBtn.onclick = async function(){
-        _showAllState = !_showAllState;
-        this.textContent = _showAllState ? '只显示待审批' : '显示全部（含已处理）';
-        joinReqShowAll = _showAllState;
-        await renderJoinReqList();
-      };
-    }
-
-    var joinReqList = document.getElementById('joinReqList');
-    if(joinReqList){
-      joinReqList.addEventListener('click', async function(e){
-        var btn = e.target.closest('button[data-act]');
-        if(!btn) return;
-        var act = btn.dataset.act;
-        var id = btn.dataset.id;
-        var email = btn.dataset.email;
-
-        if(act === 'approve'){
-          if(!confirm('确定通过 '+email+' 的申请吗？\n\n会立即给对方发邀请邮件。')) return;
-          btn.disabled = true;
-          btn.textContent = '发送中…';
-
-          try{
-            var r = await sb.functions.invoke('invite-user', { body: { email: email } });
-            if(r.error) throw r.error;
-            if(r.data && r.data.error) throw new Error(r.data.error);
-
-            await sb.from('join_requests').update({
-              status: 'approved',
-              reviewed_at: new Date().toISOString()
-            }).eq('id', id);
-
-            alert('已通过并发送邀请给 ' + email);
-            await renderJoinReqList();
-            await refreshJoinReqBadge();
-          }catch(err){
-            alert('发送邀请失败：' + (err.message || '未知错误') + '\n\n可能原因：邮箱已注册过，或邮件服务暂时不可用。');
-            btn.disabled = false;
-            btn.textContent = '通过并发送邀请';
-          }
-        }
-        else if(act === 'reject'){
-          var reason = prompt('拒绝 '+email+' 的申请（可填写理由，对方看不到）：', '');
-          if(reason === null) return;
-
-          btn.disabled = true;
-          try{
-            await sb.from('join_requests').update({
-              status: 'rejected',
-              reviewed_at: new Date().toISOString(),
-              reject_reason: reason || null
-            }).eq('id', id);
-
-            await renderJoinReqList();
-            await refreshJoinReqBadge();
-          }catch(err){
-            alert('操作失败：' + (err.message || '未知错误'));
-            btn.disabled = false;
-          }
-        }
-      });
-    }
-
-    /* ---------- 登录成功后显示管理员按钮 ---------- */
-    function checkAdminAndShow(){
-      var chip = document.getElementById('userChip');
-      var adminTag = document.getElementById('adminTag');
-      var isAdmin = adminTag && adminTag.style.display !== 'none';
-
-      if(isAdmin){
-        var btn1 = document.getElementById('btnInviteUser');
-        var btn2 = document.getElementById('btnJoinRequests');
-        if(btn1) btn1.style.display = '';
-        if(btn2) btn2.style.display = '';
-        refreshJoinReqBadge();
-        setInterval(refreshJoinReqBadge, 60000);
-      }
-    }
-
-    /* 每 500ms 检查一次登录状态（简单粗暴，但有效） */
-    var checkCount = 0;
-    var checkTimer = setInterval(function(){
-      checkCount++;
-      checkAdminAndShow();
-      if(checkCount > 60) clearInterval(checkTimer);
-    }, 500);
-
-    /* 立即检查一次 */
-    setTimeout(checkAdminAndShow, 1000);
-
-  });
-
 })();
 </script>
 </body>
