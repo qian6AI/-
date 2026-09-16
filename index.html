@@ -188,8 +188,77 @@ tr:last-child td{border-bottom:none}
 .assign-row select:focus{border-color:#3b6ef5}
 .toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:13px;padding:10px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.drag-overlay{position:fixed;inset:0;z-index:150;background:rgba(59,130,246,.08);border:3px dashed #3b6ef5;display:none;align-items:center;justify-content:center;font-size:18px;color:#3b6ef5;font-weight:600}
+
+/* ================================================================
+   拖拽上传覆盖层（新）
+   ================================================================ */
+.drag-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(59,130,246,.12);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  border:4px dashed #3b6ef5;
+  display:none;align-items:center;justify-content:center;
+  pointer-events:none;
+}
 .drag-overlay.show{display:flex}
+.drag-overlay .drag-inner{
+  background:#fff;border-radius:22px;padding:40px 56px;
+  text-align:center;
+  box-shadow:0 24px 70px rgba(59,110,245,.35);
+  border:1px solid #d6e2ff;
+  max-width:88vw;
+}
+.drag-overlay .drag-icon{
+  font-size:60px;line-height:1;margin-bottom:16px;
+  animation:dlBounce .9s ease-in-out infinite alternate;
+}
+@keyframes dlBounce{
+  from{transform:translateY(0)}
+  to{transform:translateY(-10px)}
+}
+.drag-overlay .drag-title{
+  font-size:22px;font-weight:800;color:#2a5ae0;margin-bottom:8px;
+  letter-spacing:.5px;
+}
+.drag-overlay .drag-sub{
+  font-size:13.5px;color:#7a8399;line-height:1.8;
+}
+.drag-overlay .drag-sub b{color:#3b6ef5}
+body.dragging-file *{cursor:copy !important}
+
+/* ================================================================
+   多图选择弹窗（新）
+   ================================================================ */
+.multi-img-list{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:10px;max-height:56vh;overflow:auto;padding:2px;margin:12px 0;
+}
+.multi-img-item{
+  border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;
+  background:#fbfcff;transition:.15s;text-align:center;
+}
+.multi-img-item:hover{
+  border-color:#3b6ef5;transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(59,110,245,.22);
+}
+.multi-img-item img{
+  width:100%;height:110px;object-fit:cover;display:block;background:#fff;
+}
+.multi-img-item .name{
+  font-size:11.5px;color:#5a6376;padding:6px 8px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.multi-img-tip{
+  font-size:12.5px;color:#98a1b5;text-align:center;padding:4px 0;
+}
+
+/* 粘贴提示芯片（在顶栏添加图像按钮旁边） */
+.paste-chip{
+  font-size:11.5px;color:#3b6ef5;background:#eff6ff;
+  border:1px solid #d6e2ff;padding:3px 9px;border-radius:20px;
+  display:inline-flex;align-items:center;gap:4px;font-weight:600;
+  white-space:nowrap;
+}
 
 /* ===== 小黑板 ===== */
 #bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column}
@@ -207,9 +276,7 @@ tr:last-child td{border-bottom:none}
 .bb-stage.light{background:#ffffff;border-color:#cbd5e1}
 .bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
 
-/* ================================================================
-   ★ 左下角浮动涂抹工具条（试卷 & 小黑板共用结构）
-   ================================================================ */
+/* 左下角浮动涂抹工具条 */
 .ink-dock{
   position:fixed;left:16px;bottom:16px;z-index:120;
   display:flex;align-items:center;gap:7px;flex-wrap:wrap;
@@ -217,9 +284,8 @@ tr:last-child td{border-bottom:none}
   border:1px solid #e4eaf8;border-radius:16px;
   padding:9px 14px;
   box-shadow:0 10px 30px rgba(30,40,70,.18);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   max-width:calc(100vw - 210px);
-  transition:opacity .2s;
 }
 .ink-dock .dock-sep{width:1px;height:22px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
 .ink-dock .swatch{width:32px;height:32px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
@@ -232,9 +298,7 @@ tr:last-child td{border-bottom:none}
 .ink-dock .size-btn.active i{background:#3b6ef5}
 .ink-dock button.act{font-size:12.5px;padding:6px 12px;border-radius:9px;flex-shrink:0}
 
-/* ================================================================
-   ★ 右下角浮动翻页控件
-   ================================================================ */
+/* 右下角浮动翻页控件 */
 .page-nav{
   position:fixed;right:16px;bottom:16px;z-index:120;
   display:flex;align-items:center;gap:6px;
@@ -242,7 +306,7 @@ tr:last-child td{border-bottom:none}
   border:1px solid #e4eaf8;border-radius:16px;
   padding:9px 12px;
   box-shadow:0 10px 30px rgba(30,40,70,.18);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .page-nav button{
   min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
@@ -258,7 +322,6 @@ tr:last-child td{border-bottom:none}
 .page-nav .page-ind b{color:#3b6ef5;font-size:16px}
 .page-nav .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 2px;flex-shrink:0}
 
-/* 进入小黑板时隐藏试卷页面的浮动控件 */
 body.bb-open .ink-dock,
 body.bb-open .page-nav{display:none !important}
 
@@ -270,7 +333,7 @@ body.bb-open .page-nav{display:none !important}
   border:1px solid #2f3444;border-radius:16px;
   padding:9px 14px;
   box-shadow:0 10px 30px rgba(0,0,0,.5);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   max-width:calc(100vw - 210px);
 }
 .bb-ink-dock .dock-sep{width:1px;height:22px;background:#2f3444;margin:0 3px;flex-shrink:0}
@@ -295,7 +358,7 @@ body.bb-open .page-nav{display:none !important}
   border:1px solid #2f3444;border-radius:16px;
   padding:9px 12px;
   box-shadow:0 10px 30px rgba(0,0,0,.5);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .bb-page-nav button{
   min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
@@ -378,8 +441,6 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 .pick-tab .cnt{min-width:18px;font-size:10.5px}
 .pick-item{padding:9px 11px}
 .pick-item .txt{font-size:13.5px}
-
-/* 左下工具条 & 右下翻页控件 —— 移动端缩小 */
 .ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
 .ink-dock .dock-sep{height:18px;margin:0 1px}
 .ink-dock .swatch{width:26px;height:26px;border-radius:7px}
@@ -390,7 +451,6 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 .page-nav button{min-width:32px;height:32px;font-size:16px;border-radius:8px}
 .page-nav .page-ind{font-size:12px;min-width:50px}
 .page-nav .page-ind b{font-size:13.5px}
-
 .bb-ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
 .bb-ink-dock .dock-sep{height:18px;margin:0 1px}
 .bb-swatch{width:26px;height:26px;border-radius:7px}
@@ -402,7 +462,12 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 .bb-page-nav .page-ind{font-size:12px;min-width:50px}
 .bb-page-nav .page-ind b{font-size:13.5px}
 .bb-page-nav button.act{height:32px;padding:0 9px;font-size:11px}
-
+.drag-overlay .drag-inner{padding:26px 32px}
+.drag-overlay .drag-icon{font-size:42px;margin-bottom:10px}
+.drag-overlay .drag-title{font-size:17px}
+.drag-overlay .drag-sub{font-size:12px}
+.multi-img-list{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.multi-img-item img{height:86px}
 .toast{bottom:76px}
 .save-hint{bottom:76px;right:12px}
 }
@@ -441,7 +506,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ===== 顶栏（已移除内嵌涂抹工具，工具栏移到左下角浮动） ===== -->
+<!-- ===== 顶栏 ===== -->
 <header class="topbar">
   <div class="bar-row">
     <div class="brand">
@@ -456,7 +521,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
       <button id="btnBlackboard">📝 电子黑板</button>
       <button id="btnImport">导入试卷</button>
       <button id="btnHomework" class="primary">📋 作业管理</button>
-      <button id="btnAddFigure">🖼 添加图形</button>
+      <button id="btnAddFigure">🖼 添加图像</button>
       <button id="btnShareQuestion">🔗 分享题目</button>
       <button id="btnReceiveQuestion">📥 接收试题</button>
       <div class="user-chip" id="userChip" style="display:none">
@@ -557,10 +622,22 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </section>
 
-<input type="file" id="fileInput" accept="image/*" hidden>
+<!-- 隐藏的图片选择输入（支持多选） -->
+<input type="file" id="fileInput" accept="image/*" hidden multiple>
+
+<!-- 拖拽覆盖层（新） -->
+<div class="drag-overlay" id="dragOverlay">
+  <div class="drag-inner">
+    <div class="drag-icon">🖼</div>
+    <div class="drag-title">松开鼠标，开始识别图像</div>
+    <div class="drag-sub">
+      支持 PNG / JPG / GIF / WEBP / SVG 等格式<br>
+      可一次拖入 <b>多张图片</b>，也可以直接 <b>Ctrl + V 粘贴截图</b>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
-<div class="drag-overlay" id="dragOverlay">松开鼠标，开始识别图形</div>
 <div class="save-hint" id="saveHint">已自动保存</div>
 
 <!-- ===== 我的试卷 ===== -->
@@ -693,7 +770,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ===== 图形编辑器 ===== -->
+<!-- ===== 图形编辑器（新增"换图"按钮） ===== -->
 <div class="modal-mask" id="figEditorModal">
   <div class="modal wide">
     <h3>选择图形区域</h3>
@@ -709,6 +786,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
       <div class="left">
         <button class="ghost small" id="figClearAll">清空选区</button>
         <button class="ghost small" id="figSelectAll">整张图</button>
+        <button class="ghost small" id="figChangeImage" title="重新选择一张图片">🔄 换图</button>
       </div>
       <div class="right">
         <span class="count-badge" id="figCountBadge">已勾选 0 / 共 0 个</span>
@@ -800,6 +878,22 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 多图选择弹窗（新） ===== -->
+<div class="modal-mask" id="multiImgModal">
+  <div class="modal">
+    <h3>选择要处理的图片</h3>
+    <div class="hint" style="padding:11px 14px;font-size:13px">
+      检测到 <b>多张图片</b>，请选择其中一张进入图形编辑器。<br>
+      处理完这张后可以再点「🖼 添加图像」继续添加其他图片。
+    </div>
+    <div class="multi-img-list" id="multiImgList"></div>
+    <div class="multi-img-tip">点击任意一张图片即可开始编辑</div>
+    <div class="modal-actions right">
+      <button id="multiImgCancel">取消</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /*
 ================================================================
@@ -863,6 +957,9 @@ var saveTimer = null;
 var exam = { title:'', sections:[] };
 
 var addTargetId = null;
+
+/* 多图选择临时缓存（新） */
+var pendingMultiImages = [];   /* [{dataUrl, name, width, height, file}] */
 
 /* 黑板状态 */
 var bbState = { color:'#ffffff', size:8, erase:false };
@@ -1020,7 +1117,6 @@ async function handleShareLink(){
   }
 }
 
-/* 把收到的条目追加到当前试卷末尾 */
 function appendItemsToPaper(items, sourceLabel){
   if(!exam.sections) exam.sections = [];
   var targetSec;
@@ -1043,7 +1139,6 @@ function appendItemsToPaper(items, sourceLabel){
       _sharedFrom: sourceLabel || null,
       _sharedKind: it.kind || 'main'
     };
-    /* 非主题目，加一个可见前缀标记，便于识别类型 */
     if(it.kind === 'similar'){
       q.stem = '【举一反三】' + q.stem;
     } else if(it.kind === 'homework'){
@@ -1401,7 +1496,6 @@ function showPageInternal(i){
 
 function showPage(i){ showPageInternal(i); scheduleSave(); }
 
-/* ===== 更新右下角翻页控件状态 ===== */
 function updatePageNav(){
   var total = exam.sections.length || 1;
   var cur = (state.page || 0) + 1;
@@ -2141,20 +2235,19 @@ $('#btnCopyShare').onclick = function(){
 $('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('show'); };
 
 /* ================================================================
-★★★ 分享题目（三 Tab 多选） ★★★
+分享题目（三 Tab 多选）
 ================================================================ */
 var pickQState = {
   paperId: null,
   si: 0,
-  tab: 'main',       /* main | similar | homework */
-  selection: {}      /* key: si-qi-种类-索引；value: 条目对象 */
+  tab: 'main',
+  selection: {}
 };
 
 function pickKey(si,qi,kind,idx){
   return si+'-'+qi+'-'+kind+'-'+idx;
 }
 
-/* 重置所有勾选为"全选" */
 function pickResetSelectionAll(){
   pickQState.selection = {};
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
@@ -2162,20 +2255,16 @@ function pickResetSelectionAll(){
   var sec = paper.data.sections[pickQState.si];
   if(!sec) return;
   (sec.questions||[]).forEach(function(q,qi){
-    /* 主题目 */
     pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = true;
-    /* 举一反三 */
     (q.similar||[]).forEach(function(s,idx){
       pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = true;
     });
-    /* 作业 */
     (q.homework||[]).forEach(function(h,idx){
       pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = true;
     });
   });
 }
 
-/* 仅把当前 Tab 全选/全不选 */
 function pickSetTabAll(val){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
@@ -2196,7 +2285,6 @@ function pickSetTabAll(val){
   });
 }
 
-/* 统计每个 Tab 的候选总数与已选数 */
 function pickCountTab(){
   var counts = { main:{all:0, sel:0}, similar:{all:0, sel:0}, homework:{all:0, sel:0} };
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
@@ -2271,9 +2359,7 @@ function pickRenderList(){
       );
     } else if(pickQState.tab === 'similar'){
       var list = q.similar || [];
-      if(!list.length){
-        return;
-      }
+      if(!list.length) return;
       list.forEach(function(s,idx){
         var key = pickKey(pickQState.si,qi,'similar',idx);
         var sel = !!pickQState.selection[key];
@@ -2291,9 +2377,7 @@ function pickRenderList(){
       });
     } else if(pickQState.tab === 'homework'){
       var list2 = q.homework || [];
-      if(!list2.length){
-        return;
-      }
+      if(!list2.length) return;
       list2.forEach(function(h,idx){
         var key = pickKey(pickQState.si,qi,'homework',idx);
         var sel = !!pickQState.selection[key];
@@ -2387,7 +2471,6 @@ $('#pickTabs').addEventListener('click', function(e){
   pickRenderList();
 });
 
-/* 勾选/取消 */
 $('#pickQuestionList').addEventListener('change', function(e){
   var cb = e.target.closest('input[type=checkbox]');
   if(!cb) return;
@@ -2399,7 +2482,6 @@ $('#pickQuestionList').addEventListener('change', function(e){
   pickUpdateTabsUI();
 });
 
-/* 点击整行也能切换 */
 $('#pickQuestionList').addEventListener('click', function(e){
   if(e.target.tagName === 'INPUT') return;
   var wrap = e.target.closest('.pick-item');
@@ -2431,7 +2513,6 @@ $('#pickQuestionCancel').onclick = function(){
 };
 
 $('#pickQuestionConfirm').onclick = async function(){
-  /* 收集所有选中条目 */
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
 
@@ -2483,7 +2564,6 @@ $('#pickQuestionConfirm').onclick = async function(){
 
   if(!items.length){ alert('请至少勾选一项内容'); return; }
 
-  /* 按钮防重复点击 */
   var btn = this;
   var oldTxt = btn.textContent;
   btn.disabled = true;
@@ -2587,10 +2667,265 @@ $('#btnAdminPanel').onclick = async function(){
 $('#btnAdminClose').onclick = function(){ $('#adminModal').classList.remove('show'); };
 
 /* ================================================================
-图形识别 & 批量分配
+★★★ 图像导入总入口 ★★★
+支持：点击选图（可多选）、拖拽图片到页面任意处、Ctrl+V 粘贴截图
 ================================================================ */
 var assignItems = [];
 
+/* ---------- 入口1：点击「🖼 添加图像」按钮 ---------- */
+function pickImageFiles(){
+  $('#fileInput').click();
+}
+
+/* 文件输入 change（支持多选） */
+function onFileInputChange(e){
+  var files = Array.prototype.slice.call(e.target.files || []);
+  $('#fileInput').value = '';
+  if(!files.length) return;
+  handleIncomingImages(files);
+}
+
+/* ---------- 入口2：拖拽到页面任意处 ---------- */
+var dragOverlay = null;
+
+function isImageFile(f){
+  if(!f) return false;
+  if(f.type && f.type.indexOf('image/') === 0) return true;
+  var n = (f.name||'').toLowerCase();
+  return /\.(png|jpe?g|gif|webp|bmp|svg|heic|heif)$/.test(n);
+}
+
+/* 从 DataTransfer 中提取图片文件（兼容不同浏览器） */
+function extractImageFiles(dt){
+  if(!dt) return [];
+  var out = [];
+  /* 优先 files */
+  if(dt.files && dt.files.length){
+    for(var i=0;i<dt.files.length;i++){
+      if(isImageFile(dt.files[i])) out.push(dt.files[i]);
+    }
+  }
+  if(out.length) return out;
+  /* 回退 items */
+  if(dt.items && dt.items.length){
+    for(var j=0;j<dt.items.length;j++){
+      var it = dt.items[j];
+      if(it.kind === 'file'){
+        var f = it.getAsFile && it.getAsFile();
+        if(f && isImageFile(f)) out.push(f);
+      }
+    }
+  }
+  return out;
+}
+
+/* 判断拖拽内容里是否含文件（避免页内拖动文字/元素触发覆盖层） */
+function dragContainsFiles(e){
+  if(!e.dataTransfer) return false;
+  var t = e.dataTransfer.types;
+  if(!t) return false;
+  for(var i=0;i<t.length;i++){
+    if(t[i] === 'Files') return true;
+  }
+  return false;
+}
+
+function bindDragAndDrop(){
+  dragOverlay = $('#dragOverlay');
+
+  /* dragenter：只有含文件才显示覆盖层 */
+  window.addEventListener('dragenter', function(e){
+    if(!dragContainsFiles(e)) return;
+    e.preventDefault();
+    if(dragOverlay) dragOverlay.classList.add('show');
+    document.body.classList.add('dragging-file');
+  }, false);
+
+  /* dragover：必须 preventDefault 才能触发 drop */
+  window.addEventListener('dragover', function(e){
+    if(!dragContainsFiles(e)) return;
+    e.preventDefault();
+    if(e.dataTransfer){
+      try{ e.dataTransfer.dropEffect = 'copy'; }catch(_){}
+    }
+  }, false);
+
+  /* dragleave：离开窗口才隐藏（用 relatedTarget 判定） */
+  window.addEventListener('dragleave', function(e){
+    if(!dragContainsFiles(e)) return;
+    e.preventDefault();
+    var rel = e.relatedTarget || e.toElement;
+    if(!rel || rel.nodeName === 'HTML' || rel.nodeName === 'BODY'){
+      if(dragOverlay) dragOverlay.classList.remove('show');
+      document.body.classList.remove('dragging-file');
+    }
+  }, false);
+
+  /* drop：提取图片文件 */
+  window.addEventListener('drop', function(e){
+    e.preventDefault();
+    if(dragOverlay) dragOverlay.classList.remove('show');
+    document.body.classList.remove('dragging-file');
+
+    var files = extractImageFiles(e.dataTransfer);
+    if(!files.length){
+      toast('没有检测到图片文件');
+      return;
+    }
+    handleIncomingImages(files);
+  }, false);
+}
+
+/* ---------- 入口3：Ctrl+V 粘贴截图 ---------- */
+function bindPasteImage(){
+  window.addEventListener('paste', function(e){
+    /* 正在输入框里粘贴文本，不拦截 */
+    var a = document.activeElement;
+    if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
+
+    var cd = e.clipboardData || window.clipboardData;
+    if(!cd) return;
+
+    var files = [];
+    var items = cd.items || [];
+    for(var i=0;i<items.length;i++){
+      var it = items[i];
+      if(it.kind === 'file'){
+        var f = it.getAsFile && it.getAsFile();
+        if(f && isImageFile(f)) files.push(f);
+      }
+    }
+    /* 也支持从 Excel/网页复制出来的图片文件 */
+    if(!files.length && cd.files && cd.files.length){
+      for(var j=0;j<cd.files.length;j++){
+        if(isImageFile(cd.files[j])) files.push(cd.files[j]);
+      }
+    }
+
+    if(!files.length) return;
+
+    e.preventDefault();
+    toast('检测到 ' + files.length + ' 张图片，正在加载…');
+    handleIncomingImages(files);
+  }, false);
+}
+
+/* ---------- 核心：处理多个图片文件 ---------- */
+async function handleIncomingImages(files){
+  /* 单张图片：直接进编辑器 */
+  if(files.length === 1){
+    await loadOneImageIntoEditor(files[0]);
+    return;
+  }
+
+  /* 多张图片：先全部读成 dataUrl，再弹选择框 */
+  toast('正在加载 ' + files.length + ' 张图片…');
+  var loaded = [];
+  for(var i=0;i<files.length;i++){
+    try{
+      var item = await readImageFile(files[i], i);
+      loaded.push(item);
+    }catch(e){
+      console.warn('读取失败', files[i] && files[i].name, e);
+    }
+  }
+
+  if(!loaded.length){
+    toast('没有可用的图片');
+    return;
+  }
+
+  if(loaded.length === 1){
+    openFigEditorFromItem(loaded[0]);
+    return;
+  }
+
+  pendingMultiImages = loaded;
+  renderMultiImgModal(loaded);
+  $('#multiImgModal').classList.add('show');
+}
+
+/* 读一张图片文件为 {dataUrl, name, width, height} */
+function readImageFile(file, idx){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onload = function(){
+      var dataUrl = reader.result;
+      var img = new Image();
+      img.onload = function(){
+        resolve({
+          dataUrl: dataUrl,
+          name: file.name || ('图片' + (idx+1)),
+          width: img.naturalWidth || img.width,
+          height: img.naturalHeight || img.height
+        });
+      };
+      img.onerror = function(){ reject(new Error('图片解析失败')); };
+      img.src = dataUrl;
+    };
+    reader.onerror = function(){ reject(new Error('文件读取失败')); };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* 把单个 {dataUrl,...} 载入图形编辑器 */
+function openFigEditorFromItem(item){
+  var img = new Image();
+  img.onload = function(){
+    var canvas = imageToCanvas(img);
+    openFigEditor(canvas);
+  };
+  img.onerror = function(){
+    toast('图片加载失败');
+  };
+  img.src = item.dataUrl;
+}
+
+/* 旧接口：单个 File → 直接进编辑器 */
+async function loadOneImageIntoEditor(file){
+  if(!isImageFile(file)){
+    toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）');
+    return;
+  }
+  try{
+    var item = await readImageFile(file, 0);
+    openFigEditorFromItem(item);
+  }catch(err){
+    console.error(err);
+    toast(err.message || '图片处理失败');
+  }
+}
+
+/* ---------- 多图选择弹窗 ---------- */
+function renderMultiImgModal(list){
+  var el = $('#multiImgList');
+  el.innerHTML = list.map(function(it, i){
+    return '<div class="multi-img-item" data-i="'+i+'">'+
+      '<img src="'+it.dataUrl+'" alt="'+esc(it.name)+'">'+
+      '<div class="name">'+esc(it.name)+' <span style="color:#98a1b5">('+it.width+'×'+it.height+')</span></div>'+
+    '</div>';
+  }).join('');
+}
+
+$('#multiImgList').addEventListener('click', function(e){
+  var item = e.target.closest('.multi-img-item');
+  if(!item) return;
+  var idx = +item.dataset.i;
+  var it = pendingMultiImages[idx];
+  if(!it) return;
+  $('#multiImgModal').classList.remove('show');
+  pendingMultiImages = [];
+  openFigEditorFromItem(it);
+});
+
+$('#multiImgCancel').onclick = function(){
+  $('#multiImgModal').classList.remove('show');
+  pendingMultiImages = [];
+};
+
+/* ================================================================
+图形识别 & 批量分配
+================================================================ */
 function openFigEditor(sourceCanvas){
   FigEditor.load(sourceCanvas);
   $('#figEditorModal').classList.add('show');
@@ -2686,20 +3021,6 @@ function confirmAssign(){
   scheduleSave();
   toast('已插入 ' + insertCount + ' 个图形');
   assignItems = [];
-}
-
-async function handleFigureFile(file){
-  if(!file || !file.type.startsWith('image/')){
-    toast('请选择图片文件'); return;
-  }
-  try{
-    var img = await fileToImage(file);
-    var canvas = imageToCanvas(img);
-    openFigEditor(canvas);
-  }catch(err){
-    console.error(err);
-    toast(err.message || '处理失败');
-  }
 }
 
 /* ================================================================
@@ -2867,12 +3188,7 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-图形编辑器（自选编辑修复版）
-关键修复：
-1) canvas 不再设 pointer-events:none，图片可正常响应指针
-2) .fig-stage 加 touch-action:none，支持触屏拖动
-3) 指针事件绑定到 stage 上做事件委托
-4) pointerdown/move/up 全程 preventDefault，避免浏览器原生拖图
+图形编辑器（自选编辑修复版 + 支持换图）
 ================================================================ */
 var FigEditor = {
   canvas: null,
@@ -3155,6 +3471,42 @@ var FigEditor = {
     this.activeId = this.regions[0].id;
     this.render(); this.updateUI();
   }
+};
+
+/* ===== 图形编辑器按钮事件 ===== */
+$('#figEditorCancel').onclick = function(){
+  $('#figEditorModal').classList.remove('show');
+  FigEditor.clearAll();
+};
+$('#figEditorConfirm').onclick = showAssignModal;
+$('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
+$('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
+
+/* 换图按钮（新）：临时隐藏编辑器，弹出文件选择；选完后直接覆盖编辑器内容 */
+$('#figChangeImage').onclick = function(){
+  var picker = document.createElement('input');
+  picker.type = 'file';
+  picker.accept = 'image/*';
+  picker.onchange = async function(){
+    var f = picker.files && picker.files[0];
+    if(!f) return;
+    try{
+      var item = await readImageFile(f, 0);
+      var img = new Image();
+      img.onload = function(){
+        var newCanvas = imageToCanvas(img);
+        /* 重新载入编辑器，清空旧选区 */
+        FigEditor.load(newCanvas);
+        toast('已换图，请重新选择区域');
+      };
+      img.onerror = function(){ toast('图片加载失败'); };
+      img.src = item.dataUrl;
+    }catch(e){
+      console.error(e);
+      toast('换图失败：' + (e.message || '未知错误'));
+    }
+  };
+  picker.click();
 };
 /* ================================================================
 ★★★ 新版作业管理（核心） ★★★
@@ -3560,22 +3912,11 @@ function parsePaperText(text){
   /* ===== 电子黑板入口 ===== */
   $('#btnBlackboard').onclick = enterBlackboard;
 
-  /* ===== 添加图形 ===== */
-  $('#btnAddFigure').onclick = function(){ fileInput.click(); };
-  fileInput.onchange = function(e){
-    var f = e.target.files && e.target.files[0];
-    fileInput.value = '';
-    if(f) handleFigureFile(f);
-  };
-
-  /* ===== 图形编辑器按钮 ===== */
-  $('#figEditorCancel').onclick = function(){
-    $('#figEditorModal').classList.remove('show');
-    FigEditor.clearAll();
-  };
-  $('#figEditorConfirm').onclick = showAssignModal;
-  $('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
-  $('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
+  /* ===== 添加图像（新：支持多选 / 拖拽 / 粘贴） ===== */
+  $('#btnAddFigure').onclick = pickImageFiles;
+  fileInput.onchange = onFileInputChange;
+  bindDragAndDrop();
+  bindPasteImage();
 
   /* ===== 图形批量分配 ===== */
   $('#assignCancel').onclick = function(){
@@ -3728,27 +4069,9 @@ function parsePaperText(text){
         if(m.id === 'authModal') return;
         m.classList.remove('show');
         if(m.id === 'figEditorModal') FigEditor.clearAll();
+        if(m.id === 'multiImgModal') pendingMultiImages = [];
       }
     });
-  });
-
-  /* ===== 拖拽图片到页面 ===== */
-  var overlay = $('#dragOverlay');
-  var dragDepth = 0;
-  window.addEventListener('dragenter', function(e){
-    e.preventDefault(); dragDepth++;
-    if(dragDepth === 1) overlay.classList.add('show');
-  });
-  window.addEventListener('dragover', function(e){ e.preventDefault(); });
-  window.addEventListener('dragleave', function(e){
-    e.preventDefault(); dragDepth--;
-    if(dragDepth <= 0){ dragDepth = 0; overlay.classList.remove('show'); }
-  });
-  window.addEventListener('drop', function(e){
-    e.preventDefault(); dragDepth = 0;
-    overlay.classList.remove('show');
-    var f = e.dataTransfer.files && e.dataTransfer.files[0];
-    if(f) handleFigureFile(f);
   });
 
   /* ===== 窗口尺寸变化：重绘涂鸦画布 ===== */
