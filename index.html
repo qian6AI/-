@@ -7,11 +7,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0}
+html,body{margin:0;padding:0}	
 body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#eef1f7;color:#1f2430;-webkit-font-smoothing:antialiased;font-size:16px}
 body.bb-open,body.hw-open{overflow:hidden}
 
-/* ============ 顶栏 ============ */
 .topbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid #e1e6f0;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .bar-row{display:flex;align-items:center;gap:8px;padding:8px 16px;flex-wrap:wrap}
 .bar-row.tabs{padding-top:0;padding-bottom:10px;gap:8px;overflow-x:auto}
@@ -24,8 +23,6 @@ body.bb-open,body.hw-open{overflow:hidden}
 .user-chip b{color:#2a5ae0;font-weight:700}
 .user-chip .admin-tag{background:#ffe9c2;color:#a86a00;font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
 .spacer{flex:1}
-
-/* ============ 通用按钮 ============ */
 button{font-family:inherit;font-size:15px;cursor:pointer;border:1px solid #d5dbe8;background:#fff;color:#2b3448;padding:8px 16px;border-radius:8px;transition:.15s;white-space:nowrap}
 button:hover{background:#f2f6ff;border-color:#9db6ff}
 button:active{transform:scale(.97)}
@@ -42,7 +39,6 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .tab{padding:8px 18px;border-radius:20px;font-size:15.5px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
 .tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-weight:600}
 
-/* ============ 试卷页面 ============ */
 #paperView{padding:6px 0 60px}
 .page{position:relative;max-width:1080px;margin:20px auto;background:#fff;border-radius:16px;box-shadow:0 4px 22px rgba(30,40,70,.09);padding:34px 46px 56px;min-height:320px}
 canvas.ink{position:absolute;left:0;top:0;z-index:5;pointer-events:none;border-radius:16px;touch-action:none}
@@ -65,7 +61,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .similar-head{color:#3b6ef5}
 .homework-head{color:#2f7ad4}
 
-/* ============ 结构化字段（独立成行） ============ */
 .field-block{display:block;padding:14px 0;border-bottom:1px dashed rgba(0,0,0,.1)}
 .field-block:first-child{padding-top:2px}
 .field-block:last-child{border-bottom:none;padding-bottom:2px}
@@ -78,7 +73,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .field-val{display:block;font-size:19px;line-height:2;color:#1f2430;white-space:pre-wrap;word-break:break-word;padding-left:4px}
 .field-val.empty{color:#b8c0d0;font-style:italic;font-size:17px}
 
-/* ============ 举一反三 / 作业子题 ============ */
 .subq{background:#fff;border:1px solid #dfe7fa;border-radius:12px;padding:16px 20px;margin:14px 0}
 .subq .field-block{padding:10px 0}
 .subq .field-label{font-size:14px;padding:2px 10px;margin-bottom:8px}
@@ -98,7 +92,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .sim-nav button:disabled{opacity:.35;cursor:not-allowed}
 .sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
 
-/* ============ 图形 / 配图 ============ */
 .q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
 .q-figure:hover{border-color:#cbd5e1}
 .q-figure img{display:block;height:auto;border-radius:8px;border:1px solid #e6eaf2;background:#fafbfd;user-select:none}
@@ -140,7 +133,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .fig-editor-bar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .count-badge{font-size:13px;color:#3b6ef5;background:#eff6ff;padding:5px 13px;border-radius:20px;font-weight:700}
 
-/* ============ 图文分配弹窗 ============ */
 .assign-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow:auto;padding:2px;margin:14px 0}
 .assign-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid #e2e8f5;border-radius:12px;background:#fbfcff;flex-wrap:wrap}
 .assign-row .fig-preview{flex-shrink:0;width:110px;height:78px;border-radius:8px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -151,7 +143,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .assign-row select{font-family:inherit;font-size:14.5px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;width:100%}
 .assign-row select:focus{border-color:#3b6ef5}
 
-/* ============ 拖拽上传覆盖层 ============ */
 .drag-overlay{position:fixed;inset:0;z-index:500;background:rgba(59,130,246,.12);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:4px dashed #3b6ef5;display:none;align-items:center;justify-content:center;pointer-events:none}
 .drag-overlay.show{display:flex}
 .drag-overlay .drag-inner{background:#fff;border-radius:22px;padding:40px 56px;text-align:center;box-shadow:0 24px 70px rgba(59,110,245,.35);border:1px solid #d6e2ff;max-width:88vw}
@@ -161,7 +152,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .drag-overlay .drag-sub b{color:#3b6ef5}
 body.dragging-file *{cursor:copy !important}
 
-/* ============ 多图选择弹窗 ============ */
 .multi-img-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:58vh;overflow:auto;padding:2px;margin:12px 0}
 .multi-img-item{border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;background:#fbfcff;transition:.15s;text-align:center}
 .multi-img-item:hover{border-color:#3b6ef5;transform:translateY(-2px);box-shadow:0 8px 20px rgba(59,110,245,.22)}
@@ -169,7 +159,6 @@ body.dragging-file *{cursor:copy !important}
 .multi-img-item .name{font-size:12px;color:#5a6376;padding:7px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .multi-img-tip{font-size:13px;color:#98a1b5;text-align:center;padding:4px 0}
 
-/* ============ 通用弹窗 ============ */
 .modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.5);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
 .modal-mask.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow:auto;padding:26px 28px 24px;box-shadow:0 18px 50px rgba(20,28,50,.3)}
@@ -218,7 +207,6 @@ tr:last-child td{border-bottom:none}
 .save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.94);color:#fff;font-size:14px;padding:10px 18px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
 .save-hint.show{opacity:1;transform:translateY(0)}
 
-/* ============ 作业管理 ============ */
 #hwView{display:none;padding-bottom:60px}
 .hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .hw-title{font-weight:800;font-size:18px;color:#23304d}
@@ -244,7 +232,6 @@ tr:last-child td{border-bottom:none}
 .hw-item select{font-family:inherit;font-size:15px;border:1px solid #d5dbe8;border-radius:7px;padding:8px 11px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
 .used-tag{font-size:12px;color:#c4304a;background:#ffe9ec;padding:2px 8px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:600}
 
-/* ============ 左下浮动涂抹工具条 ============ */
 .ink-dock{position:fixed;left:16px;bottom:16px;z-index:120;display:flex;align-items:center;gap:7px;flex-wrap:wrap;background:rgba(255,255,255,.97);border:1px solid #e4eaf8;border-radius:16px;padding:10px 15px;box-shadow:0 10px 30px rgba(30,40,70,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:calc(100vw - 260px)}
 .ink-dock .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
 .ink-dock .swatch{width:34px;height:34px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
@@ -257,7 +244,6 @@ tr:last-child td{border-bottom:none}
 .ink-dock .size-btn.active i{background:#3b6ef5}
 .ink-dock button.act{font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600}
 
-/* ============ 右下浮动翻页控件 ============ */
 .page-nav{position:fixed;right:16px;bottom:16px;z-index:120;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.97);border:1px solid #e4eaf8;border-radius:16px;padding:10px 13px;box-shadow:0 10px 30px rgba(30,40,70,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .page-nav button{min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;border-radius:11px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #d5dbe8;color:#3a4560;font-weight:700}
 .page-nav button:hover{background:#f2f6ff;border-color:#9db6ff;color:#2a5ae0}
@@ -267,7 +253,6 @@ tr:last-child td{border-bottom:none}
 body.bb-open .ink-dock,body.bb-open .page-nav{display:none !important}
 body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 
-/* ============ 小黑板（全屏自适应） ============ */
 #bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column;overflow:hidden}
 #bbView.show{display:flex}
 .bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:5}
@@ -302,7 +287,6 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 .bb-page-nav .dock-sep{width:1px;height:26px;background:#2f3444;margin:0 2px;flex-shrink:0}
 .bb-page-nav button.act{font-size:13.5px;min-width:auto;padding:0 14px;height:42px;font-weight:600}
 
-/* ============ 分享题目多选 Tab ============ */
 .pick-tabs{display:flex;gap:6px;margin:14px 0 4px;border-bottom:2px solid #e4eaf8;flex-wrap:wrap}
 .pick-tab{padding:10px 18px;border:none;background:transparent;color:#7a8399;font-size:14.5px;font-weight:700;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;display:inline-flex;align-items:center;gap:6px}
 .pick-tab:hover{background:#f4f7ff;color:#3b6ef5}
@@ -326,7 +310,6 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 .pick-stat{font-size:13.5px;color:#5c7cf0;font-weight:700;background:#f4f7ff;border:1px solid #dfe7fa;border-radius:8px;padding:8px 15px;display:inline-flex;align-items:center;gap:8px}
 .pick-stat b{color:#3b6ef5;font-size:17px}
 
-/* ============ 导入方式选择 ============ */
 .import-choice-list{display:flex;flex-direction:column;gap:12px;margin:14px 0}
 .import-choice-card{border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s}
 .import-choice-card:hover{border-color:#3b6ef5;background:#f0f5ff;transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,110,245,.18)}
@@ -335,7 +318,6 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 .import-choice-card[data-choice="new"] .ttl{color:#2a5ae0}
 .import-choice-card[data-choice="merge"] .ttl{color:#1f8a45}
 
-/* ============ 响应式 ============ */
 @media (max-width:760px){
   body{font-size:15px}
   .bar-row{padding:7px 10px;gap:6px}
@@ -490,7 +472,7 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 <!-- ============ 试卷页面 ============ -->
 <main id="paperView"></main>
 
-<!-- ============ 左下角浮动涂抹工具条 ============ -->
+<!-- ============ 左下浮动涂抹工具条 ============ -->
 <div class="ink-dock" id="inkDock">
   <button class="swatch" data-color="#ffe066" style="--c:#ffe066" title="黄色"></button>
   <button class="swatch" data-color="#8ce99a" style="--c:#8ce99a" title="绿色"></button>
@@ -506,7 +488,7 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
   <button class="act" id="btnExitInk">退出涂抹</button>
 </div>
 
-<!-- ============ 右下角浮动翻页控件 ============ -->
+<!-- ============ 右下浮动翻页控件 ============ -->
 <div class="page-nav" id="pageNav">
   <button id="btnPrevPage" title="上一页">◀</button>
   <span class="page-ind"><b id="pageCur">1</b> / <span id="pageTotal">1</span></span>
@@ -722,7 +704,7 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
   </div>
 </div>
 
-<!-- ============ 图形批量分配（可选主题目/举一反三/作业） ============ -->
+<!-- ============ 图文分配 ============ -->
 <div class="modal-mask" id="assignModal">
   <div class="modal wide">
     <h3>分配图像到题目</h3>
@@ -782,7 +764,7 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
     <div class="hint">
       <b>大题</b>直接写 <code>一、选择题</code>、<code>二、填空题</code> 即可。<br>
       <b>题号</b>用 <code>1.</code> <code>2.</code> 起行，答案 / 解析 / 举一反三 / 作业自动归属。<br>
-      <b>支持字段：</b>答案、解析、计算过程、算理、知识易错点，各自独立成行。
+      <b>支持字段：</b>答案、计算过程、算理、知识易错点、解析，各自独立成行。
       <span class="fmt">一、选择题
 1. 题干第一行
 题干第二行
@@ -919,8 +901,7 @@ body.hw-open .ink-dock,body.hw-open .page-nav{display:none !important}
 
 <script>
 /* ================================================================
-配置：把下面两个值换成你自己的 Supabase 项目信息
-Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
+配置
 ================================================================ */
 var SUPABASE_URL = 'https://dsyhhqimtglzatfggifj.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzeWhocWltdGdsemF0ZmdnaWZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTQ5ODM5OSwiZXhwIjoyMTA1MDc0Mzk5fQ.0lmqARrKYbqnxov0EAY5tXWj-qGHwBjpZufA_DhDce8';
@@ -963,19 +944,97 @@ function toast(msg){
 }
 
 /* ================================================================
+★★★ 关键修复：从 analysis 中自动拆出 calc / reason / pitfall
+   旧数据（之前用旧版导入的）把"计算过程：""算理：""知识易错点："
+   都追加进了 analysis 字段，现在读取时自动拆分出来。
+================================================================ */
+function splitAnalysisText(text){
+  var out = { analysis:'', calc:'', reason:'', pitfall:'' };
+  if(!text) return out;
+  var lines = String(text).split('\n');
+  var bucket = { analysis:[], calc:[], reason:[], pitfall:[] };
+  var cur = 'analysis';
+
+  var RE_CALC = /^\s*(?:计算过程|计算|步骤|推导过程|推导|过程)\s*[:：]\s*([\s\S]*)$/;
+  var RE_REASON = /^\s*(?:算理|道理|原理|依据)\s*[:：]\s*([\s\S]*)$/;
+  var RE_PIT = /^\s*(?:知识易错点|易错点|易错|注意点|注意事项|错点)\s*[:：]\s*([\s\S]*)$/;
+  var RE_ANA = /^\s*(?:解析|分析|解答|解题过程)\s*[:：]\s*([\s\S]*)$/;
+
+  for(var i=0;i<lines.length;i++){
+    var line = lines[i];
+    var trimmed = line.trim();
+    if(!trimmed){ bucket[cur].push(''); continue; }
+
+    var mC = trimmed.match(RE_CALC);
+    if(mC){ cur='calc'; if(mC[1]) bucket.calc.push(mC[1]); continue; }
+
+    var mR = trimmed.match(RE_REASON);
+    if(mR){ cur='reason'; if(mR[1]) bucket.reason.push(mR[1]); continue; }
+
+    var mP = trimmed.match(RE_PIT);
+    if(mP){ cur='pitfall'; if(mP[1]) bucket.pitfall.push(mP[1]); continue; }
+
+    var mA = trimmed.match(RE_ANA);
+    if(mA){ cur='analysis'; if(mA[1]) bucket.analysis.push(mA[1]); continue; }
+
+    bucket[cur].push(line);
+  }
+
+  out.analysis = bucket.analysis.join('\n').trim();
+  out.calc = bucket.calc.join('\n').trim();
+  out.reason = bucket.reason.join('\n').trim();
+  out.pitfall = bucket.pitfall.join('\n').trim();
+  return out;
+}
+
+/* 检查 answer 里是否也误塞了"计算过程：xxx"这类内容 */
+function splitAnswerText(text){
+  var out = { answer:'', calc:'', reason:'', pitfall:'' };
+  if(!text) return out;
+  var s = String(text);
+  if(!/(计算过程|计算|步骤|推导过程|推导|过程|算理|道理|原理|依据|知识易错点|易错点|易错|注意点|注意事项|错点)\s*[:：]/.test(s)){
+    out.answer = s.trim();
+    return out;
+  }
+  var split = splitAnalysisText(s);
+  out.answer = split.analysis;
+  out.calc = split.calc;
+  out.reason = split.reason;
+  out.pitfall = split.pitfall;
+  return out;
+}
+
+/* ================================================================
 ★ 结构化字段规范化
-   每道题/变式/作业统一成：
-   { stem, answer, analysis, calc, reason, pitfall, similar, homework, figure }
 ================================================================ */
 function normalizeQuestion(q){
   q = q || {};
+
+  /* 先处理 answer（旧数据里 answer 可能含"计算过程："等） */
+  var ansSplit = splitAnswerText(q.answer || '');
+  var answer = (q.answer && !ansSplit.calc && !ansSplit.reason && !ansSplit.pitfall) ? (q.answer||'') : ansSplit.answer;
+  var calcFromAnswer = ansSplit.calc;
+  var reasonFromAnswer = ansSplit.reason;
+  var pitfallFromAnswer = ansSplit.pitfall;
+
+  /* 再处理 analysis（旧数据里 analysis 里含"计算过程："等） */
+  var hasSplit = (q.calc && String(q.calc).trim()) ||
+                 (q.reason && String(q.reason).trim()) ||
+                 (q.pitfall && String(q.pitfall).trim());
+  var anaSplit = hasSplit ? { analysis:'', calc:'', reason:'', pitfall:'' } : splitAnalysisText(q.analysis || '');
+
+  var analysis = hasSplit ? (q.analysis || '') : anaSplit.analysis;
+  var calc = (q.calc && String(q.calc).trim()) ? q.calc : (anaSplit.calc || calcFromAnswer);
+  var reason = (q.reason && String(q.reason).trim()) ? q.reason : (anaSplit.reason || reasonFromAnswer);
+  var pitfall = (q.pitfall && String(q.pitfall).trim()) ? q.pitfall : (anaSplit.pitfall || pitfallFromAnswer);
+
   var o = {
     stem:     q.stem     || '',
-    answer:   q.answer   || '',
-    analysis: q.analysis || '',
-    calc:     q.calc     || '',
-    reason:   q.reason   || '',
-    pitfall:  q.pitfall  || '',
+    answer:   answer     || '',
+    analysis: analysis   || '',
+    calc:     calc       || '',
+    reason:   reason     || '',
+    pitfall:  pitfall    || '',
     similar:  Array.isArray(q.similar)  ? q.similar.map(normalizeQuestion)  : [],
     homework: Array.isArray(q.homework) ? q.homework.map(normalizeQuestion) : [],
     figure:   q.figure || null
@@ -1051,7 +1110,6 @@ function setAuthMode(m){
   $('#signupExtra').style.display = m==='login' ? 'none' : 'block';
   $('#signupExtra2').style.display = m==='login' ? 'none' : 'block';
 }
-
 $('#btnToggleMode').onclick = function(){
   setAuthMode(authMode==='login'?'signup':'login');
   $('#authMsg').className='msg';
@@ -1062,7 +1120,6 @@ function validateUserCode(code){
   if(!/^[A-Za-z0-9_]{4,20}$/.test(code)) return '用户 ID 需为 4-20 位字母、数字或下划线';
   return '';
 }
-
 async function checkUserCodeUnique(code){
   var r = await sb.from('profiles').select('id').eq('user_code', code).limit(1);
   if(r.error && r.error.code !== 'PGRST116') throw r.error;
@@ -1130,7 +1187,6 @@ async function afterLogin(){
     var pr2 = await sb.from('profiles').select('*').eq('id', currentUser.id).limit(1);
     prof = (pr2.data && pr2.data[0]) || null;
   }
-
   currentProfile = prof;
 
   $('#authModal').classList.remove('show');
@@ -1154,7 +1210,7 @@ $('#btnLogout').onclick = async function(){
 };
 
 /* ================================================================
-申请加入（未登录用户可见）
+申请加入
 ================================================================ */
 var btnOpenApply = document.getElementById('btnOpenApply');
 if(btnOpenApply){
@@ -1217,7 +1273,7 @@ document.getElementById('applySubmit').onclick = async function(){
 };
 
 /* ================================================================
-邀请用户（管理员）
+邀请用户
 ================================================================ */
 var btnInviteUser = document.getElementById('btnInviteUser');
 if(btnInviteUser){
@@ -1257,7 +1313,7 @@ document.getElementById('inviteOk').onclick = async function(){
 };
 
 /* ================================================================
-待审批列表（管理员）
+待审批列表
 ================================================================ */
 var joinReqShowAll = false;
 
@@ -1334,35 +1390,25 @@ document.getElementById('joinReqShowAll').onclick = function(){
   this.textContent = joinReqShowAll ? '只看待审批' : '显示全部（含已处理）';
   renderJoinReqList();
 };
-
 var joinReqListEl = document.getElementById('joinReqList');
 if(joinReqListEl){
   joinReqListEl.addEventListener('click', async function(e){
-    var btn = e.target.closest('button[data-act]');
-    if(!btn) return;
-    var act = btn.dataset.act;
-    var id = btn.dataset.id;
-    var email = btn.dataset.email;
+    var btn = e.target.closest('button[data-act]'); if(!btn) return;
+    var act = btn.dataset.act, id = btn.dataset.id, email = btn.dataset.email;
 
     if(act === 'approve'){
       if(!confirm('确定通过 '+email+' 的申请吗？\n\n会立即给对方发邀请邮件。')) return;
-      btn.disabled = true;
-      btn.textContent = '发送中...';
+      btn.disabled = true; btn.textContent = '发送中...';
       try{
         var r = await sb.functions.invoke('invite-user', { body: { email: email } });
         if(r.error) throw r.error;
         if(r.data && r.data.error) throw new Error(r.data.error);
-        await sb.from('join_requests').update({
-          status: 'approved',
-          reviewed_at: new Date().toISOString()
-        }).eq('id', id);
+        await sb.from('join_requests').update({ status:'approved', reviewed_at:new Date().toISOString() }).eq('id', id);
         alert('已通过并发送邀请给 ' + email);
-        await renderJoinReqList();
-        await refreshJoinReqBadge();
+        await renderJoinReqList(); await refreshJoinReqBadge();
       } catch(err){
         alert('发送邀请失败：' + (err.message||'未知错误') + '\n\n可能原因：邮箱已注册过，或邮件服务暂时不可用。');
-        btn.disabled = false;
-        btn.textContent = '通过并发送邀请';
+        btn.disabled = false; btn.textContent = '通过并发送邀请';
       }
     } else if(act === 'reject'){
       var reason = prompt('拒绝 ' + email + ' 的申请（可填写理由，对方看不到）：', '');
@@ -1370,12 +1416,9 @@ if(joinReqListEl){
       btn.disabled = true;
       try{
         await sb.from('join_requests').update({
-          status: 'rejected',
-          reviewed_at: new Date().toISOString(),
-          reject_reason: reason || null
+          status:'rejected', reviewed_at:new Date().toISOString(), reject_reason: reason || null
         }).eq('id', id);
-        await renderJoinReqList();
-        await refreshJoinReqBadge();
+        await renderJoinReqList(); await refreshJoinReqBadge();
       } catch(err){
         alert('操作失败：' + (err.message||'未知错误'));
         btn.disabled = false;
@@ -1385,7 +1428,7 @@ if(joinReqListEl){
 }
 
 /* ================================================================
-分享链接处理（整卷 / 单题 / 多选 三合一）
+分享链接处理
 ================================================================ */
 async function handleShareLink(){
   var params = new URLSearchParams(location.search);
@@ -1431,7 +1474,6 @@ function appendItemsToPaper(items, sourceLabel){
 
     targetSec.questions.push(q);
   });
-
   return targetSec;
 }
 
@@ -1445,7 +1487,7 @@ async function receiveShareById(shareId){
   var ownerCode = obj.owner_code || '未知';
   var paperName = obj.paper_name || snapshot.title || '分享的试卷';
 
-  /* ---------- 多选 / 单题分支 ---------- */
+  /* 多选 / 单题 */
   if(snapshot.__kind === 'question' || snapshot.__kind === 'multi'){
     var items = [];
     if(snapshot.__kind === 'multi' && Array.isArray(snapshot.items)){
@@ -1453,29 +1495,20 @@ async function receiveShareById(shareId){
     } else {
       items = [Object.assign({ kind:'main' }, snapshot.question || {})];
     }
-
-    if(!items.length){
-      alert('这次分享里没有可接收的题目。');
-      return { cancelled: true };
-    }
-
-    if(!currentPaper){
-      alert('请先打开一份试卷，再接收试题。');
-      return { cancelled: true };
-    }
+    if(!items.length){ alert('这次分享里没有可接收的题目。'); return { cancelled: true }; }
+    if(!currentPaper){ alert('请先打开一份试卷，再接收试题。'); return { cancelled: true }; }
 
     var previews = items.slice(0,3).map(function(it,i){
       var first = String(it.stem||'').split('\n')[0];
       if(first.length > 46) first = first.slice(0,46)+'...';
-      var tag = it.kind==='similar' ? '【举一反三】' :
-                it.kind==='homework' ? '【配套作业】' : '【题目】';
+      var tag = it.kind==='similar' ? '【举一反三】' : it.kind==='homework' ? '【配套作业】' : '【题目】';
       return (i+1)+'. '+tag+first;
     }).join('\n');
     if(items.length > 3) previews += '\n...（共 '+items.length+' 项）';
 
     var go = confirm(
-      '你收到了来自用户【'+ownerCode+'】分享的 '+items.length+' 项内容：\n\n'+
-      previews+'\n\n点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
+      '你收到了来自用户【'+ownerCode+'】分享的 '+items.length+' 项内容：\n\n'+previews+
+      '\n\n点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
     );
     if(!go) return { cancelled: true };
 
@@ -1483,17 +1516,13 @@ async function receiveShareById(shareId){
 
     try{
       await sb.from('share_accepts').insert({
-        share_id: shareId,
-        paper_name: snapshot.paper_name || paperName,
-        owner_id: null,
-        owner_code: ownerCode,
-        accepted_by: currentUser.id,
-        accepted_by_code: currentProfile.user_code
+        share_id: shareId, paper_name: snapshot.paper_name || paperName,
+        owner_id: null, owner_code: ownerCode,
+        accepted_by: currentUser.id, accepted_by_code: currentProfile.user_code
       });
     }catch(_){}
 
-    renderTabs();
-    renderPaper();
+    renderTabs(); renderPaper();
     showPageInternal(exam.sections.length - 1);
     requestAnimationFrame(function(){
       $$('#paperView .page').forEach(function(p){
@@ -1505,7 +1534,7 @@ async function receiveShareById(shareId){
     return { ok: true };
   }
 
-  /* ---------- 整卷分支 ---------- */
+  /* 整卷 */
   var go2 = confirm(
     '你收到了来自用户【'+ownerCode+'】分享的试卷：\n\n「'+paperName+'」\n\n点击"确定"会在你的账号下创建一份全新的副本。'
   );
@@ -1517,26 +1546,17 @@ async function receiveShareById(shareId){
   incoming.title = finalName;
 
   var ins = await sb.from('papers').insert({
-    owner_id: myId,
-    name: finalName,
-    data: incoming,
-    saved_homework: null,
-    sim_memory: {},
-    current_page: 0,
-    strokes: {},
-    source_owner_code: ownerCode,
-    source_paper_name: paperName
+    owner_id: myId, name: finalName, data: incoming,
+    saved_homework: null, sim_memory: {}, current_page: 0, strokes: {},
+    source_owner_code: ownerCode, source_paper_name: paperName
   }).select().single();
   if(ins.error) throw ins.error;
 
   try{
     await sb.from('share_accepts').insert({
-      share_id: shareId,
-      paper_name: paperName,
-      owner_id: null,
-      owner_code: ownerCode,
-      accepted_by: myId,
-      accepted_by_code: currentProfile.user_code
+      share_id: shareId, paper_name: paperName,
+      owner_id: null, owner_code: ownerCode,
+      accepted_by: myId, accepted_by_code: currentProfile.user_code
     });
   }catch(_){}
 
@@ -1546,7 +1566,7 @@ async function receiveShareById(shareId){
 }
 
 /* ================================================================
-接收试题（顶栏按钮入口）
+接收试题入口
 ================================================================ */
 $('#btnReceiveQuestion').onclick = function(){
   $('#receiveShareInput').value = '';
@@ -1554,9 +1574,7 @@ $('#btnReceiveQuestion').onclick = function(){
   $('#receiveQuestionModal').classList.add('show');
   setTimeout(function(){ $('#receiveShareInput').focus(); }, 80);
 };
-$('#receiveCancel').onclick = function(){
-  $('#receiveQuestionModal').classList.remove('show');
-};
+$('#receiveCancel').onclick = function(){ $('#receiveQuestionModal').classList.remove('show'); };
 $('#receiveOk').onclick = async function(){
   var v = $('#receiveShareInput').value.trim();
   if(!v){ showMsg('#receiveMsg','请输入链接或分享 ID','err'); return; }
@@ -1625,9 +1643,7 @@ async function loadPapers(preferId){
       }] }]
     });
     var ins = await sb.from('papers').insert({
-      owner_id: currentUser.id,
-      name: '我的第一份试卷',
-      data: blank,
+      owner_id: currentUser.id, name: '我的第一份试卷', data: blank,
       saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
     }).select().single();
     if(ins.error){ console.error(ins.error); return; }
@@ -1708,9 +1724,12 @@ function scheduleSave(){
 }
 
 /* ================================================================
-★ 结构化字段渲染
-   答案面板 = 答案 + 计算过程
-   解析面板 = 解析 + 算理 + 知识易错点
+★★★ 结构化字段渲染（三重兜底修复"计算过程"）
+   关键点：
+   1) 答案面板：answer + calc
+   2) 解析面板：analysis + reason + pitfall
+   3) 渲染前再跑一次 splitAnalysisText，即使旧数据把"计算过程："
+      塞进了 analysis，这里也能正确拆出来
 ================================================================ */
 function fieldBlockHTML(labelText, labelClass, valueText){
   var v = String(valueText || '').trim();
@@ -1721,34 +1740,49 @@ function fieldBlockHTML(labelText, labelClass, valueText){
   '</div>';
 }
 
+/* ★ 把任意题对象在渲染前做一次"计算过程/算理/易错点"清洗 */
+function preparedFieldSource(q){
+  q = q || {};
+  var calc = q.calc, reason = q.reason, pitfall = q.pitfall;
+  var analysis = q.analysis, answer = q.answer;
+
+  /* answer 里如果混入"计算过程："等，也拆分 */
+  if(answer && /(计算过程|计算|步骤|推导过程|推导|过程|算理|道理|原理|依据|知识易错点|易错点|易错|注意点|注意事项|错点)\s*[:：]/.test(answer)){
+    var aSplit = splitAnalysisText(answer);
+    answer = aSplit.analysis;
+    if(!calc) calc = aSplit.calc;
+    if(!reason) reason = aSplit.reason;
+    if(!pitfall) pitfall = aSplit.pitfall;
+  }
+
+  /* analysis 里如果混入"计算过程："等，也拆分 */
+  if(analysis && /(计算过程|计算|步骤|推导过程|推导|过程|算理|道理|原理|依据|知识易错点|易错点|易错|注意点|注意事项|错点)\s*[:：]/.test(analysis)){
+    var sSplit = splitAnalysisText(analysis);
+    analysis = sSplit.analysis;
+    if(!calc) calc = sSplit.calc;
+    if(!reason) reason = sSplit.reason;
+    if(!pitfall) pitfall = sSplit.pitfall;
+  }
+
+  return { answer:answer||'', analysis:analysis||'', calc:calc||'', reason:reason||'', pitfall:pitfall||'' };
+}
+
 function renderAnswerFieldsHTML(q){
+  var s = preparedFieldSource(q);
   var blocks = '';
-  if(q.answer && String(q.answer).trim()){
-    blocks += fieldBlockHTML('✅ 答案','ans', q.answer);
-  }
-  if(q.calc && String(q.calc).trim()){
-    blocks += fieldBlockHTML('📐 计算过程','calc', q.calc);
-  }
-  if(!blocks){
-    blocks = '<div class="field-val empty">该题暂无答案</div>';
-  }
+  if(s.answer) blocks += fieldBlockHTML('✅ 答案','ans', s.answer);
+  if(s.calc)   blocks += fieldBlockHTML('📐 计算过程','calc', s.calc);
+  if(!blocks)  blocks = '<div class="field-val empty">该题暂无答案</div>';
   return blocks;
 }
 
 function renderAnalysisFieldsHTML(q){
+  var s = preparedFieldSource(q);
   var blocks = '';
-  if(q.analysis && String(q.analysis).trim()){
-    blocks += fieldBlockHTML('📝 解析','ana', q.analysis);
-  }
-  if(q.reason && String(q.reason).trim()){
-    blocks += fieldBlockHTML('💡 算理','reason', q.reason);
-  }
-  if(q.pitfall && String(q.pitfall).trim()){
-    blocks += fieldBlockHTML('⚠️ 知识易错点','pitfall', q.pitfall);
-  }
-  if(!blocks){
-    blocks = '<div class="field-val empty">该题暂无解析</div>';
-  }
+  if(s.analysis) blocks += fieldBlockHTML('📝 解析','ana', s.analysis);
+  if(s.reason)   blocks += fieldBlockHTML('💡 算理','reason', s.reason);
+  if(s.pitfall)  blocks += fieldBlockHTML('⚠️ 知识易错点','pitfall', s.pitfall);
+  if(!blocks)    blocks = '<div class="field-val empty">该题暂无解析</div>';
   return blocks;
 }
 
@@ -1879,7 +1913,6 @@ function showPageInternal(i){
     var p = $('#paperView .page[data-page="'+i+'"]');
     if(p) fitCanvas(p);
   });
-
   updatePageNav();
 }
 
@@ -1899,8 +1932,7 @@ function attachFigureInteraction(wrap){
   var handle = wrap.querySelector('.fig-handle');
   var tools = wrap.querySelector('.fig-tools');
   if(!img || !handle || !tools) return;
-  var qEl = wrap.closest('.q');
-  if(!qEl) return;
+  var qEl = wrap.closest('.q'); if(!qEl) return;
   var si = +qEl.dataset.si, qi = +qEl.dataset.qi;
   var q = exam.sections[si].questions[qi];
 
@@ -1938,8 +1970,7 @@ function attachFigureInteraction(wrap){
       if(act === 'fig-del'){
         if(!confirm('删除该图形？')) return;
         q.figure = null;
-        renderPaper(); showPageInternal(state.page);
-        scheduleSave(); toast('已删除图形');
+        renderPaper(); showPageInternal(state.page); scheduleSave(); toast('已删除图形');
       } else if(act === 'fig-side'){
         q.figure.side = q.figure.side === 'left' ? 'right' : 'left';
         renderPaper(); showPageInternal(state.page); scheduleSave();
@@ -2094,8 +2125,7 @@ function bbDrawStroke(s){
   if(pts.length === 1){
     ctx.beginPath();
     ctx.arc(pts[0].x*BB_W, pts[0].y*BB_H, s.size/2, 0, Math.PI*2);
-    ctx.fill();
-    return;
+    ctx.fill(); return;
   }
   ctx.beginPath();
   ctx.moveTo(pts[0].x*BB_W, pts[0].y*BB_H);
@@ -2134,14 +2164,12 @@ function bbBindPointer(){
     if(e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
     var bb = ensureBlackboard();
-    var page = bb.pages[bb.current];
-    if(!page) return;
+    var page = bb.pages[bb.current]; if(!page) return;
     var p = bbPointerPos(e);
     var stroke = {
       color: bbState.erase ? '#000' : bbState.color,
       size: bbState.size * (bbState.erase ? 2 : 1),
-      erase: bbState.erase,
-      points: [p]
+      erase: bbState.erase, points: [p]
     };
     page.strokes.push(stroke);
     bbCurrentStroke = stroke;
@@ -2171,9 +2199,7 @@ function bbBindPointer(){
   }
   bbCanvas.addEventListener('pointerup', end);
   bbCanvas.addEventListener('pointercancel', end);
-  bbCanvas.addEventListener('pointerleave', function(e){
-    if(bbCurrentStroke) end(e);
-  });
+  bbCanvas.addEventListener('pointerleave', function(e){ if(bbCurrentStroke) end(e); });
 }
 function bbSwitchPage(i){
   var bb = ensureBlackboard();
@@ -2199,16 +2225,14 @@ function bbUndo(){
   var bb = ensureBlackboard();
   var page = bb.pages[bb.current];
   if(!page || !page.strokes.length){ toast('没有可撤销的笔迹'); return; }
-  page.strokes.pop();
-  bbRedraw(); scheduleSave();
+  page.strokes.pop(); bbRedraw(); scheduleSave();
 }
 function bbClear(){
   var bb = ensureBlackboard();
   var page = bb.pages[bb.current];
   if(!page || !page.strokes.length){ toast('当前页是空的'); return; }
   if(!confirm('清空当前页的所有笔迹？')) return;
-  page.strokes = [];
-  bbRedraw(); scheduleSave();
+  page.strokes = []; bbRedraw(); scheduleSave();
 }
 function enterBlackboard(){
   ensureBlackboard();
@@ -2321,7 +2345,7 @@ $('#paperView').addEventListener('click', function(e){
 });
 
 /* ================================================================
-左右滑动切题（触屏 + 鼠标拖拽）
+左右滑动切题
 ================================================================ */
 (function setupSwipePage(){
   var swipe = { startX:0, startY:0, tracking:false, moved:false, startTime:0 };
@@ -2340,11 +2364,9 @@ $('#paperView').addEventListener('click', function(e){
     if(e.touches && e.touches.length > 1) return;
     if(shouldIgnore(e.target)) return;
     var t = e.touches ? e.touches[0] : e;
-    swipe.startX = t.clientX;
-    swipe.startY = t.clientY;
+    swipe.startX = t.clientX; swipe.startY = t.clientY;
     swipe.startTime = Date.now();
-    swipe.tracking = true;
-    swipe.moved = false;
+    swipe.tracking = true; swipe.moved = false;
   }
   function onMove(e){
     if(!swipe.tracking) return;
@@ -2516,9 +2538,7 @@ function renderPapersList(){
     var date = new Date(p.updated_at||p.created_at||Date.now());
     var ds = fmtDate(date);
     var qc = 0;
-    ((p.data && p.data.sections)||[]).forEach(function(s){
-      qc += (s.questions||[]).length;
-    });
+    ((p.data && p.data.sections)||[]).forEach(function(s){ qc += (s.questions||[]).length; });
     return '<div class="paper-item'+(isCur?' current':'')+'" data-id="'+p.id+'">'+
       '<div class="info">'+
         '<div class="name">'+esc(p.name)+(isCur?'<span class="tag">当前</span>':'')+'</div>'+
@@ -2636,15 +2656,13 @@ $('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('sho
 分享题目（三 Tab 多选）
 ================================================================ */
 var pickQState = { paperId: null, si: 0, tab: 'main', selection: {} };
-
 function pickKey(si,qi,kind,idx){ return si+'-'+qi+'-'+kind+'-'+idx; }
 
 function pickResetSelectionAll(){
   pickQState.selection = {};
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
-  var sec = paper.data.sections[pickQState.si];
-  if(!sec) return;
+  var sec = paper.data.sections[pickQState.si]; if(!sec) return;
   (sec.questions||[]).forEach(function(q,qi){
     pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = true;
     (q.similar||[]).forEach(function(s,idx){ pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = true; });
@@ -2654,8 +2672,7 @@ function pickResetSelectionAll(){
 function pickSetTabAll(val){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return;
-  var sec = paper.data.sections[pickQState.si];
-  if(!sec) return;
+  var sec = paper.data.sections[pickQState.si]; if(!sec) return;
   (sec.questions||[]).forEach(function(q,qi){
     if(pickQState.tab === 'main') pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = val;
     else if(pickQState.tab === 'similar') (q.similar||[]).forEach(function(s,idx){ pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = val; });
@@ -2666,8 +2683,7 @@ function pickCountTab(){
   var counts = { main:{all:0, sel:0}, similar:{all:0, sel:0}, homework:{all:0, sel:0} };
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections) return counts;
-  var sec = paper.data.sections[pickQState.si];
-  if(!sec) return counts;
+  var sec = paper.data.sections[pickQState.si]; if(!sec) return counts;
   (sec.questions||[]).forEach(function(q,qi){
     counts.main.all += 1;
     if(pickQState.selection[pickKey(pickQState.si,qi,'main',0)]) counts.main.sel++;
@@ -2699,15 +2715,12 @@ function pickRenderList(){
   var el = $('#pickQuestionList');
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
   if(!paper || !paper.data || !paper.data.sections || !paper.data.sections[pickQState.si]){
-    el.innerHTML = '<div class="pick-empty">没有题目</div>';
-    return;
+    el.innerHTML = '<div class="pick-empty">没有题目</div>'; return;
   }
   var sec = paper.data.sections[pickQState.si];
   var qs = sec.questions || [];
-  if(!qs.length){
-    el.innerHTML = '<div class="pick-empty">该大题下暂无题目</div>';
-    return;
-  }
+  if(!qs.length){ el.innerHTML = '<div class="pick-empty">该大题下暂无题目</div>'; return; }
+
   var rows = [];
   qs.forEach(function(q,qi){
     if(pickQState.tab === 'main'){
@@ -2792,9 +2805,7 @@ $('#btnShareQuestion').onclick = async function(){
 $('#pickQPaperSelect').onchange = function(){
   pickQState.paperId = this.value;
   pickQState.si = 0;
-  refreshPickQSections();
-  pickResetSelectionAll();
-  pickRenderList();
+  refreshPickQSections(); pickResetSelectionAll(); pickRenderList();
 };
 function refreshPickQSections(){
   var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
@@ -2863,10 +2874,8 @@ $('#pickQuestionConfirm').onclick = async function(){
 
   if(!items.length){ alert('请至少勾选一项内容'); return; }
 
-  var btn = this;
-  var oldTxt = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = '生成中...';
+  var btn = this, oldTxt = btn.textContent;
+  btn.disabled = true; btn.textContent = '生成中...';
 
   try{
     var r = await sb.from('shares').insert({
@@ -2885,32 +2894,28 @@ $('#pickQuestionConfirm').onclick = async function(){
     console.error(err);
     alert('生成分享失败：'+(err.message||'未知错误'));
   } finally {
-    btn.disabled = false;
-    btn.textContent = oldTxt;
+    btn.disabled = false; btn.textContent = oldTxt;
   }
 };
 /* ================================================================
-图像导入总入口（点击选图 / 拖拽 / Ctrl+V 粘贴）
+图像导入（点击 / 拖拽 / Ctrl+V 粘贴）
 ================================================================ */
 var assignItems = [];
 var dragOverlay = null;
 
 function pickImageFiles(){ $('#fileInput').click(); }
-
 function onFileInputChange(e){
   var files = Array.prototype.slice.call(e.target.files || []);
   $('#fileInput').value = '';
   if(!files.length) return;
   handleIncomingImages(files);
 }
-
 function isImageFile(f){
   if(!f) return false;
   if(f.type && f.type.indexOf('image/') === 0) return true;
   var n = (f.name||'').toLowerCase();
   return /\.(png|jpe?g|gif|webp|bmp|svg|heic|heif)$/.test(n);
 }
-
 function extractImageFiles(dt){
   if(!dt) return [];
   var out = [];
@@ -2931,7 +2936,6 @@ function extractImageFiles(dt){
   }
   return out;
 }
-
 function dragContainsFiles(e){
   if(!e.dataTransfer) return false;
   var t = e.dataTransfer.types;
@@ -2941,25 +2945,19 @@ function dragContainsFiles(e){
   }
   return false;
 }
-
 function bindDragAndDrop(){
   dragOverlay = $('#dragOverlay');
-
   window.addEventListener('dragenter', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
     if(dragOverlay) dragOverlay.classList.add('show');
     document.body.classList.add('dragging-file');
   }, false);
-
   window.addEventListener('dragover', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
-    if(e.dataTransfer){
-      try{ e.dataTransfer.dropEffect = 'copy'; }catch(_){}
-    }
+    if(e.dataTransfer){ try{ e.dataTransfer.dropEffect = 'copy'; }catch(_){} }
   }, false);
-
   window.addEventListener('dragleave', function(e){
     if(!dragContainsFiles(e)) return;
     e.preventDefault();
@@ -2969,7 +2967,6 @@ function bindDragAndDrop(){
       document.body.classList.remove('dragging-file');
     }
   }, false);
-
   window.addEventListener('drop', function(e){
     e.preventDefault();
     if(dragOverlay) dragOverlay.classList.remove('show');
@@ -2979,15 +2976,12 @@ function bindDragAndDrop(){
     handleIncomingImages(files);
   }, false);
 }
-
 function bindPasteImage(){
   window.addEventListener('paste', function(e){
     var a = document.activeElement;
     if(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA')) return;
-
     var cd = e.clipboardData || window.clipboardData;
     if(!cd) return;
-
     var files = [];
     var items = cd.items || [];
     for(var i=0;i<items.length;i++){
@@ -3003,18 +2997,13 @@ function bindPasteImage(){
       }
     }
     if(!files.length) return;
-
     e.preventDefault();
     toast('检测到 ' + files.length + ' 张图片，正在加载…');
     handleIncomingImages(files);
   }, false);
 }
-
 async function handleIncomingImages(files){
-  if(files.length === 1){
-    await loadOneImageIntoEditor(files[0]);
-    return;
-  }
+  if(files.length === 1){ await loadOneImageIntoEditor(files[0]); return; }
   toast('正在加载 ' + files.length + ' 张图片…');
   var loaded = [];
   for(var i=0;i<files.length;i++){
@@ -3029,7 +3018,6 @@ async function handleIncomingImages(files){
   renderMultiImgModal(loaded);
   $('#multiImgModal').classList.add('show');
 }
-
 function readImageFile(file, idx){
   return new Promise(function(resolve, reject){
     var reader = new FileReader();
@@ -3051,17 +3039,12 @@ function readImageFile(file, idx){
     reader.readAsDataURL(file);
   });
 }
-
 function openFigEditorFromItem(item){
   var img = new Image();
-  img.onload = function(){
-    var canvas = imageToCanvas(img);
-    openFigEditor(canvas);
-  };
+  img.onload = function(){ openFigEditor(imageToCanvas(img)); };
   img.onerror = function(){ toast('图片加载失败'); };
   img.src = item.dataUrl;
 }
-
 async function loadOneImageIntoEditor(file){
   if(!isImageFile(file)){ toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）'); return; }
   try{
@@ -3072,7 +3055,6 @@ async function loadOneImageIntoEditor(file){
     toast(err.message || '图片处理失败');
   }
 }
-
 function renderMultiImgModal(list){
   var el = $('#multiImgList');
   el.innerHTML = list.map(function(it, i){
@@ -3115,7 +3097,6 @@ function otsuThreshold(hist, total){
   }
   return th;
 }
-
 function detectRegions(sourceCanvas){
   var MAX_ANALYZE = 800;
   var scale = Math.min(1, MAX_ANALYZE / Math.max(sourceCanvas.width, sourceCanvas.height));
@@ -3144,7 +3125,6 @@ function detectRegions(sourceCanvas){
     for(var x=0;x<W;x++) s += bin[base+x];
     rowSum[y] = s;
   }
-
   var rowBlankTh = Math.max(1, Math.round(W * 0.004));
   var rowBlocks = [];
   var rs = -1;
@@ -3184,7 +3164,6 @@ function detectRegions(sourceCanvas){
       if(cb[0] - last[1] - 1 < Math.max(2, W*0.015)) last[1] = cb[1];
       else merged.push([cb[0], cb[1]]);
     }
-
     for(var m=0;m<merged.length;m++){
       var x1 = merged[m][0], x2 = merged[m][1];
       var w = x2-x1+1;
@@ -3227,7 +3206,6 @@ function detectRegions(sourceCanvas){
   }
   return kept;
 }
-
 function cropRegion(sourceCanvas, r, maxW){
   maxW = maxW || 400;
   var s = Math.min(1, maxW / r.w);
@@ -3237,7 +3215,6 @@ function cropRegion(sourceCanvas, r, maxW){
   c.getContext('2d').drawImage(sourceCanvas, r.x, r.y, r.w, r.h, 0, 0, c.width, c.height);
   return c;
 }
-
 function imageToCanvas(img, maxSide){
   maxSide = maxSide || 1600;
   var scale = Math.min(1, maxSide / Math.max(img.width, img.height));
@@ -3249,26 +3226,19 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-图形编辑器（彻底修复版）
+图形编辑器
 ================================================================ */
 function openFigEditor(sourceCanvas){
   var modal = document.getElementById('figEditorModal');
   modal.classList.add('show');
   requestAnimationFrame(function(){
-    requestAnimationFrame(function(){
-      FigEditor.load(sourceCanvas);
-    });
+    requestAnimationFrame(function(){ FigEditor.load(sourceCanvas); });
   });
 }
 
 var FigEditor = {
-  canvas: null,
-  canvasEl: null,
-  regions: [],
-  activeId: null,
-  nextId: 1,
-  drag: null,
-  bound: false,
+  canvas: null, canvasEl: null,
+  regions: [], activeId: null, nextId: 1, drag: null, bound: false,
 
   load: function(sourceCanvas){
     var self = this;
@@ -3365,10 +3335,7 @@ var FigEditor = {
       check.className = 'thumb-check';
       check.textContent = '✓';
       div.appendChild(check);
-      div.onclick = function(e){
-        e.stopPropagation();
-        self.toggleSelect(r.id);
-      };
+      div.onclick = function(e){ e.stopPropagation(); self.toggleSelect(r.id); };
       thumbs.appendChild(div);
     });
   },
@@ -3387,13 +3354,12 @@ var FigEditor = {
     document.getElementById('figEditorConfirm').disabled = selCount === 0;
   },
 
-  getSelected: function(){
-    return this.regions.filter(function(r){ return r.selected; });
-  },
+  getSelected: function(){ return this.regions.filter(function(r){ return r.selected; }); },
 
   bindEvents: function(){
     var stage = document.getElementById('figStage');
     var self = this;
+
     stage.addEventListener('dragstart', function(e){ e.preventDefault(); });
     stage.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
@@ -3408,7 +3374,6 @@ var FigEditor = {
         if(regEl){ self.toggleSelect(+regEl.dataset.id); }
         return;
       }
-
       var handleEl = e.target.closest('.h');
       if(handleEl){
         var rEl1 = handleEl.closest('.fig-region');
@@ -3424,7 +3389,6 @@ var FigEditor = {
           return;
         }
       }
-
       var rEl2 = e.target.closest('.fig-region');
       if(rEl2){
         var id2 = +rEl2.dataset.id;
@@ -3437,7 +3401,6 @@ var FigEditor = {
         try{ stage.setPointerCapture(e.pointerId); }catch(_){}
         return;
       }
-
       var newId = self.nextId++;
       self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
       self.activeId = newId;
@@ -3521,7 +3484,6 @@ var FigEditor = {
     this.regions = []; this.activeId = null;
     this.render(); this.updateUI();
   },
-
   selectAll: function(){
     if(!this.canvas) return;
     this.regions = [{ id:this.nextId++, x:0, y:0, w:this.canvas.width, h:this.canvas.height, selected:true }];
@@ -3552,22 +3514,18 @@ function collectFigureTargets(){
   });
   return arr;
 }
-
 function showAssignModal(){
   var selected = FigEditor.getSelected();
   if(!selected.length){ toast('请至少勾选一个图形'); return; }
-
   assignItems = selected.map(function(r){
     var c = cropRegion(FigEditor.canvas, r, 600);
     return { dataUrl: c.toDataURL('image/png') };
   });
-
   var targets = collectFigureTargets();
   if(!targets.length){ toast('当前试卷还没有可插入的题目'); return; }
 
   var listEl = $('#assignList');
   listEl.innerHTML = '';
-
   var qOnlyValues = [];
   targets.forEach(function(t){
     if(t.kind === 'main') qOnlyValues.push({ value: t.si+'-'+t.qi, label: t.group });
@@ -3623,7 +3581,6 @@ function showAssignModal(){
       optMain.value = si+'-'+qi+'-main-0';
       optMain.textContent = '主题目下方';
       selKind.appendChild(optMain);
-
       (q.similar||[]).forEach(function(s, idx){
         var o = document.createElement('option');
         o.value = si+'-'+qi+'-similar-'+idx;
@@ -3651,13 +3608,11 @@ function showAssignModal(){
   $('#figEditorModal').classList.remove('show');
   $('#assignModal').classList.add('show');
 }
-
 function confirmAssign(){
   var rows = $$('#assignList .assign-row');
   var insertCount = 0;
   rows.forEach(function(row, i){
-    var selKind = row.querySelector('.assign-kind');
-    if(!selKind) return;
+    var selKind = row.querySelector('.assign-kind'); if(!selKind) return;
     var parts = selKind.value.split('-');
     var si = +parts[0], qi = +parts[1];
     var kind = parts[2];
@@ -3672,8 +3627,7 @@ function confirmAssign(){
     insertCount++;
   });
   $('#assignModal').classList.remove('show');
-  renderPaper();
-  showPageInternal(state.page);
+  renderPaper(); showPageInternal(state.page);
   requestAnimationFrame(function(){
     $$('#paperView .page').forEach(function(p){
       if(p.style.display!=='none') fitCanvas(p);
@@ -3685,13 +3639,12 @@ function confirmAssign(){
 }
 
 /* ================================================================
-作业管理核心
+作业管理
 ================================================================ */
 function ensureHomeworkData(){
   if(!exam.homeworkSets) exam.homeworkSets = [];
   if(!exam.usedKeys) exam.usedKeys = [];
 }
-
 function openHomeworkView(){
   ensureHomeworkData();
   $('#paperView').style.display = 'none';
@@ -3742,7 +3695,6 @@ function keyToItem(key){
   if(!h) return null;
   return { key:key, si:si2, qi:qi2, hi:hi2, stem:h.stem, answer:h.answer, analysis:h.analysis, calc:h.calc, reason:h.reason, pitfall:h.pitfall };
 }
-
 function renderHomeworkList(){
   ensureHomeworkData();
   var list = exam.homeworkSets.slice().sort(function(a,b){ return a.no - b.no; });
@@ -3771,7 +3723,6 @@ function renderHomeworkList(){
     '</div>';
   }).join('');
 }
-
 function hwItemHTML(it,i){
   return '<div class="hw-q" data-key="'+esc(it.key)+'">'+
     '<div class="stem">'+(i+1)+'. '+esc(it.stem)+'</div>'+
@@ -3784,7 +3735,6 @@ function hwItemHTML(it,i){
     '<div class="panel hw-explain hw-ana">'+renderAnalysisFieldsHTML(it)+'</div>'+
   '</div>';
 }
-
 function openHwModal(){
   ensureHomeworkData();
   var html = '';
@@ -3806,7 +3756,6 @@ function openHwModal(){
   $('#hwList').innerHTML = html || '<div class="empty">暂无题目</div>';
   $('#hwModal').classList.add('show');
 }
-
 function doGenerateHomework(){
   ensureHomeworkData();
   var picks = [];
@@ -3841,25 +3790,21 @@ function doGenerateHomework(){
     skipped += Math.max(0, p.count - take.length);
     newItems = newItems.concat(take);
   });
-
   if(!newItems.length){
     alert('所选题目均已在往期作业中使用过，没有新题可生成。\n可先删除对应作业释放题目，或导入更多题库。');
     return;
   }
-
   var no = nextHwNo();
   var set = { id: uid('hw'), no: no, name: '作业' + no, createdAt: new Date().toISOString(), items: newItems };
   exam.homeworkSets.push(set);
   newItems.forEach(function(it){
     if(exam.usedKeys.indexOf(it.key) < 0) exam.usedKeys.push(it.key);
   });
-
   scheduleSave();
   $('#hwModal').classList.remove('show');
   renderHomeworkList();
   toast('已生成 ' + set.name + '（' + newItems.length + ' 题）' + (skipped ? '，跳过 ' + skipped + ' 道重复题' : ''));
 }
-
 function deleteHwSet(id){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === id; });
@@ -3873,7 +3818,6 @@ function deleteHwSet(id){
   scheduleSave(); renderHomeworkList();
   toast('已删除 ' + set.name);
 }
-
 function renameHwSet(id){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === id; });
@@ -3884,7 +3828,6 @@ function renameHwSet(id){
   set.name = nn;
   scheduleSave(); renderHomeworkList();
 }
-
 function removeItemFromSet(setId, key){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
@@ -3896,7 +3839,6 @@ function removeItemFromSet(setId, key){
   scheduleSave(); renderHomeworkList();
   toast('已移出');
 }
-
 function openAddQModal(setId){
   ensureHomeworkData();
   addTargetId = setId;
@@ -3970,7 +3912,6 @@ function parsePaperText(text){
       block=null; lastField=null;
       continue;
     }
-
     var mSec = line.match(/^([一二三四五六七八九十]+)\s*[、．.]\s*(.+)$/);
     if(mSec){
       curSec={name:line.trim(),questions:[]};
@@ -3978,16 +3919,13 @@ function parsePaperText(text){
       curQ=null; block=null; lastField=null; lastNum=0;
       continue;
     }
-
     if(/^##\s+/.test(line) && !/^###/.test(line)){
       curSec={name:line.replace(/^##\s+/,'').trim(),questions:[]};
       result.sections.push(curSec);
       curQ=null; block=null; lastField=null; lastNum=0;
       continue;
     }
-
     if(/^###\s+/.test(line)){ startQ(line.replace(/^###\s+/,'')); continue; }
-
     if(RE_SIM.test(line)){ if(curQ) block='similar'; lastField=null; continue; }
     if(RE_HW.test(line)){ if(curQ) block='homework'; lastField=null; continue; }
 
@@ -4015,16 +3953,12 @@ function parsePaperText(text){
 
     var mA = line.match(RE_ANS);
     if(mA){ if(!curQ) startQ(''); curQ.answer = mA[1].trim(); lastField='answer'; block=null; continue; }
-
     var mC = line.match(RE_CALC);
     if(mC){ if(!curQ) startQ(''); curQ.calc = mC[1].trim(); lastField='calc'; block=null; continue; }
-
     var mR = line.match(RE_REASON);
     if(mR){ if(!curQ) startQ(''); curQ.reason = mR[1].trim(); lastField='reason'; block=null; continue; }
-
     var mP = line.match(RE_PIT);
     if(mP){ if(!curQ) startQ(''); curQ.pitfall = mP[1].trim(); lastField='pitfall'; block=null; continue; }
-
     var mAn = line.match(RE_ANA);
     if(mAn){ if(!curQ) startQ(''); curQ.analysis = mAn[1].trim(); lastField='analysis'; block=null; continue; }
 
@@ -4037,7 +3971,6 @@ function parsePaperText(text){
         continue;
       }
     }
-
     if(!curQ){ startQ(line); continue; }
     if(lastField==='answer') curQ.answer += '\n'+line;
     else if(lastField==='analysis') curQ.analysis += '\n'+line;
@@ -4054,7 +3987,6 @@ function parsePaperText(text){
     });
   });
   result.sections = result.sections.filter(function(s){ return s.questions.length>0; });
-
   result.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
   result.homeworkSets = [];
   result.usedKeys = [];
@@ -4062,10 +3994,9 @@ function parsePaperText(text){
 }
 
 /* ================================================================
-导入方式选择（新建 / 合并）
+导入方式选择
 ================================================================ */
 var pendingImportData = null;
-
 $('#btnImportOk').onclick = function(){
   var txt = $('#importText').value.trim();
   if(!txt){ alert('请先粘贴试卷文字内容'); return; }
@@ -4076,20 +4007,16 @@ $('#btnImportOk').onclick = function(){
   $('#importModal').classList.remove('show');
   $('#importChoiceModal').classList.add('show');
 };
-
 $('#importChoiceCancel').onclick = function(){
   pendingImportData = null;
   $('#importChoiceModal').classList.remove('show');
 };
-
 $('#importChoiceModal').addEventListener('click', function(e){
-  var card = e.target.closest('.import-choice-card');
-  if(!card) return;
+  var card = e.target.closest('.import-choice-card'); if(!card) return;
   var choice = card.dataset.choice;
   if(choice === 'new') doImportAsNewPaper();
   else if(choice === 'merge') doImportAsMerge();
 });
-
 async function doImportAsNewPaper(){
   if(!pendingImportData) return;
   var parsed = pendingImportData;
@@ -4105,22 +4032,18 @@ async function doImportAsNewPaper(){
     saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
   }).select().single();
   if(r.error){ alert('创建失败：'+r.error.message); return; }
-
   papers.unshift(r.data);
   await openPaper(r.data.id);
   renderPapersList();
   window.scrollTo(0,0);
   toast('已生成新试卷「'+newTitle+'」，共 '+newExam.sections.length+' 个大题');
 }
-
 async function doImportAsMerge(){
   if(!pendingImportData) return;
   var parsed = pendingImportData;
   pendingImportData = null;
   $('#importChoiceModal').classList.remove('show');
-
   if(!currentPaper){ alert('当前没有打开的试卷，请先打开一份试卷再合并。'); return; }
-
   if(!exam.sections) exam.sections = [];
   parsed.sections.forEach(function(sec){ exam.sections.push(normalizeSection(sec)); });
   ensureBlackboard();
@@ -4138,7 +4061,6 @@ async function doImportAsMerge(){
   var fileInput = $('#fileInput');
 
   $('#btnBlackboard').onclick = enterBlackboard;
-
   $('#btnAddFigure').onclick = pickImageFiles;
   fileInput.onchange = onFileInputChange;
   bindDragAndDrop();
@@ -4149,7 +4071,6 @@ async function doImportAsMerge(){
     $('#figEditorModal').classList.add('show');
   };
   $('#assignConfirm').onclick = confirmAssign;
-
   $('#figEditorCancel').onclick = function(){
     $('#figEditorModal').classList.remove('show');
     FigEditor.clearAll();
@@ -4161,18 +4082,14 @@ async function doImportAsMerge(){
     var picker = document.createElement('input');
     picker.type = 'file'; picker.accept = 'image/*';
     picker.onchange = async function(){
-      var f = picker.files && picker.files[0];
-      if(!f) return;
+      var f = picker.files && picker.files[0]; if(!f) return;
       try{
         var item = await readImageFile(f, 0);
         var img = new Image();
         img.onload = function(){ FigEditor.load(imageToCanvas(img)); toast('已换图，请重新选择区域'); };
         img.onerror = function(){ toast('图片加载失败'); };
         img.src = item.dataUrl;
-      }catch(e){
-        console.error(e);
-        toast('换图失败：' + (e.message || '未知错误'));
-      }
+      }catch(e){ console.error(e); toast('换图失败：' + (e.message || '未知错误')); }
     };
     picker.click();
   };
@@ -4198,8 +4115,7 @@ async function doImportAsMerge(){
     $$('#addQList input[type=checkbox]:checked').forEach(function(cb){
       var key = cb.value;
       if(exam.usedKeys.indexOf(key) >= 0) return;
-      var it = keyToItem(key);
-      if(!it) return;
+      var it = keyToItem(key); if(!it) return;
       set.items.push(it);
       exam.usedKeys.push(key);
       added++;
@@ -4254,7 +4170,6 @@ async function doImportAsMerge(){
     $('#importModal').classList.add('show');
   };
   $('#btnImportCancel').onclick = function(){ $('#importModal').classList.remove('show'); };
-
   $('#btnImportDemo').onclick = function(){
     $('#importText').value = [
       '# 七年级数学 · 有理数及其运算',
@@ -4325,7 +4240,6 @@ async function doImportAsMerge(){
     } else {
       $('#authModal').classList.add('show');
     }
-
     sb.auth.onAuthStateChange(function(evt){
       if(evt === 'SIGNED_IN' && !currentUser) afterLogin().catch(console.error);
     });
