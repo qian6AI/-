@@ -34,15 +34,6 @@ button.small{font-size:12px;padding:5px 10px}
 button.danger{color:#c4304a;border-color:#ffd0d8;background:#fff5f7}
 button.danger:hover{background:#ffe9ec;border-color:#ffb8c4}
 button:disabled{opacity:.45;cursor:not-allowed}
-.ink-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.tool-label{font-size:13px;color:#7a8399;margin:0 2px 0 6px}
-.swatch{width:32px;height:32px;border-radius:8px;padding:0;border:2px solid #d5dbe8;background:var(--c)}
-.swatch.active{border-color:#3b6ef5;box-shadow:0 0 0 3px rgba(59,110,245,.18)}
-.swatch.eraser{background:#fff;color:#6b7488;font-size:13px;display:flex;align-items:center;justify-content:center}
-.size-btn{width:32px;height:32px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.size-btn i{display:block;border-radius:50%;background:#5a6b8c}
-.size-btn.active{border-color:#3b6ef5;background:#eef3ff}
-.size-btn.active i{background:#3b6ef5}
 .bar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .tab{padding:7px 17px;border-radius:20px;font-size:15px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
 .tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-weight:600}
@@ -81,8 +72,6 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .sim-nav button{font-size:14px;padding:7px 15px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
 .sim-nav button:disabled{opacity:.35;cursor:not-allowed}
 .sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
-
-/* ===== 作业管理（新版） ===== */
 #hwView{display:none;padding-bottom:60px}
 .hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .hw-title{font-weight:700;font-size:17px;color:#23304d}
@@ -99,17 +88,16 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .hw-q:last-child{border-bottom:none}
 .hw-q .stem{font-size:18px;line-height:2.05}
 .hw-explain .line{margin:6px 0}
-.used-tag{font-size:11.5px;color:#c4304a;background:#ffe9ec;padding:1px 7px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:500}
 .hw-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
 .hw-item>label{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer;min-width:0;font-size:15px}
 .hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hw-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0}
 .hw-item select{font-family:inherit;font-size:14.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
-
+.used-tag{font-size:11.5px;color:#c4304a;background:#ffe9ec;padding:1px 7px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:500}
 .modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.45);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
 .modal-mask.show{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:760px;max-height:88vh;overflow:auto;padding:24px 26px 22px;box-shadow:0 18px 50px rgba(20,28,50,.28)}
-.modal.wide{max-width:820px}
+.modal.wide{max-width:900px}
 .modal h3{margin:0 0 10px;font-size:19px;color:#1b2740}
 .modal .hint{font-size:14px;color:#6b7488;line-height:1.9;margin-bottom:13px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:13px 16px}
 .modal .hint code{background:#eaf0ff;color:#2a5ae0;padding:1px 6px;border-radius:4px;font-size:13.5px}
@@ -122,6 +110,8 @@ body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
 .modal-actions.right{justify-content:flex-end}
 .form-field{margin-top:12px}
 .form-field label{font-size:13.5px;color:#5a6376;font-weight:600;display:block}
+.form-field select{width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px}
+.form-field select:focus{border-color:#3b6ef5}
 .qlist{display:flex;flex-direction:column;gap:8px;margin:13px 0;max-height:48vh;overflow:auto;padding:2px}
 .papers-list{display:flex;flex-direction:column;gap:9px;max-height:50vh;overflow:auto;padding:2px;margin:12px 0}
 .paper-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff;cursor:pointer;transition:.15s}
@@ -147,7 +137,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #eef1f7;white-space:nowrap}
 th{background:#f7f9ff;font-weight:700;color:#3a4560;position:sticky;top:0;z-index:1}
 tr:last-child td{border-bottom:none}
-.save-hint{position:fixed;bottom:18px;right:18px;z-index:100;background:rgba(30,42,70,.92);color:#fff;font-size:13px;padding:9px 16px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
+.save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.92);color:#fff;font-size:13px;padding:9px 16px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
 .save-hint.show{opacity:1;transform:translateY(0)}
 .q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
 .q-figure:hover{border-color:#cbd5e1}
@@ -158,9 +148,9 @@ tr:last-child td{border-bottom:none}
 .q-figure:hover .fig-tools{opacity:1;pointer-events:auto}
 .q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:11px;padding:4px 9px;border-radius:5px;cursor:pointer;font-family:inherit}
 .q-figure .fig-tools button:hover{background:rgba(255,255,255,.16)}
-.fig-stage{position:relative;display:inline-block;line-height:0;touch-action:none;user-select:none;max-width:100%}
-.fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;pointer-events:none}
-.fig-region{position:absolute;border:2px solid rgba(59,130,246,.85);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s}
+.fig-stage{position:relative;display:inline-block;line-height:0;user-select:none;max-width:100%;touch-action:none}
+.fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.fig-region{position:absolute;border:2px solid rgba(59,130,246,.85);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s;touch-action:none}
 .fig-region:hover{background:rgba(59,130,246,.2)}
 .fig-region.selected{border-color:#10b981;background:rgba(16,185,129,.16);z-index:5}
 .fig-region .rg-check{position:absolute;top:-11px;left:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
@@ -196,28 +186,18 @@ tr:last-child td{border-bottom:none}
 .assign-row .arrow{color:#98a1b5;font-size:16px;flex-shrink:0}
 .assign-row select{flex:1;font-family:inherit;font-size:14px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;min-width:0}
 .assign-row select:focus{border-color:#3b6ef5}
-.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:13px;padding:10px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
+.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:13px;padding:10px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .drag-overlay{position:fixed;inset:0;z-index:150;background:rgba(59,130,246,.08);border:3px dashed #3b6ef5;display:none;align-items:center;justify-content:center;font-size:18px;color:#3b6ef5;font-weight:600}
 .drag-overlay.show{display:flex}
+
+/* ===== 小黑板 ===== */
 #bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column}
 #bbView.show{display:flex}
 .bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0}
 .bb-title{font-weight:700;font-size:15px;color:#e6e8ee;display:flex;align-items:center;gap:6px}
-.bb-tools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.bb-label{font-size:12px;color:#7a8399;margin:0 4px 0 8px}
-.bb-swatch{width:30px;height:30px;padding:0;border-radius:8px;border:2px solid #2f3444;background:var(--c);cursor:pointer}
-.bb-swatch.active{border-color:#6ea8ff;box-shadow:0 0 0 3px rgba(110,168,255,.25)}
-.bb-swatch.eraser{background:#2a2f3d;color:#98a1b5;font-size:12px;display:flex;align-items:center;justify-content:center}
-.bb-size{width:30px;height:30px;padding:0;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #2f3444;cursor:pointer}
-.bb-size i{display:block;border-radius:50%;background:#7a8399}
-.bb-size.active{border-color:#6ea8ff;background:rgba(110,168,255,.12)}
-.bb-size.active i{background:#6ea8ff}
 .bb-theme{font-size:12px;padding:5px 11px;background:transparent;border:1px solid #2f3444;color:#98a1b5;border-radius:7px}
 .bb-theme.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
-.bb-bar .bb-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.bb-bar button{font-size:13px;padding:6px 12px;background:#232734;border-color:#2f3444;color:#e6e8ee}
-.bb-bar button:hover{background:#2a2f3d;border-color:#3d455c}
 .bb-bar button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
 .bb-tabs{display:flex;gap:6px;padding:8px 14px;background:#12151c;border-bottom:1px solid #262b38;overflow-x:auto;flex-shrink:0}
 .bb-tab{padding:5px 14px;border-radius:16px;font-size:13px;background:#232734;border:1px solid #2f3444;color:#98a1b5;cursor:pointer;white-space:nowrap}
@@ -226,12 +206,140 @@ tr:last-child td{border-bottom:none}
 .bb-stage{position:relative;width:100%;max-width:1400px;aspect-ratio:8/5;background:#141820;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.5);overflow:hidden;border:1px solid #262b38;flex-shrink:0}
 .bb-stage.light{background:#ffffff;border-color:#cbd5e1}
 .bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+
+/* ================================================================
+   ★ 左下角浮动涂抹工具条（试卷 & 小黑板共用结构）
+   ================================================================ */
+.ink-dock{
+  position:fixed;left:16px;bottom:16px;z-index:120;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  background:rgba(255,255,255,.97);
+  border:1px solid #e4eaf8;border-radius:16px;
+  padding:9px 14px;
+  box-shadow:0 10px 30px rgba(30,40,70,.18);
+  backdrop-filter:blur(10px);
+  max-width:calc(100vw - 210px);
+  transition:opacity .2s;
+}
+.ink-dock .dock-sep{width:1px;height:22px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
+.ink-dock .swatch{width:32px;height:32px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
+.ink-dock .swatch:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
+.ink-dock .swatch.active{border-color:#3b6ef5;box-shadow:0 0 0 3px rgba(59,110,245,.2)}
+.ink-dock .swatch.eraser{background:#fff;color:#6b7488;font-size:13px;display:flex;align-items:center;justify-content:center}
+.ink-dock .size-btn{width:32px;height:32px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid #d5dbe8;background:#fff;cursor:pointer;flex-shrink:0;transition:.15s}
+.ink-dock .size-btn i{display:block;border-radius:50%;background:#5a6b8c}
+.ink-dock .size-btn.active{border-color:#3b6ef5;background:#eef3ff;box-shadow:0 0 0 3px rgba(59,110,245,.14)}
+.ink-dock .size-btn.active i{background:#3b6ef5}
+.ink-dock button.act{font-size:12.5px;padding:6px 12px;border-radius:9px;flex-shrink:0}
+
+/* ================================================================
+   ★ 右下角浮动翻页控件
+   ================================================================ */
+.page-nav{
+  position:fixed;right:16px;bottom:16px;z-index:120;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.97);
+  border:1px solid #e4eaf8;border-radius:16px;
+  padding:9px 12px;
+  box-shadow:0 10px 30px rgba(30,40,70,.18);
+  backdrop-filter:blur(10px);
+}
+.page-nav button{
+  min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:#fff;border:1px solid #d5dbe8;color:#3a4560;
+}
+.page-nav button:hover{background:#f2f6ff;border-color:#9db6ff;color:#2a5ae0}
+.page-nav .page-ind{
+  font-size:14px;font-weight:700;color:#3a4560;
+  min-width:64px;text-align:center;user-select:none;
+  padding:0 4px;letter-spacing:.3px;
+}
+.page-nav .page-ind b{color:#3b6ef5;font-size:16px}
+.page-nav .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 2px;flex-shrink:0}
+
+/* 进入小黑板时隐藏试卷页面的浮动控件 */
+body.bb-open .ink-dock,
+body.bb-open .page-nav{display:none !important}
+
+/* 小黑板内部的浮动工具条 & 翻页控件 */
+.bb-ink-dock{
+  position:absolute;left:16px;bottom:16px;z-index:30;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  background:rgba(23,26,34,.96);
+  border:1px solid #2f3444;border-radius:16px;
+  padding:9px 14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  backdrop-filter:blur(10px);
+  max-width:calc(100vw - 210px);
+}
+.bb-ink-dock .dock-sep{width:1px;height:22px;background:#2f3444;margin:0 3px;flex-shrink:0}
+.bb-swatch{width:32px;height:32px;padding:0;border-radius:9px;border:2px solid #2f3444;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
+.bb-swatch:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.bb-swatch.active{border-color:#6ea8ff;box-shadow:0 0 0 3px rgba(110,168,255,.28)}
+.bb-swatch.eraser{background:#2a2f3d;color:#98a1b5;font-size:12px;display:flex;align-items:center;justify-content:center}
+.bb-size{width:32px;height:32px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #2f3444;cursor:pointer;flex-shrink:0;transition:.15s}
+.bb-size i{display:block;border-radius:50%;background:#7a8399}
+.bb-size.active{border-color:#6ea8ff;background:rgba(110,168,255,.15)}
+.bb-size.active i{background:#6ea8ff}
+.bb-ink-dock button.act{
+  font-size:12.5px;padding:6px 12px;border-radius:9px;flex-shrink:0;
+  background:#232734;border:1px solid #2f3444;color:#e6e8ee;
+}
+.bb-ink-dock button.act:hover{background:#2a2f3d;border-color:#3d455c}
+
+.bb-page-nav{
+  position:absolute;right:16px;bottom:16px;z-index:30;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(23,26,34,.96);
+  border:1px solid #2f3444;border-radius:16px;
+  padding:9px 12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  backdrop-filter:blur(10px);
+}
+.bb-page-nav button{
+  min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  background:#232734;border:1px solid #2f3444;color:#e6e8ee;
+}
+.bb-page-nav button:hover{background:#2a2f3d;border-color:#3d455c}
+.bb-page-nav .page-ind{
+  font-size:14px;font-weight:700;color:#e6e8ee;
+  min-width:64px;text-align:center;user-select:none;
+  padding:0 4px;letter-spacing:.3px;
+}
+.bb-page-nav .page-ind b{color:#6ea8ff;font-size:16px}
+.bb-page-nav .dock-sep{width:1px;height:24px;background:#2f3444;margin:0 2px;flex-shrink:0}
+.bb-page-nav button.act{font-size:12.5px;min-width:auto;padding:0 12px;height:38px}
+
+/* ===== 分享题目多选 UI ===== */
+.pick-tabs{display:flex;gap:6px;margin:14px 0 4px;border-bottom:2px solid #e4eaf8;flex-wrap:wrap}
+.pick-tab{padding:9px 18px;border:none;background:transparent;color:#7a8399;font-size:14px;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;position:relative;display:inline-flex;align-items:center;gap:6px}
+.pick-tab:hover{background:#f4f7ff;color:#3b6ef5}
+.pick-tab.active{color:#3b6ef5;border-bottom-color:#3b6ef5;background:#f4f7ff}
+.pick-tab .cnt{display:inline-block;min-width:22px;padding:1px 7px;font-size:11.5px;font-weight:700;color:#fff;background:#3b6ef5;border-radius:10px;text-align:center;line-height:1.6}
+.pick-tab .cnt.zero{background:#b8c0d0}
+.pick-list{display:flex;flex-direction:column;gap:8px;margin:12px 0;max-height:42vh;overflow:auto;padding:2px}
+.pick-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff;cursor:pointer;transition:.12s}
+.pick-item:hover{background:#f1f5ff;border-color:#b9caf7}
+.pick-item.selected{background:#eef3ff;border-color:#7d9bf5;box-shadow:0 0 0 2px rgba(59,110,245,.1)}
+.pick-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0;margin-top:2px;cursor:pointer}
+.pick-item .body{flex:1;min-width:0}
+.pick-item .txt{font-size:14.5px;color:#26304a;line-height:1.7;word-break:break-word}
+.pick-item .meta{font-size:11.5px;color:#98a1b5;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
+.pick-item .badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
+.pick-item .badge.main{background:#e5edff;color:#3b6ef5}
+.pick-item .badge.sim{background:#e9f8ee;color:#1f8a45}
+.pick-item .badge.hw{background:#fff8e8;color:#a86a00}
+.pick-item .badge.fig{background:#f0e8ff;color:#7a3fd4}
+.pick-empty{padding:28px;text-align:center;color:#98a1b5;font-size:14px;border:1px dashed #dfe7fa;border-radius:10px;background:#fbfcff}
+.pick-stat{font-size:13px;color:#5c7cf0;font-weight:600;background:#f4f7ff;border:1px solid #dfe7fa;border-radius:8px;padding:8px 14px;display:inline-flex;align-items:center;gap:8px}
+.pick-stat b{color:#3b6ef5;font-size:16px}
+
 @media (max-width:720px){
 .bar-row{padding:7px 10px;gap:6px}
 .brand{font-size:14px;gap:5px}
 .paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:160px}
-.tool-label{display:none}
-.swatch,.size-btn{width:32px;height:32px}
 button{padding:8px 11px;font-size:13px;min-height:36px}
 .tab{padding:7px 13px;font-size:13px}
 .page{margin:8px;padding:16px 13px 26px;border-radius:12px}
@@ -258,24 +366,51 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 .fig-thumb canvas{max-width:100px;max-height:70px}
 .assign-row{flex-wrap:wrap}
 .assign-row .fig-preview{width:80px;height:56px}
-#paperView{padding-bottom:40px}
+#paperView{padding-bottom:120px}
 .user-chip{font-size:12px;padding:4px 10px}
 .stats-grid{grid-template-columns:1fr 1fr}
 .stat-card .num{font-size:20px}
-.bb-bar{padding:6px 10px;gap:5px}
-.bb-title{font-size:13px}
-.bb-stage-wrap{padding:8px}
-.bb-bar button{font-size:12px;padding:5px 9px;min-height:30px}
-.bb-swatch,.bb-size{width:26px;height:26px}
 .hw-container{padding:0 8px}
 .hw-set-body{padding:6px 12px 14px}
 .hw-set-head{padding:12px 14px}
 .hw-set-actions{margin-left:0;width:100%}
+.pick-tab{padding:8px 12px;font-size:12.5px}
+.pick-tab .cnt{min-width:18px;font-size:10.5px}
+.pick-item{padding:9px 11px}
+.pick-item .txt{font-size:13.5px}
+
+/* 左下工具条 & 右下翻页控件 —— 移动端缩小 */
+.ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
+.ink-dock .dock-sep{height:18px;margin:0 1px}
+.ink-dock .swatch{width:26px;height:26px;border-radius:7px}
+.ink-dock .size-btn{width:26px;height:26px;border-radius:7px}
+.ink-dock .size-btn i{transform:scale(.8)}
+.ink-dock button.act{font-size:11px;padding:5px 8px;border-radius:7px}
+.page-nav{right:8px;bottom:8px;padding:6px 8px;gap:4px;border-radius:13px}
+.page-nav button{min-width:32px;height:32px;font-size:16px;border-radius:8px}
+.page-nav .page-ind{font-size:12px;min-width:50px}
+.page-nav .page-ind b{font-size:13.5px}
+
+.bb-ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
+.bb-ink-dock .dock-sep{height:18px;margin:0 1px}
+.bb-swatch{width:26px;height:26px;border-radius:7px}
+.bb-size{width:26px;height:26px;border-radius:7px}
+.bb-size i{transform:scale(.8)}
+.bb-ink-dock button.act{font-size:11px;padding:5px 8px;border-radius:7px}
+.bb-page-nav{right:8px;bottom:8px;padding:6px 8px;gap:4px;border-radius:13px}
+.bb-page-nav button{min-width:32px;height:32px;font-size:16px;border-radius:8px}
+.bb-page-nav .page-ind{font-size:12px;min-width:50px}
+.bb-page-nav .page-ind b{font-size:13.5px}
+.bb-page-nav button.act{height:32px;padding:0 9px;font-size:11px}
+
+.toast{bottom:76px}
+.save-hint{bottom:76px;right:12px}
 }
 </style>
 </head>
 <body>
 
+<!-- ===== 认证弹窗 ===== -->
 <div class="modal-mask show" id="authModal" style="z-index:300">
   <div class="modal" style="max-width:440px">
     <h3 id="authTitle">登录 / 注册</h3>
@@ -306,6 +441,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 顶栏（已移除内嵌涂抹工具，工具栏移到左下角浮动） ===== -->
 <header class="topbar">
   <div class="bar-row">
     <div class="brand">
@@ -316,19 +452,6 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
       </span>
     </div>
     <div class="spacer"></div>
-    <div class="ink-tools">
-      <span class="tool-label">颜色</span>
-      <button class="swatch" data-color="#ffe066" style="--c:#ffe066"></button>
-      <button class="swatch" data-color="#8ce99a" style="--c:#8ce99a"></button>
-      <button class="swatch" data-color="#ffa8c5" style="--c:#ffa8c5"></button>
-      <button class="swatch eraser" data-erase="1">擦</button>
-      <span class="tool-label">粗细</span>
-      <button class="size-btn" data-size="6"><i style="width:5px;height:5px"></i></button>
-      <button class="size-btn active" data-size="16"><i style="width:11px;height:11px"></i></button>
-      <button class="size-btn" data-size="30"><i style="width:19px;height:19px"></i></button>
-      <button id="btnClearInk">清空</button>
-      <button id="btnExitInk">退出涂抹</button>
-    </div>
     <div class="bar-right">
       <button id="btnBlackboard">📝 电子黑板</button>
       <button id="btnImport">导入试卷</button>
@@ -347,9 +470,35 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   <div class="bar-row tabs" id="tabs"></div>
 </header>
 
+<!-- ===== 试卷页面 ===== -->
 <main id="paperView"></main>
 
-<!-- ========== 作业管理视图（新版） ========== -->
+<!-- ===== 左下角浮动涂抹工具条（试卷页面） ===== -->
+<div class="ink-dock" id="inkDock">
+  <button class="swatch" data-color="#ffe066" style="--c:#ffe066" title="黄色"></button>
+  <button class="swatch" data-color="#8ce99a" style="--c:#8ce99a" title="绿色"></button>
+  <button class="swatch" data-color="#ffa8c5" style="--c:#ffa8c5" title="粉色"></button>
+  <button class="swatch" data-color="#74c0fc" style="--c:#74c0fc" title="蓝色"></button>
+  <button class="swatch eraser" data-erase="1" title="橡皮擦">擦</button>
+  <span class="dock-sep"></span>
+  <button class="size-btn" data-size="6" title="细"><i style="width:5px;height:5px"></i></button>
+  <button class="size-btn active" data-size="16" title="中"><i style="width:11px;height:11px"></i></button>
+  <button class="size-btn" data-size="30" title="粗"><i style="width:19px;height:19px"></i></button>
+  <span class="dock-sep"></span>
+  <button class="act" id="btnClearInk">清空</button>
+  <button class="act" id="btnExitInk">退出涂抹</button>
+</div>
+
+<!-- ===== 右下角浮动翻页控件（试卷页面） ===== -->
+<div class="page-nav" id="pageNav">
+  <button id="btnPrevPage" title="上一页">◀</button>
+  <span class="page-ind"><b id="pageCur">1</b> / <span id="pageTotal">1</span></span>
+  <button id="btnNextPage" title="下一页">▶</button>
+  <span class="dock-sep"></span>
+  <button class="act" id="btnTopPage" title="回到顶部">↑ 顶部</button>
+</div>
+
+<!-- ===== 作业管理视图 ===== -->
 <section id="hwView">
   <div class="hw-bar">
     <div class="hw-title">📋 作业管理</div>
@@ -360,39 +509,50 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   <div class="hw-container" id="hwContainer"></div>
 </section>
 
+<!-- ===== 小黑板 ===== -->
 <section id="bbView">
   <div class="bb-bar">
     <div class="bb-title">📝 电子黑板</div>
-    <div class="bb-tools">
-      <span class="bb-label">颜色</span>
-      <button class="bb-swatch active" data-color="#ffffff" style="--c:#ffffff"></button>
-      <button class="bb-swatch" data-color="#ffe066" style="--c:#ffe066"></button>
-      <button class="bb-swatch" data-color="#8ce99a" style="--c:#8ce99a"></button>
-      <button class="bb-swatch" data-color="#74c0fc" style="--c:#74c0fc"></button>
-      <button class="bb-swatch" data-color="#ffa8c5" style="--c:#ffa8c5"></button>
-      <button class="bb-swatch eraser" data-erase="1">擦</button>
-      <span class="bb-label">粗细</span>
-      <button class="bb-size" data-size="4"><i style="width:4px;height:4px"></i></button>
-      <button class="bb-size active" data-size="8"><i style="width:8px;height:8px"></i></button>
-      <button class="bb-size" data-size="16"><i style="width:14px;height:14px"></i></button>
-      <button class="bb-size" data-size="28"><i style="width:22px;height:22px"></i></button>
-      <span class="bb-label">底色</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span style="font-size:12px;color:#7a8399;margin:0 4px 0 8px">底色</span>
       <button class="bb-theme active" data-theme="dark">黑板</button>
       <button class="bb-theme" data-theme="light">白板</button>
     </div>
     <div class="spacer"></div>
-    <div class="bb-actions">
-      <button id="bbUndo">撤销</button>
-      <button id="bbClear">清空本页</button>
-      <button id="bbAddPage">+ 加页</button>
-      <button id="bbDelPage">删页</button>
-      <button id="bbBack" class="primary">返回试卷</button>
-    </div>
+    <button id="bbBack" class="primary">返回试卷</button>
   </div>
   <div class="bb-tabs" id="bbTabs"></div>
   <div class="bb-stage-wrap">
     <div class="bb-stage" id="bbStage">
       <canvas id="bbCanvas"></canvas>
+
+      <!-- 小黑板左下角浮动涂抹工具条 -->
+      <div class="bb-ink-dock">
+        <button class="bb-swatch active" data-color="#ffffff" style="--c:#ffffff" title="白色"></button>
+        <button class="bb-swatch" data-color="#ffe066" style="--c:#ffe066" title="黄色"></button>
+        <button class="bb-swatch" data-color="#8ce99a" style="--c:#8ce99a" title="绿色"></button>
+        <button class="bb-swatch" data-color="#74c0fc" style="--c:#74c0fc" title="蓝色"></button>
+        <button class="bb-swatch" data-color="#ffa8c5" style="--c:#ffa8c5" title="粉色"></button>
+        <button class="bb-swatch eraser" data-erase="1" title="橡皮擦">擦</button>
+        <span class="dock-sep"></span>
+        <button class="bb-size" data-size="4" title="细"><i style="width:4px;height:4px"></i></button>
+        <button class="bb-size active" data-size="8" title="中"><i style="width:8px;height:8px"></i></button>
+        <button class="bb-size" data-size="16" title="粗"><i style="width:14px;height:14px"></i></button>
+        <button class="bb-size" data-size="28" title="特粗"><i style="width:22px;height:22px"></i></button>
+        <span class="dock-sep"></span>
+        <button class="act" id="bbUndo">撤销</button>
+        <button class="act" id="bbClear">清空本页</button>
+      </div>
+
+      <!-- 小黑板右下角浮动翻页控件 -->
+      <div class="bb-page-nav">
+        <button id="bbPrevPage" title="上一页">◀</button>
+        <span class="page-ind"><b id="bbPageCur">1</b> / <span id="bbPageTotal">1</span></span>
+        <button id="bbNextPage" title="下一页">▶</button>
+        <span class="dock-sep"></span>
+        <button class="act" id="bbAddPage" title="加页">+ 加页</button>
+        <button class="act" id="bbDelPage" title="删除当前页">删页</button>
+      </div>
     </div>
   </div>
 </section>
@@ -403,6 +563,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="drag-overlay" id="dragOverlay">松开鼠标，开始识别图形</div>
 <div class="save-hint" id="saveHint">已自动保存</div>
 
+<!-- ===== 我的试卷 ===== -->
 <div class="modal-mask" id="papersModal">
   <div class="modal">
     <h3>我的试卷</h3>
@@ -420,11 +581,12 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 分享链接 ===== -->
 <div class="modal-mask" id="shareModal">
   <div class="modal" style="max-width:600px">
-    <h3>分享试卷</h3>
+    <h3>分享链接</h3>
     <div class="hint" style="padding:11px 14px;font-size:13px">
-      把链接发给同事或学生，对方打开后会创建一份全新的试卷副本，从零开始存储，不会影响你的原卷。
+      把链接发给同事或学生，对方打开后会创建一份全新的副本，从零开始存储，不会影响你的原卷。
     </div>
     <div class="share-row">
       <input type="text" id="shareLinkInput" readonly>
@@ -437,35 +599,62 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 分享题目（三 Tab 多选） ===== -->
 <div class="modal-mask" id="pickQuestionModal">
   <div class="modal wide">
     <h3>选择要分享的题目</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px;margin-bottom:12px">
-      按顺序选：<b>① 试卷 → ② 大题 → ③ 题目</b>。图形会跟着分享，<b>涂鸦不分享</b>。
+    <div class="hint" style="padding:11px 14px;font-size:13px;margin-bottom:4px">
+      按顺序选：<b>① 试卷 → ② 大题</b>，然后在下方三个分类里勾选要分享的内容。<br>
+      三个分类 <b>默认全部勾选</b>，可手动取消。<b>图形会自动跟着分享，涂鸦不分享。</b>
     </div>
+
     <div class="form-field">
       <label>① 选择试卷</label>
-      <select id="pickQPaperSelect" style="width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px"></select>
+      <select id="pickQPaperSelect"></select>
     </div>
+
     <div class="form-field">
-      <label>② 选择大题</label>
-      <select id="pickQSectionSelect" style="width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px"></select>
+      <label>② 选择大题（决定下方候选范围）</label>
+      <select id="pickQSectionSelect"></select>
     </div>
-    <div class="form-field">
-      <label>③ 点击要分享的题目</label>
-      <div class="qlist" id="pickQuestionList" style="max-height:36vh;margin-top:8px"></div>
+
+    <div class="pick-tabs" id="pickTabs">
+      <button class="pick-tab active" data-ptab="main">
+        📝 试卷题目 <span class="cnt" data-cnt="main">0</span>
+      </button>
+      <button class="pick-tab" data-ptab="similar">
+        🔁 举一反三 <span class="cnt" data-cnt="similar">0</span>
+      </button>
+      <button class="pick-tab" data-ptab="homework">
+        📋 配套作业 <span class="cnt" data-cnt="homework">0</span>
+      </button>
     </div>
+
+    <div class="pick-list" id="pickQuestionList"></div>
+
+    <div class="modal-actions" style="justify-content:space-between;align-items:center;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="ghost small" id="pickSelectAll">本页全选</button>
+        <button class="ghost small" id="pickSelectNone">本页全不选</button>
+        <button class="ghost small" id="pickSelectAllTabs">全部分类全选</button>
+      </div>
+      <span class="pick-stat" id="pickStat">已选 <b>0</b> 项</span>
+    </div>
+
     <div class="modal-actions right">
       <button id="pickQuestionCancel">取消</button>
+      <button class="primary" id="pickQuestionConfirm">生成分享链接</button>
     </div>
   </div>
 </div>
 
+<!-- ===== 接收试题 ===== -->
 <div class="modal-mask" id="receiveQuestionModal">
   <div class="modal" style="max-width:520px">
     <h3>接收分享的试题</h3>
     <div class="hint" style="padding:11px 14px;font-size:13px">
-      粘贴对方发来的<b>分享链接</b>，或直接贴<b>分享 ID</b>。
+      粘贴对方发来的<b>分享链接</b>，或直接贴<b>分享 ID</b>。<br>
+      收到后所有题目会依次追加到当前试卷末尾（举一反三与作业会带上类型标记）。
     </div>
     <div class="form-field">
       <label>分享链接 / ID</label>
@@ -479,6 +668,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 管理员面板 ===== -->
 <div class="modal-mask" id="adminModal">
   <div class="modal" style="max-width:900px">
     <h3>分享管理（仅管理员可见）</h3>
@@ -503,6 +693,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 图形编辑器 ===== -->
 <div class="modal-mask" id="figEditorModal">
   <div class="modal wide">
     <h3>选择图形区域</h3>
@@ -528,6 +719,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 图形批量分配 ===== -->
 <div class="modal-mask" id="assignModal">
   <div class="modal">
     <h3>分配图形到题目</h3>
@@ -542,7 +734,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ========== 生成新作业弹窗（新版） ========== -->
+<!-- ===== 生成新作业 ===== -->
 <div class="modal-mask" id="hwModal">
   <div class="modal">
     <h3>生成新作业 · 选择题目与数量</h3>
@@ -562,7 +754,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ========== 添加题目到指定作业单弹窗（新增） ========== -->
+<!-- ===== 添加题目到作业单 ===== -->
 <div class="modal-mask" id="addQModal">
   <div class="modal">
     <h3>添加题目到作业单</h3>
@@ -578,6 +770,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
+<!-- ===== 导入试卷 ===== -->
 <div class="modal-mask" id="importModal">
   <div class="modal">
     <h3>导入试卷（粘贴文字即可）</h3>
@@ -669,8 +862,7 @@ var resizeObserver = null;
 var saveTimer = null;
 var exam = { title:'', sections:[] };
 
-/* 新版作业管理状态 */
-var addTargetId = null;   // 正在向哪个作业单添加题目
+var addTargetId = null;
 
 /* 黑板状态 */
 var bbState = { color:'#ffffff', size:8, erase:false };
@@ -813,7 +1005,7 @@ $('#btnLogout').onclick = async function(){
 };
 
 /* ================================================================
-分享链接处理（整卷 / 单题 二合一）
+分享链接处理（整卷 / 单题 / 多选 三合一）
 ================================================================ */
 async function handleShareLink(){
   var params = new URLSearchParams(location.search);
@@ -828,6 +1020,41 @@ async function handleShareLink(){
   }
 }
 
+/* 把收到的条目追加到当前试卷末尾 */
+function appendItemsToPaper(items, sourceLabel){
+  if(!exam.sections) exam.sections = [];
+  var targetSec;
+  if(exam.sections.length){
+    targetSec = exam.sections[exam.sections.length - 1];
+  } else {
+    targetSec = { name: '分享的题目', questions: [] };
+    exam.sections.push(targetSec);
+  }
+  if(!targetSec.questions) targetSec.questions = [];
+
+  items.forEach(function(it){
+    var q = {
+      stem: it.stem || '',
+      answer: it.answer || '',
+      analysis: it.analysis || '',
+      similar: it.similar || [],
+      homework: it.homework || [],
+      figure: it.figure || null,
+      _sharedFrom: sourceLabel || null,
+      _sharedKind: it.kind || 'main'
+    };
+    /* 非主题目，加一个可见前缀标记，便于识别类型 */
+    if(it.kind === 'similar'){
+      q.stem = '【举一反三】' + q.stem;
+    } else if(it.kind === 'homework'){
+      q.stem = '【配套作业】' + q.stem;
+    }
+    targetSec.questions.push(q);
+  });
+
+  return targetSec;
+}
+
 async function receiveShareById(shareId){
   var r = await sb.rpc('get_share_snapshot', { p_share_id: shareId });
   if(r.error) throw r.error;
@@ -838,42 +1065,42 @@ async function receiveShareById(shareId){
   var ownerCode = obj.owner_code || '未知';
   var paperName = obj.paper_name || snapshot.title || '分享的试卷';
 
-  /* ---------- 单题分支 ---------- */
-  if(snapshot.__kind === 'question'){
-    var q = snapshot.question || {};
-    var preview = String(q.stem||'').split('\n')[0];
-    if(preview.length > 60) preview = preview.slice(0,60) + '...';
+  /* ---------- 多选 / 单题分支 ---------- */
+  if(snapshot.__kind === 'question' || snapshot.__kind === 'multi'){
+    var items = [];
+    if(snapshot.__kind === 'multi' && Array.isArray(snapshot.items)){
+      items = snapshot.items.slice();
+    } else {
+      items = [Object.assign({ kind:'main' }, snapshot.question || {})];
+    }
+
+    if(!items.length){
+      alert('这次分享里没有可接收的题目。');
+      return { cancelled: true };
+    }
 
     if(!currentPaper){
       alert('请先打开一份试卷，再接收试题。');
       return { cancelled: true };
     }
 
+    var previews = items.slice(0,3).map(function(it,i){
+      var first = String(it.stem||'').split('\n')[0];
+      if(first.length > 46) first = first.slice(0,46)+'...';
+      var tag = it.kind==='similar' ? '【举一反三】' :
+                it.kind==='homework' ? '【配套作业】' : '【题目】';
+      return (i+1)+'. '+tag+first;
+    }).join('\n');
+    if(items.length > 3) previews += '\n...（共 '+items.length+' 项）';
+
     var go = confirm(
-      '你收到了来自用户【'+ownerCode+'】分享的一道试题：\n\n'+
-      '「'+preview+'」\n\n'+
+      '你收到了来自用户【'+ownerCode+'】分享的 '+items.length+' 项内容：\n\n'+
+      previews+'\n\n'+
       '点击"确定"会追加到当前试卷「'+currentPaper.name+'」的末尾。'
     );
     if(!go) return { cancelled: true };
 
-    if(!exam.sections) exam.sections = [];
-    var targetSec;
-    if(exam.sections.length){
-      targetSec = exam.sections[exam.sections.length - 1];
-    } else {
-      targetSec = { name: '分享的题目', questions: [] };
-      exam.sections.push(targetSec);
-    }
-    if(!targetSec.questions) targetSec.questions = [];
-
-    targetSec.questions.push({
-      stem: q.stem || '',
-      answer: q.answer || '',
-      analysis: q.analysis || '',
-      similar: q.similar || [],
-      homework: q.homework || [],
-      figure: q.figure || null
-    });
+    var targetSec = appendItemsToPaper(items, ownerCode);
 
     try{
       await sb.from('share_accepts').insert({
@@ -895,7 +1122,7 @@ async function receiveShareById(shareId){
       });
     });
     await saveCurrentPaper();
-    alert('已加入「'+currentPaper.name+'」的「'+targetSec.name+'」大题末尾。');
+    alert('已加入「'+currentPaper.name+'」的「'+targetSec.name+'」大题末尾，共 '+items.length+' 项。');
     return { ok: true };
   }
 
@@ -1053,6 +1280,7 @@ function renderTabs(){
   $('#tabs').innerHTML = exam.sections.map(function(s,i){
     return '<button class="tab" data-page="'+i+'">'+esc(s.name)+'</button>';
   }).join('');
+  updatePageNav();
 }
 
 function buildSimilarArea(list,si,qi){
@@ -1147,6 +1375,8 @@ function renderPaper(){
     });
   });
   $$('#paperView .page').forEach(function(p){ resizeObserver.observe(p); });
+
+  updatePageNav();
 }
 
 function showPageInternal(i){
@@ -1165,9 +1395,25 @@ function showPageInternal(i){
     var p = $('#paperView .page[data-page="'+i+'"]');
     if(p) fitCanvas(p);
   });
+
+  updatePageNav();
 }
 
 function showPage(i){ showPageInternal(i); scheduleSave(); }
+
+/* ===== 更新右下角翻页控件状态 ===== */
+function updatePageNav(){
+  var total = exam.sections.length || 1;
+  var cur = (state.page || 0) + 1;
+  var curEl = $('#pageCur');
+  var totalEl = $('#pageTotal');
+  if(curEl) curEl.textContent = cur;
+  if(totalEl) totalEl.textContent = total;
+  var prev = $('#btnPrevPage');
+  var next = $('#btnNextPage');
+  if(prev) prev.disabled = (state.page <= 0);
+  if(next) next.disabled = (state.page >= total - 1);
+}
 
 function attachFigureInteraction(wrap){
   var img = wrap.querySelector('img');
@@ -1350,6 +1596,21 @@ function bbRenderTabs(){
   el.innerHTML = bb.pages.map(function(p,i){
     return '<div class="bb-tab'+(i===bb.current?' active':'')+'" data-i="'+i+'">第 '+(i+1)+' 页</div>';
   }).join('');
+  bbUpdatePageNav();
+}
+
+function bbUpdatePageNav(){
+  var bb = ensureBlackboard();
+  var cur = (bb.current||0)+1;
+  var total = bb.pages.length || 1;
+  var curEl = $('#bbPageCur');
+  var totalEl = $('#bbPageTotal');
+  if(curEl) curEl.textContent = cur;
+  if(totalEl) totalEl.textContent = total;
+  var prev = $('#bbPrevPage');
+  var next = $('#bbNextPage');
+  if(prev) prev.disabled = (bb.current <= 0);
+  if(next) next.disabled = (bb.current >= total - 1);
 }
 
 function bbDrawStroke(s){
@@ -1625,26 +1886,26 @@ $('#paperView').addEventListener('click', function(e){
 });
 
 /* ================================================================
-工具栏
+左下角浮动涂抹工具条（试卷） & 右下角翻页控件
 ================================================================ */
-$$('.swatch').forEach(function(b){
+$$('#inkDock .swatch').forEach(function(b){
   b.onclick = function(){
     var isE = b.dataset.erase==='1';
     state.erase = isE;
     if(!isE) state.color = b.dataset.color;
     state.inkOn = true;
     document.body.classList.add('ink-on');
-    $$('.swatch').forEach(function(x){x.classList.remove('active');});
+    $$('#inkDock .swatch').forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');
   };
 });
 
-$$('.size-btn').forEach(function(b){
+$$('#inkDock .size-btn').forEach(function(b){
   b.onclick = function(){
     state.size = +b.dataset.size;
     state.inkOn = true;
     document.body.classList.add('ink-on');
-    $$('.size-btn').forEach(function(x){x.classList.remove('active');});
+    $$('#inkDock .size-btn').forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');
   };
 });
@@ -1652,7 +1913,7 @@ $$('.size-btn').forEach(function(b){
 $('#btnExitInk').onclick = function(){
   state.inkOn = false;
   document.body.classList.remove('ink-on');
-  $$('.swatch').forEach(function(x){x.classList.remove('active');});
+  $$('#inkDock .swatch').forEach(function(x){x.classList.remove('active');});
 };
 
 $('#btnClearInk').onclick = function(){
@@ -1664,10 +1925,78 @@ $('#btnClearInk').onclick = function(){
   scheduleSave();
 };
 
+$('#btnPrevPage').onclick = function(){
+  if(state.page <= 0) return;
+  showPage(state.page - 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+$('#btnNextPage').onclick = function(){
+  if(state.page >= exam.sections.length - 1) return;
+  showPage(state.page + 1);
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+$('#btnTopPage').onclick = function(){
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
 $('#tabs').addEventListener('click', function(e){
   var t = e.target.closest('.tab'); if(!t) return;
   showPage(+t.dataset.page);
 });
+
+/* ================================================================
+小黑板浮动工具条事件
+================================================================ */
+$$('#bbView .bb-swatch').forEach(function(b){
+  b.onclick = function(){
+    var isE = b.dataset.erase === '1';
+    bbState.erase = isE;
+    if(!isE) bbState.color = b.dataset.color;
+    $$('#bbView .bb-swatch').forEach(function(x){ x.classList.remove('active'); });
+    b.classList.add('active');
+  };
+});
+
+$$('#bbView .bb-size').forEach(function(b){
+  b.onclick = function(){
+    bbState.size = +b.dataset.size;
+    $$('#bbView .bb-size').forEach(function(x){ x.classList.remove('active'); });
+    b.classList.add('active');
+  };
+});
+
+$$('.bb-theme').forEach(function(b){
+  b.onclick = function(){
+    ensureBlackboard().theme = b.dataset.theme;
+    bbApplyTheme();
+    scheduleSave();
+  };
+});
+
+$('#bbTabs').addEventListener('click', function(e){
+  var t = e.target.closest('.bb-tab'); if(!t) return;
+  bbSwitchPage(+t.dataset.i);
+});
+
+$('#bbPrevPage').onclick = function(){
+  var bb = ensureBlackboard();
+  if(bb.current <= 0) return;
+  bbSwitchPage(bb.current - 1);
+};
+
+$('#bbNextPage').onclick = function(){
+  var bb = ensureBlackboard();
+  if(bb.current >= bb.pages.length - 1) return;
+  bbSwitchPage(bb.current + 1);
+};
+
+$('#bbAddPage').onclick = bbAddPage;
+$('#bbDelPage').onclick = bbDelPage;
+$('#bbUndo').onclick = bbUndo;
+$('#bbClear').onclick = bbClear;
+$('#bbBack').onclick = exitBlackboard;
 
 /* ================================================================
 试卷管理
@@ -1812,12 +2141,189 @@ $('#btnCopyShare').onclick = function(){
 $('#btnShareClose').onclick = function(){ $('#shareModal').classList.remove('show'); };
 
 /* ================================================================
-分享单题（试卷 → 大题 → 题目）
+★★★ 分享题目（三 Tab 多选） ★★★
 ================================================================ */
-var pickQState = { paperId: null, si: 0 };
+var pickQState = {
+  paperId: null,
+  si: 0,
+  tab: 'main',       /* main | similar | homework */
+  selection: {}      /* key: si-qi-种类-索引；value: 条目对象 */
+};
+
+function pickKey(si,qi,kind,idx){
+  return si+'-'+qi+'-'+kind+'-'+idx;
+}
+
+/* 重置所有勾选为"全选" */
+function pickResetSelectionAll(){
+  pickQState.selection = {};
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections) return;
+  var sec = paper.data.sections[pickQState.si];
+  if(!sec) return;
+  (sec.questions||[]).forEach(function(q,qi){
+    /* 主题目 */
+    pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = true;
+    /* 举一反三 */
+    (q.similar||[]).forEach(function(s,idx){
+      pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = true;
+    });
+    /* 作业 */
+    (q.homework||[]).forEach(function(h,idx){
+      pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = true;
+    });
+  });
+}
+
+/* 仅把当前 Tab 全选/全不选 */
+function pickSetTabAll(val){
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections) return;
+  var sec = paper.data.sections[pickQState.si];
+  if(!sec) return;
+  (sec.questions||[]).forEach(function(q,qi){
+    if(pickQState.tab === 'main'){
+      pickQState.selection[pickKey(pickQState.si,qi,'main',0)] = val;
+    } else if(pickQState.tab === 'similar'){
+      (q.similar||[]).forEach(function(s,idx){
+        pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)] = val;
+      });
+    } else if(pickQState.tab === 'homework'){
+      (q.homework||[]).forEach(function(h,idx){
+        pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)] = val;
+      });
+    }
+  });
+}
+
+/* 统计每个 Tab 的候选总数与已选数 */
+function pickCountTab(){
+  var counts = { main:{all:0, sel:0}, similar:{all:0, sel:0}, homework:{all:0, sel:0} };
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections) return counts;
+  var sec = paper.data.sections[pickQState.si];
+  if(!sec) return counts;
+
+  (sec.questions||[]).forEach(function(q,qi){
+    counts.main.all += 1;
+    if(pickQState.selection[pickKey(pickQState.si,qi,'main',0)]) counts.main.sel++;
+
+    (q.similar||[]).forEach(function(s,idx){
+      counts.similar.all += 1;
+      if(pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)]) counts.similar.sel++;
+    });
+    (q.homework||[]).forEach(function(h,idx){
+      counts.homework.all += 1;
+      if(pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)]) counts.homework.sel++;
+    });
+  });
+  return counts;
+}
+
+function pickUpdateTabsUI(){
+  var c = pickCountTab();
+  Object.keys(c).forEach(function(k){
+    var el = document.querySelector('[data-cnt="'+k+'"]');
+    if(el){
+      el.textContent = c[k].sel + ' / ' + c[k].all;
+      el.classList.toggle('zero', c[k].sel === 0);
+    }
+  });
+  var totalSel = c.main.sel + c.similar.sel + c.homework.sel;
+  var stat = $('#pickStat');
+  if(stat) stat.innerHTML = '已选 <b>'+totalSel+'</b> 项';
+}
+
+function pickRenderList(){
+  var el = $('#pickQuestionList');
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections || !paper.data.sections[pickQState.si]){
+    el.innerHTML = '<div class="pick-empty">没有题目</div>';
+    return;
+  }
+  var sec = paper.data.sections[pickQState.si];
+  var qs = sec.questions || [];
+  if(!qs.length){
+    el.innerHTML = '<div class="pick-empty">该大题下暂无题目</div>';
+    return;
+  }
+
+  var rows = [];
+  qs.forEach(function(q,qi){
+    if(pickQState.tab === 'main'){
+      var key = pickKey(pickQState.si,qi,'main',0);
+      var sel = !!pickQState.selection[key];
+      var first = String(q.stem||'').split('\n')[0];
+      if(first.length > 60) first = first.slice(0,60)+'...';
+      var figTag = (q.figure && q.figure.src)
+        ? '<span class="badge fig">🖼 有图</span>' : '';
+      rows.push(
+        '<label class="pick-item'+(sel?' selected':'')+'" data-pkey="'+key+'">'+
+          '<input type="checkbox"'+(sel?' checked':'')+'>'+
+          '<div class="body">'+
+            '<div class="txt"><span class="badge main">题目</span> 第 '+(qi+1)+' 题：'+esc(first)+'</div>'+
+            '<div class="meta">'+figTag+
+              '<span>举一反三 '+(q.similar||[]).length+' 题</span>'+
+              '<span>作业 '+(q.homework||[]).length+' 题</span>'+
+            '</div>'+
+          '</div>'+
+        '</label>'
+      );
+    } else if(pickQState.tab === 'similar'){
+      var list = q.similar || [];
+      if(!list.length){
+        return;
+      }
+      list.forEach(function(s,idx){
+        var key = pickKey(pickQState.si,qi,'similar',idx);
+        var sel = !!pickQState.selection[key];
+        var first = String(s.stem||'').split('\n')[0];
+        if(first.length > 60) first = first.slice(0,60)+'...';
+        rows.push(
+          '<label class="pick-item'+(sel?' selected':'')+'" data-pkey="'+key+'">'+
+            '<input type="checkbox"'+(sel?' checked':'')+'>'+
+            '<div class="body">'+
+              '<div class="txt"><span class="badge sim">举一反三</span> 第 '+(qi+1)+' 题 · 变式 '+(idx+1)+'：'+esc(first)+'</div>'+
+              '<div class="meta"><span>来源：'+(qi+1)+' 题</span></div>'+
+            '</div>'+
+          '</label>'
+        );
+      });
+    } else if(pickQState.tab === 'homework'){
+      var list2 = q.homework || [];
+      if(!list2.length){
+        return;
+      }
+      list2.forEach(function(h,idx){
+        var key = pickKey(pickQState.si,qi,'homework',idx);
+        var sel = !!pickQState.selection[key];
+        var first = String(h.stem||'').split('\n')[0];
+        if(first.length > 60) first = first.slice(0,60)+'...';
+        rows.push(
+          '<label class="pick-item'+(sel?' selected':'')+'" data-pkey="'+key+'">'+
+            '<input type="checkbox"'+(sel?' checked':'')+'>'+
+            '<div class="body">'+
+              '<div class="txt"><span class="badge hw">配套作业</span> 第 '+(qi+1)+' 题 · 作业 '+(idx+1)+'：'+esc(first)+'</div>'+
+              '<div class="meta"><span>来源：'+(qi+1)+' 题</span></div>'+
+            '</div>'+
+          '</label>'
+        );
+      });
+    }
+  });
+
+  if(!rows.length){
+    el.innerHTML = '<div class="pick-empty">该分类下暂无内容</div>';
+  } else {
+    el.innerHTML = rows.join('');
+  }
+
+  pickUpdateTabsUI();
+}
 
 $('#btnShareQuestion').onclick = function(){
   if(!papers.length){ toast('还没有试卷'); return; }
+
   var pSel = $('#pickQPaperSelect');
   pSel.innerHTML = papers.map(function(p){
     var qn = 0;
@@ -1829,13 +2335,24 @@ $('#btnShareQuestion').onclick = function(){
   }).join('');
   pSel.value = currentPaper ? currentPaper.id : papers[0].id;
   pickQState.paperId = pSel.value;
+  pickQState.si = 0;
+  pickQState.tab = 'main';
+
   refreshPickQSections();
+  pickResetSelectionAll();
+  $$('#pickTabs .pick-tab').forEach(function(b){
+    b.classList.toggle('active', b.dataset.ptab === 'main');
+  });
+  pickRenderList();
   $('#pickQuestionModal').classList.add('show');
 };
 
 $('#pickQPaperSelect').onchange = function(){
   pickQState.paperId = this.value;
+  pickQState.si = 0;
   refreshPickQSections();
+  pickResetSelectionAll();
+  pickRenderList();
 };
 
 function refreshPickQSections(){
@@ -1845,7 +2362,6 @@ function refreshPickQSections(){
   if(!secs.length){
     secSel.innerHTML = '<option>（该试卷暂无大题）</option>';
     pickQState.si = 0;
-    renderPickQuestionList(0);
     return;
   }
   secSel.innerHTML = secs.map(function(s, i){
@@ -1854,88 +2370,155 @@ function refreshPickQSections(){
   }).join('');
   secSel.value = '0';
   pickQState.si = 0;
-  renderPickQuestionList(0);
 }
 
 $('#pickQSectionSelect').onchange = function(){
   pickQState.si = parseInt(this.value, 10) || 0;
-  renderPickQuestionList(pickQState.si);
+  pickResetSelectionAll();
+  pickRenderList();
 };
 
-function renderPickQuestionList(si){
-  var el = $('#pickQuestionList');
-  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
-  if(!paper || !paper.data || !paper.data.sections || !paper.data.sections[si]){
-    el.innerHTML = '<div class="empty">没有题目</div>';
-    return;
-  }
-  var sec = paper.data.sections[si];
-  var qs = sec.questions || [];
-  if(!qs.length){
-    el.innerHTML = '<div class="empty">该大题下暂无题目</div>';
-    return;
-  }
-  el.innerHTML = qs.map(function(q, qi){
-    var firstLine = String(q.stem||'').split('\n')[0];
-    var preview = firstLine.length > 48 ? firstLine.slice(0,48)+'...' : firstLine;
-    var figTag = (q.figure && q.figure.src)
-      ? '<span style="color:#2f7ad4;margin-left:8px;font-size:12px;flex-shrink:0">🖼 有图</span>'
-      : '';
-    return ''+
-      '<div class="hw-item" data-qi="'+qi+'" style="cursor:pointer">'+
-      '<label style="cursor:pointer;width:100%">'+
-      '<span><b>第 '+(qi+1)+' 题：</b>'+esc(preview)+'</span>'+figTag+
-      '</label>'+
-      '</div>';
-  }).join('');
-}
+$('#pickTabs').addEventListener('click', function(e){
+  var t = e.target.closest('.pick-tab'); if(!t) return;
+  pickQState.tab = t.dataset.ptab;
+  $$('#pickTabs .pick-tab').forEach(function(b){
+    b.classList.toggle('active', b === t);
+  });
+  pickRenderList();
+});
 
-$('#pickQuestionList').onclick = async function(e){
-  var item = e.target.closest('.hw-item[data-qi]');
-  if(!item) return;
-  var si = pickQState.si;
-  var qi = parseInt(item.dataset.qi, 10);
-  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
-  if(!paper || !paper.data || !paper.data.sections[si]) return;
-  var sec = paper.data.sections[si];
-  var q = (sec.questions||[])[qi];
-  if(!q){ toast('题目不存在'); return; }
+/* 勾选/取消 */
+$('#pickQuestionList').addEventListener('change', function(e){
+  var cb = e.target.closest('input[type=checkbox]');
+  if(!cb) return;
+  var wrap = cb.closest('.pick-item');
+  if(!wrap) return;
+  var key = wrap.dataset.pkey;
+  pickQState.selection[key] = cb.checked;
+  wrap.classList.toggle('selected', cb.checked);
+  pickUpdateTabsUI();
+});
 
-  var payload = {
-    stem: q.stem || '',
-    answer: q.answer || '',
-    analysis: q.analysis || '',
-    similar: q.similar || [],
-    homework: q.homework || [],
-    figure: q.figure || null
-  };
+/* 点击整行也能切换 */
+$('#pickQuestionList').addEventListener('click', function(e){
+  if(e.target.tagName === 'INPUT') return;
+  var wrap = e.target.closest('.pick-item');
+  if(!wrap) return;
+  var cb = wrap.querySelector('input[type=checkbox]');
+  if(!cb) return;
+  cb.checked = !cb.checked;
+  pickQState.selection[wrap.dataset.pkey] = cb.checked;
+  wrap.classList.toggle('selected', cb.checked);
+  pickUpdateTabsUI();
+});
 
-  $('#pickQuestionModal').classList.remove('show');
-
-  var r = await sb.from('shares').insert({
-    paper_id: paper.id,
-    paper_name: paper.name,
-    owner_id: currentUser.id,
-    owner_code: currentProfile.user_code,
-    snapshot: {
-      __kind: 'question',
-      question: payload,
-      section_name: sec.name,
-      paper_name: paper.name
-    }
-  }).select().single();
-  if(r.error){ alert('生成分享失败：'+r.error.message); return; }
-
-  var url = location.origin + location.pathname + '?share=' + r.data.id;
-  $('#shareLinkInput').value = url;
-  $('#shareMsg').className = 'msg';
-  $('#shareModal').classList.add('show');
+$('#pickSelectAll').onclick = function(){
+  pickSetTabAll(true);
+  pickRenderList();
+};
+$('#pickSelectNone').onclick = function(){
+  pickSetTabAll(false);
+  pickRenderList();
+};
+$('#pickSelectAllTabs').onclick = function(){
+  pickResetSelectionAll();
+  pickRenderList();
+  toast('已全选所有分类');
 };
 
 $('#pickQuestionCancel').onclick = function(){
   $('#pickQuestionModal').classList.remove('show');
 };
 
+$('#pickQuestionConfirm').onclick = async function(){
+  /* 收集所有选中条目 */
+  var paper = papers.find(function(x){ return x.id === pickQState.paperId; });
+  if(!paper || !paper.data || !paper.data.sections) return;
+
+  var items = [];
+  var sec = paper.data.sections[pickQState.si];
+  if(!sec){ alert('试卷结构异常'); return; }
+
+  (sec.questions||[]).forEach(function(q,qi){
+    if(pickQState.selection[pickKey(pickQState.si,qi,'main',0)]){
+      items.push({
+        kind: 'main',
+        stem: q.stem || '',
+        answer: q.answer || '',
+        analysis: q.analysis || '',
+        similar: q.similar || [],
+        homework: q.homework || [],
+        figure: q.figure || null
+      });
+    }
+    (q.similar||[]).forEach(function(s,idx){
+      if(pickQState.selection[pickKey(pickQState.si,qi,'similar',idx)]){
+        items.push({
+          kind: 'similar',
+          stem: s.stem || '',
+          answer: s.answer || '',
+          analysis: s.analysis || '',
+          similar: [],
+          homework: [],
+          figure: null,
+          _fromQuestion: qi+1
+        });
+      }
+    });
+    (q.homework||[]).forEach(function(h,idx){
+      if(pickQState.selection[pickKey(pickQState.si,qi,'homework',idx)]){
+        items.push({
+          kind: 'homework',
+          stem: h.stem || '',
+          answer: h.answer || '',
+          analysis: h.analysis || '',
+          similar: [],
+          homework: [],
+          figure: null,
+          _fromQuestion: qi+1
+        });
+      }
+    });
+  });
+
+  if(!items.length){ alert('请至少勾选一项内容'); return; }
+
+  /* 按钮防重复点击 */
+  var btn = this;
+  var oldTxt = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '生成中...';
+
+  try{
+    var r = await sb.from('shares').insert({
+      paper_id: paper.id,
+      paper_name: paper.name,
+      owner_id: currentUser.id,
+      owner_code: currentProfile.user_code,
+      snapshot: {
+        __kind: 'multi',
+        items: items,
+        section_name: sec.name,
+        paper_name: paper.name
+      }
+    }).select().single();
+
+    if(r.error) throw r.error;
+
+    var url = location.origin + location.pathname + '?share=' + r.data.id;
+    $('#shareLinkInput').value = url;
+    $('#shareMsg').className = 'msg';
+    $('#pickQuestionModal').classList.remove('show');
+    $('#shareModal').classList.add('show');
+    toast('已生成分享链接（共 '+items.length+' 项）');
+  }catch(err){
+    console.error(err);
+    alert('生成分享失败：'+(err.message||'未知错误'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = oldTxt;
+  }
+};
 /* ================================================================
 接收试题（顶栏按钮入口）
 ================================================================ */
@@ -1972,6 +2555,7 @@ $('#receiveOk').onclick = async function(){
   this.disabled = false;
   this.textContent = old;
 };
+
 /* ================================================================
 管理员面板
 ================================================================ */
@@ -2018,7 +2602,7 @@ function flattenQuestionList(){
     sec.questions.forEach(function(q,qi){
       arr.push({
         si: si, qi: qi,
-        label: sec.name + ' · 第 ' + (qi+1) + ' 题：' + q.stem.replace(/\s+/g,' ').slice(0, 32)
+        label: sec.name + ' · 第 ' + (qi+1) + ' 题：' + String(q.stem||'').replace(/\s+/g,' ').slice(0, 32)
       });
     });
   });
@@ -2081,7 +2665,7 @@ function confirmAssign(){
     if(!sel) return;
     var parts = sel.value.split('-');
     var si = +parts[0], qi = +parts[1];
-    var q = exam.sections[si].questions[qi];
+    var q = exam.sections[si] && exam.sections[si].questions[qi];
     if(!q) return;
     q.figure = {
       src: assignItems[i].dataUrl,
@@ -2283,7 +2867,12 @@ function imageToCanvas(img, maxSide){
 }
 
 /* ================================================================
-图形编辑器
+图形编辑器（自选编辑修复版）
+关键修复：
+1) canvas 不再设 pointer-events:none，图片可正常响应指针
+2) .fig-stage 加 touch-action:none，支持触屏拖动
+3) 指针事件绑定到 stage 上做事件委托
+4) pointerdown/move/up 全程 preventDefault，避免浏览器原生拖图
 ================================================================ */
 var FigEditor = {
   canvas: null,
@@ -2428,13 +3017,21 @@ var FigEditor = {
     var stage = document.getElementById('figStage');
     var self = this;
 
-    stage.addEventListener('pointerdown', function(e){
-      if(e.button !== 0) return;
+    /* 阻止浏览器把图片当作可拖动元素 */
+    stage.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    stage.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
+    stage.addEventListener('pointerdown', function(e){
+      if(e.button !== 0 && e.pointerType === 'mouse') return;
+      if(!self.canvas) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      /* 点击勾选圆点 */
       if(e.target.classList.contains('rg-check')){
         var regEl = e.target.closest('.fig-region');
         if(regEl){ self.toggleSelect(+regEl.dataset.id); }
-        e.preventDefault(); e.stopPropagation();
         return;
       }
 
@@ -2477,11 +3074,11 @@ var FigEditor = {
       }
 
       try{ stage.setPointerCapture(e.pointerId); }catch(_){}
-      e.preventDefault(); e.stopPropagation();
     });
 
     stage.addEventListener('pointermove', function(e){
       if(!self.drag || !self.canvas) return;
+      e.preventDefault();
       var r = self.regions.find(function(x){ return x.id === self.drag.id; });
       if(!r) return;
       var orig = self.drag.orig;
@@ -2553,42 +3150,39 @@ var FigEditor = {
   },
 
   selectAll: function(){
+    if(!this.canvas) return;
     this.regions = [{ id:this.nextId++, x:0, y:0, w:this.canvas.width, h:this.canvas.height, selected:true }];
     this.activeId = this.regions[0].id;
     this.render(); this.updateUI();
   }
 };
-
 /* ================================================================
 ★★★ 新版作业管理（核心） ★★★
 ================================================================ */
-
-/* 确保数据结构 */
 function ensureHomeworkData(){
   if(!exam.homeworkSets) exam.homeworkSets = [];
   if(!exam.usedKeys) exam.usedKeys = [];
 }
 
-/* 打开作业管理视图 */
 function openHomeworkView(){
   ensureHomeworkData();
   $('#paperView').style.display = 'none';
   $('#tabs').style.display = 'none';
   $('#hwView').style.display = 'block';
+  document.body.classList.add('hw-open');
   renderHomeworkList();
   window.scrollTo(0,0);
 }
 
-/* 关闭作业管理视图，返回试卷 */
 function closeHomeworkView(){
   $('#hwView').style.display = 'none';
   $('#paperView').style.display = '';
   $('#tabs').style.display = '';
+  document.body.classList.remove('hw-open');
   showPage(state.page);
   window.scrollTo(0,0);
 }
 
-/* 下一个作业编号 */
 function nextHwNo(){
   var max = 0;
   ensureHomeworkData();
@@ -2596,7 +3190,6 @@ function nextHwNo(){
   return max + 1;
 }
 
-/* 统计某一题已用掉的题库数量 */
 function countUsed(si,qi,pool){
   var n = 0;
   if(pool){
@@ -2609,7 +3202,6 @@ function countUsed(si,qi,pool){
   return n;
 }
 
-/* 由 key 反查题目对象 */
 function keyToItem(key){
   if(key.indexOf("q-") === 0){
     var a = key.split("-");
@@ -2627,7 +3219,6 @@ function keyToItem(key){
   return { key:key, si:si2, qi:qi2, hi:hi2, stem:h.stem, answer:h.answer, analysis:h.analysis };
 }
 
-/* 渲染作业列表 */
 function renderHomeworkList(){
   ensureHomeworkData();
   var list = exam.homeworkSets.slice().sort(function(a,b){ return a.no - b.no; });
@@ -2674,7 +3265,6 @@ function hwItemHTML(it,i){
   '</div>';
 }
 
-/* 生成新作业弹窗 */
 function openHwModal(){
   ensureHomeworkData();
   var html = '';
@@ -2697,7 +3287,6 @@ function openHwModal(){
   $('#hwModal').classList.add('show');
 }
 
-/* 核心：生成作业（自动去重 + 自动编号） */
 function doGenerateHomework(){
   ensureHomeworkData();
   var picks = [];
@@ -2768,7 +3357,6 @@ function doGenerateHomework(){
   toast('已生成 ' + set.name + '（' + newItems.length + ' 题）' + (skipped ? '，跳过 ' + skipped + ' 道重复题' : ''));
 }
 
-/* 删除作业单（释放题目） */
 function deleteHwSet(id){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === id; });
@@ -2786,7 +3374,6 @@ function deleteHwSet(id){
   toast('已删除 ' + set.name);
 }
 
-/* 重命名作业单 */
 function renameHwSet(id){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === id; });
@@ -2799,7 +3386,6 @@ function renameHwSet(id){
   renderHomeworkList();
 }
 
-/* 从作业单中移出单题 */
 function removeItemFromSet(setId, key){
   ensureHomeworkData();
   var set = exam.homeworkSets.find(function(s){ return s.id === setId; });
@@ -2815,7 +3401,6 @@ function removeItemFromSet(setId, key){
   toast('已移出');
 }
 
-/* 添加题目弹窗 */
 function openAddQModal(setId){
   ensureHomeworkData();
   addTargetId = setId;
@@ -2972,6 +3557,10 @@ function parsePaperText(text){
 (function init(){
   var fileInput = $('#fileInput');
 
+  /* ===== 电子黑板入口 ===== */
+  $('#btnBlackboard').onclick = enterBlackboard;
+
+  /* ===== 添加图形 ===== */
   $('#btnAddFigure').onclick = function(){ fileInput.click(); };
   fileInput.onchange = function(e){
     var f = e.target.files && e.target.files[0];
@@ -2979,44 +3568,7 @@ function parsePaperText(text){
     if(f) handleFigureFile(f);
   };
 
-  $('#btnBlackboard').onclick = enterBlackboard;
-  $('#bbBack').onclick = exitBlackboard;
-  $('#bbUndo').onclick = bbUndo;
-  $('#bbClear').onclick = bbClear;
-  $('#bbAddPage').onclick = bbAddPage;
-  $('#bbDelPage').onclick = bbDelPage;
-
-  $('#bbTabs').addEventListener('click', function(e){
-    var t = e.target.closest('.bb-tab'); if(!t) return;
-    bbSwitchPage(+t.dataset.i);
-  });
-
-  $$('.bb-swatch').forEach(function(b){
-    b.onclick = function(){
-      var isE = b.dataset.erase === '1';
-      bbState.erase = isE;
-      if(!isE) bbState.color = b.dataset.color;
-      $$('.bb-swatch').forEach(function(x){ x.classList.remove('active'); });
-      b.classList.add('active');
-    };
-  });
-
-  $$('.bb-size').forEach(function(b){
-    b.onclick = function(){
-      bbState.size = +b.dataset.size;
-      $$('.bb-size').forEach(function(x){ x.classList.remove('active'); });
-      b.classList.add('active');
-    };
-  });
-
-  $$('.bb-theme').forEach(function(b){
-    b.onclick = function(){
-      ensureBlackboard().theme = b.dataset.theme;
-      bbApplyTheme();
-      scheduleSave();
-    };
-  });
-
+  /* ===== 图形编辑器按钮 ===== */
   $('#figEditorCancel').onclick = function(){
     $('#figEditorModal').classList.remove('show');
     FigEditor.clearAll();
@@ -3025,14 +3577,15 @@ function parsePaperText(text){
   $('#figClearAll').onclick = function(){ FigEditor.clearAll(); };
   $('#figSelectAll').onclick = function(){ FigEditor.selectAll(); };
 
+  /* ===== 图形批量分配 ===== */
   $('#assignCancel').onclick = function(){
     $('#assignModal').classList.remove('show');
     $('#figEditorModal').classList.add('show');
   };
   $('#assignConfirm').onclick = confirmAssign;
 
-  /* ===== 新版作业管理事件 ===== */
-  $('#btnHomework').onclick = function(){ openHomeworkView(); };
+  /* ===== 作业管理入口 & 事件 ===== */
+  $('#btnHomework').onclick = openHomeworkView;
   $('#btnHwBack').onclick = closeHomeworkView;
   $('#btnNewHw').onclick = openHwModal;
 
@@ -3045,7 +3598,6 @@ function parsePaperText(text){
   };
   $('#btnHwGen').onclick = doGenerateHomework;
 
-  /* 添加题目弹窗 */
   $('#addQCancel').onclick = function(){ $('#addQModal').classList.remove('show'); };
   $('#addQConfirm').onclick = function(){
     ensureHomeworkData();
@@ -3104,7 +3656,7 @@ function parsePaperText(text){
     }
   });
 
-  /* 导入试卷 */
+  /* ===== 导入试卷 ===== */
   $('#btnImport').onclick = function(){
     $('#importText').value = '';
     $('#importModal').classList.add('show');
@@ -3169,7 +3721,7 @@ function parsePaperText(text){
     toast('导入成功，共 ' + parsed.sections.length + ' 个大题');
   };
 
-  /* 点击遮罩关闭 */
+  /* ===== 点击遮罩关闭弹窗 ===== */
   $$('.modal-mask').forEach(function(m){
     m.addEventListener('click', function(e){
       if(e.target === m){
@@ -3180,7 +3732,7 @@ function parsePaperText(text){
     });
   });
 
-  /* 拖拽图片到页面 */
+  /* ===== 拖拽图片到页面 ===== */
   var overlay = $('#dragOverlay');
   var dragDepth = 0;
   window.addEventListener('dragenter', function(e){
@@ -3199,14 +3751,14 @@ function parsePaperText(text){
     if(f) handleFigureFile(f);
   });
 
-  /* 窗口缩放时重绘涂鸦画布 */
+  /* ===== 窗口尺寸变化：重绘涂鸦画布 ===== */
   window.addEventListener('resize', function(){
     $$('#paperView .page').forEach(function(p){
       if(p.style.display!=='none') fitCanvas(p);
     });
   });
 
-  /* Esc 退出黑板 */
+  /* ===== Esc 退出小黑板 ===== */
   window.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && document.getElementById('bbView').classList.contains('show')){
       var anyModal = $$('.modal-mask').some(function(m){ return m.classList.contains('show'); });
@@ -3214,7 +3766,7 @@ function parsePaperText(text){
     }
   });
 
-  /* 启动 */
+  /* ===== 启动 ===== */
   (async function bootstrap(){
     var s = await sb.auth.getSession();
     if(s.data && s.data.session && s.data.session.user){
