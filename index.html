@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#eef1f7;color:#1f2430;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#eef1f7;color:#1f2430;-webkit-font-smoothing:antialiased;font-size:16px}
 body.bb-open{overflow:hidden}
 .topbar{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid #e1e6f0;box-shadow:0 2px 10px rgba(30,40,70,.05)}
 .bar-row{display:flex;align-items:center;gap:8px;padding:8px 16px;flex-wrap:wrap}
@@ -30,323 +30,362 @@ button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
 button.primary:hover{background:#2a5ae0}
 button.ghost{background:transparent;border-color:#e4e9f2;color:#7a8399}
 button.ghost:hover{background:#f6f8fc;border-color:#d3dae8;color:#5a6376}
-button.small{font-size:12px;padding:5px 10px}
+button.small{font-size:12.5px;padding:5px 11px}
 button.danger{color:#c4304a;border-color:#ffd0d8;background:#fff5f7}
 button.danger:hover{background:#ffe9ec;border-color:#ffb8c4}
 button:disabled{opacity:.45;cursor:not-allowed}
 .bar-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.tab{padding:7px 17px;border-radius:20px;font-size:15px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
+.tab{padding:8px 18px;border-radius:20px;font-size:15.5px;border:1px solid #dde3f0;background:#f7f9ff;color:#3a4560}
 .tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-weight:600}
 #paperView{padding:6px 0 60px}
-.page{position:relative;max-width:1040px;margin:20px auto;background:#fff;border-radius:16px;box-shadow:0 4px 22px rgba(30,40,70,.09);padding:32px 42px 52px;min-height:320px}
+.page{position:relative;max-width:1080px;margin:20px auto;background:#fff;border-radius:16px;box-shadow:0 4px 22px rgba(30,40,70,.09);padding:34px 46px 56px;min-height:320px}
 canvas.ink{position:absolute;left:0;top:0;z-index:5;pointer-events:none;border-radius:16px;touch-action:none}
 body.ink-on #paperView canvas.ink{pointer-events:auto;cursor:crosshair}
-.sec-title{font-size:22px;font-weight:700;color:#1b2740;margin:4px 0 22px;padding-left:14px;border-left:6px solid #3b6ef5;line-height:1.3}
-.q{padding:24px 0;border-bottom:1px dashed #e6eaf2;display:flex;gap:18px;align-items:flex-start}
+.sec-title{font-size:26px;font-weight:800;color:#1b2740;margin:4px 0 24px;padding-left:16px;border-left:7px solid #3b6ef5;line-height:1.3}
+.q{padding:28px 0;border-bottom:1px dashed #e6eaf2;display:flex;gap:20px;align-items:flex-start}
 .q:last-child{border-bottom:none}
 .q-main{flex:1;min-width:0}
-.stem{font-size:20px;line-height:2.4;white-space:pre-wrap;color:#1f2430;word-break:break-word;letter-spacing:.3px}
-.btns{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;position:relative;z-index:10}
-.panel{display:none;margin-top:14px;padding:14px 18px;border-radius:10px;font-size:17px;line-height:2;white-space:pre-wrap;word-break:break-word}
+.stem{font-size:22px;line-height:2.2;white-space:pre-wrap;color:#1f2430;word-break:break-word;letter-spacing:.3px;font-weight:500}
+.btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;position:relative;z-index:10}
+.btns button{font-size:15.5px;padding:9px 18px;font-weight:600}
+.panel{display:none;margin-top:16px;padding:16px 22px;border-radius:12px;font-size:19px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
 .panel.show{display:block;animation:fade .18s ease}
 @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-.panel.answer{background:#eefaf1;border-left:4px solid #43b96c}
-.panel.analysis{background:#fff8e8;border-left:4px solid #f0b429}
-.panel.similar{background:#f4f7ff;border-left:4px solid #7d9bf5;padding:14px 16px}
-.panel.homework{background:#f0f7ff;border-left:4px solid #4a90e2;padding:14px 16px}
-.similar-head,.homework-head{font-size:15px;font-weight:700;margin-bottom:11px;letter-spacing:.5px}
+.panel.answer{background:#eefaf1;border-left:5px solid #43b96c}
+.panel.analysis{background:#fff8e8;border-left:5px solid #f0b429}
+.panel.similar{background:#f4f7ff;border-left:5px solid #7d9bf5;padding:16px 18px}
+.panel.homework{background:#f0f7ff;border-left:5px solid #4a90e2;padding:16px 18px}
+.similar-head,.homework-head{font-size:17px;font-weight:800;margin-bottom:14px;letter-spacing:.5px}
 .similar-head{color:#3b6ef5}
 .homework-head{color:#2f7ad4}
-.subq{background:#fff;border:1px solid #dfe7fa;border-radius:10px;padding:14px 16px;margin:12px 0}
-.sub-title{font-size:14px;font-weight:700;color:#5c7cf0;margin-bottom:8px;letter-spacing:.5px}
+
+/* ================================================================
+   ★ 结构化字段（答案 / 计算过程 / 算理 / 易错点 / 解析）—— 各自独立成行
+   ================================================================ */
+.field-block{display:block;padding:14px 0;border-bottom:1px dashed rgba(0,0,0,.10)}
+.field-block:first-child{padding-top:2px}
+.field-block:last-child{border-bottom:none;padding-bottom:2px}
+.field-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:16px;font-weight:800;letter-spacing:.5px;
+  padding:3px 12px;border-radius:20px;margin-bottom:10px;
+}
+.field-label.ans{background:#d4f5de;color:#1a7a3d}
+.field-label.ana{background:#ffefcc;color:#a86a00}
+.field-label.calc{background:#dbeafe;color:#1d4ed8}
+.field-label.reason{background:#e9defa;color:#6d28d9}
+.field-label.pitfall{background:#ffe4e6;color:#be123c}
+.field-val{
+  display:block;font-size:19px;line-height:2;color:#1f2430;
+  white-space:pre-wrap;word-break:break-word;padding-left:4px;
+}
+.field-val.empty{color:#b8c0d0;font-style:italic;font-size:17px}
+
+/* 举一反三 / 作业内部的字段紧凑一点 */
+.subq .field-block{padding:10px 0}
+.subq .field-label{font-size:14px;padding:2px 10px;margin-bottom:8px}
+.subq .field-val{font-size:17px;line-height:1.9}
+
+.subq{background:#fff;border:1px solid #dfe7fa;border-radius:12px;padding:16px 20px;margin:14px 0}
+.sub-title{font-size:15.5px;font-weight:800;color:#5c7cf0;margin-bottom:10px;letter-spacing:.5px}
 .subq .sub-title{color:#2f7ad4}
-.sub-stem{font-size:17.5px;line-height:2.2;white-space:pre-wrap;letter-spacing:.2px}
-.subq .btns{margin-top:12px}
-.subq button{font-size:14px;padding:6px 15px}
-.panel.sub-answer{background:#eefaf1;border-left:4px solid #43b96c;font-size:16.5px;padding:11px 15px}
-.panel.sub-analysis{background:#fff8e8;border-left:4px solid #f0b429;font-size:16.5px;padding:11px 15px}
-.empty{color:#98a1b5;font-size:15px;padding:8px 0}
-.sim-nav{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:14px;border-top:1px dashed #cddaf5;flex-wrap:wrap}
-.sim-progress{font-size:14px;color:#5c7cf0;font-weight:600;margin-right:auto}
-.sim-progress b{color:#3b6ef5;font-size:17px}
-.sim-nav button{font-size:14px;padding:7px 15px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
+.sub-stem{font-size:19px;line-height:2;white-space:pre-wrap;letter-spacing:.2px;font-weight:500}
+.subq .btns{margin-top:14px}
+.subq button{font-size:14.5px;padding:7px 16px}
+.panel.sub-answer{background:#eefaf1;border-left:5px solid #43b96c;font-size:18px;padding:12px 18px}
+.panel.sub-analysis{background:#fff8e8;border-left:5px solid #f0b429;font-size:18px;padding:12px 18px}
+.empty{color:#98a1b5;font-size:15.5px;padding:10px 0}
+.sim-nav{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:16px;border-top:1px dashed #cddaf5;flex-wrap:wrap}
+.sim-progress{font-size:15px;color:#5c7cf0;font-weight:600;margin-right:auto}
+.sim-progress b{color:#3b6ef5;font-size:18px}
+.sim-nav button{font-size:15px;padding:8px 17px;background:#fff;border:1px solid #cddaf5;color:#3b6ef5}
 .sim-nav button:disabled{opacity:.35;cursor:not-allowed}
 .sim-nav button.sim-exit{background:transparent;border-color:#e4e9f2;color:#8b94a8;font-weight:400}
+</style>
+<style>
+/* ================================================================
+   作业管理
+   ================================================================ */
 #hwView{display:none;padding-bottom:60px}
 .hw-bar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #e1e6f0;padding:11px 16px;box-shadow:0 2px 10px rgba(30,40,70,.05)}
-.hw-title{font-weight:700;font-size:17px;color:#23304d}
-.hw-container{max-width:1040px;margin:20px auto;padding:0 16px}
+.hw-title{font-weight:800;font-size:18px;color:#23304d}
+.hw-container{max-width:1080px;margin:20px auto;padding:0 16px}
 .hw-set{background:#fff;border-radius:14px;box-shadow:0 4px 18px rgba(30,40,70,.08);margin-bottom:18px;overflow:hidden}
-.hw-set-head{display:flex;align-items:center;gap:10px;padding:14px 20px;background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border-bottom:1px solid #e2e8f5;flex-wrap:wrap}
-.hw-set-name{font-size:17px;font-weight:800;color:#2a5ae0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hw-badge{font-size:12px;font-weight:600;color:#3b6ef5;background:#fff;border:1px solid #d6e2ff;padding:2px 10px;border-radius:20px}
-.hw-date{font-size:12px;color:#98a1b5;font-weight:400}
+.hw-set-head{display:flex;align-items:center;gap:10px;padding:15px 22px;background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border-bottom:1px solid #e2e8f5;flex-wrap:wrap}
+.hw-set-name{font-size:18px;font-weight:800;color:#2a5ae0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hw-badge{font-size:12.5px;font-weight:600;color:#3b6ef5;background:#fff;border:1px solid #d6e2ff;padding:2px 11px;border-radius:20px}
+.hw-date{font-size:12.5px;color:#98a1b5;font-weight:400}
 .hw-set-actions{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-.hw-set-body{padding:6px 20px 16px}
+.hw-set-body{padding:6px 22px 18px}
 .hw-set-body.collapsed{display:none}
-.hw-q{padding:18px 0;border-bottom:1px dashed #e6eaf2}
+.hw-q{padding:20px 0;border-bottom:1px dashed #e6eaf2}
 .hw-q:last-child{border-bottom:none}
-.hw-q .stem{font-size:18px;line-height:2.05}
+.hw-q .stem{font-size:20px;line-height:2}
+.hw-q .field-val{font-size:18px}
+.hw-q .field-label{font-size:14.5px}
+.hw-explain{background:#f8fbff;border-left:4px solid #93b8ff;border-radius:8px;padding:12px 16px}
 .hw-explain .line{margin:6px 0}
-.hw-item{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
-.hw-item>label{display:flex;align-items:center;gap:9px;flex:1;cursor:pointer;min-width:0;font-size:15px}
+.hw-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff}
+.hw-item>label{display:flex;align-items:center;gap:10px;flex:1;cursor:pointer;min-width:0;font-size:15.5px}
 .hw-item>label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hw-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0}
-.hw-item select{font-family:inherit;font-size:14.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
-.used-tag{font-size:11.5px;color:#c4304a;background:#ffe9ec;padding:1px 7px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:500}
-.modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.45);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.hw-item input[type=checkbox]{accent-color:#3b6ef5;width:19px;height:19px;flex-shrink:0}
+.hw-item select{font-family:inherit;font-size:15px;border:1px solid #d5dbe8;border-radius:7px;padding:8px 11px;background:#fff;color:#2b3448;cursor:pointer;outline:none;flex-shrink:0}
+.used-tag{font-size:12px;color:#c4304a;background:#ffe9ec;padding:2px 8px;border-radius:10px;margin-left:6px;white-space:nowrap;font-weight:600}
+
+/* ================================================================
+   通用弹窗
+   ================================================================ */
+.modal-mask{position:fixed;inset:0;z-index:200;background:rgba(20,28,50,.5);display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
 .modal-mask.show{display:flex}
-.modal{background:#fff;border-radius:16px;width:100%;max-width:760px;max-height:88vh;overflow:auto;padding:24px 26px 22px;box-shadow:0 18px 50px rgba(20,28,50,.28)}
-.modal.wide{max-width:900px}
-.modal h3{margin:0 0 10px;font-size:19px;color:#1b2740}
-.modal .hint{font-size:14px;color:#6b7488;line-height:1.9;margin-bottom:13px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:13px 16px}
-.modal .hint code{background:#eaf0ff;color:#2a5ae0;padding:1px 6px;border-radius:4px;font-size:13.5px}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow:auto;padding:26px 28px 24px;box-shadow:0 18px 50px rgba(20,28,50,.3)}
+.modal.wide{max-width:960px}
+.modal h3{margin:0 0 12px;font-size:21px;color:#1b2740;font-weight:800}
+.modal .hint{font-size:14.5px;color:#6b7488;line-height:1.9;margin-bottom:14px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:14px 17px}
+.modal .hint code{background:#eaf0ff;color:#2a5ae0;padding:2px 7px;border-radius:4px;font-size:13.5px}
 .modal .hint .fmt{display:block;margin-top:9px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:#3a4560;white-space:pre;overflow-x:auto;line-height:1.8}
-.modal textarea{width:100%;min-height:280px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.8;border:1px solid #d5dbe8;border-radius:10px;padding:13px;background:#fafbff;color:#26304a;outline:none}
+.modal textarea{width:100%;min-height:300px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14.5px;line-height:1.85;border:1px solid #d5dbe8;border-radius:10px;padding:14px;background:#fafbff;color:#26304a;outline:none}
 .modal textarea:focus{border-color:#3b6ef5;background:#fff}
-.modal input[type=text],.modal input[type=email],.modal input[type=password]{width:100%;font-family:inherit;font-size:15px;padding:11px 14px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px}
+.modal input[type=text],.modal input[type=email],.modal input[type=password]{width:100%;font-family:inherit;font-size:15.5px;padding:12px 14px;border:1px solid #d5dbe8;border-radius:9px;background:#fafbff;color:#26304a;outline:none;margin-top:8px}
 .modal input:focus{border-color:#3b6ef5;background:#fff}
-.modal-actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.modal-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
 .modal-actions.right{justify-content:flex-end}
 .form-field{margin-top:12px}
-.form-field label{font-size:13.5px;color:#5a6376;font-weight:600;display:block}
-.form-field select{width:100%;font-family:inherit;font-size:14px;padding:10px 12px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px}
+.form-field label{font-size:14px;color:#5a6376;font-weight:700;display:block}
+.form-field select{width:100%;font-family:inherit;font-size:15px;padding:11px 13px;border:1px solid #d5dbe8;border-radius:9px;background:#fff;color:#2b3448;cursor:pointer;outline:none;margin-top:8px}
 .form-field select:focus{border-color:#3b6ef5}
-.qlist{display:flex;flex-direction:column;gap:8px;margin:13px 0;max-height:48vh;overflow:auto;padding:2px}
+.qlist{display:flex;flex-direction:column;gap:8px;margin:14px 0;max-height:50vh;overflow:auto;padding:2px}
 .papers-list{display:flex;flex-direction:column;gap:9px;max-height:50vh;overflow:auto;padding:2px;margin:12px 0}
-.paper-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff;cursor:pointer;transition:.15s}
+.paper-item{display:flex;align-items:center;gap:10px;padding:13px 15px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff;cursor:pointer;transition:.15s}
 .paper-item:hover{background:#f1f5ff;border-color:#b9caf7}
 .paper-item.current{background:#eef3ff;border-color:#7d9bf5}
 .paper-item .info{flex:1;min-width:0}
-.paper-item .name{font-size:14.5px;font-weight:600;color:#26304a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.paper-item .meta{font-size:12px;color:#98a1b5;margin-top:3px}
-.paper-item .tag{font-size:11.5px;color:#3b6ef5;background:#e5edff;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:500}
+.paper-item .name{font-size:15.5px;font-weight:600;color:#26304a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.paper-item .meta{font-size:12.5px;color:#98a1b5;margin-top:3px}
+.paper-item .tag{font-size:12px;color:#3b6ef5;background:#e5edff;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:600}
 .paper-item .actions{display:flex;gap:5px;flex-shrink:0}
-.msg{font-size:13.5px;padding:9px 12px;border-radius:8px;margin-top:10px;display:none}
+.msg{font-size:14px;padding:10px 13px;border-radius:8px;margin-top:10px;display:none}
 .msg.show{display:block}
 .msg.err{background:#ffe9ec;color:#c4304a;border:1px solid #ffd0d8}
 .msg.ok{background:#e9f8ee;color:#1f8a45;border:1px solid #c8eed6}
-.share-row{display:flex;align-items:center;gap:8px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:13.5px}
-.share-row input{flex:1;font-family:ui-monospace,monospace;font-size:12.5px;border:1px solid #d5dbe8;border-radius:7px;padding:7px 10px;background:#fff;outline:none;min-width:0}
+.share-row{display:flex;align-items:center;gap:8px;background:#f7f9ff;border:1px solid #e4eaf8;border-radius:10px;padding:11px 13px;margin-top:10px;font-size:14px}
+.share-row input{flex:1;font-family:ui-monospace,monospace;font-size:13px;border:1px solid #d5dbe8;border-radius:7px;padding:8px 11px;background:#fff;outline:none;min-width:0}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
 .stat-card{background:linear-gradient(135deg,#f4f7ff,#eaf0ff);border:1px solid #dfe7fa;border-radius:12px;padding:14px 16px}
-.stat-card .num{font-size:26px;font-weight:800;color:#3b6ef5;line-height:1.1}
-.stat-card .lbl{font-size:12.5px;color:#5a6376;margin-top:4px}
+.stat-card .num{font-size:28px;font-weight:800;color:#3b6ef5;line-height:1.1}
+.stat-card .lbl{font-size:13px;color:#5a6376;margin-top:4px}
 .table-wrap{max-height:44vh;overflow:auto;border:1px solid #e6eaf2;border-radius:10px;margin-top:12px}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #eef1f7;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:10px 13px;text-align:left;border-bottom:1px solid #eef1f7;white-space:nowrap}
 th{background:#f7f9ff;font-weight:700;color:#3a4560;position:sticky;top:0;z-index:1}
 tr:last-child td{border-bottom:none}
-.save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.92);color:#fff;font-size:13px;padding:9px 16px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
+.save-hint{position:fixed;bottom:84px;right:18px;z-index:130;background:rgba(30,42,70,.94);color:#fff;font-size:14px;padding:10px 18px;border-radius:22px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}
 .save-hint.show{opacity:1;transform:translateY(0)}
+.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:14px;padding:11px 22px;border-radius:9px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ================================================================
+   图形 / 配图
+   ================================================================ */
 .q-figure{flex-shrink:0;position:relative;border:1px dashed transparent;border-radius:10px;padding:2px;transition:border-color .15s}
 .q-figure:hover{border-color:#cbd5e1}
 .q-figure img{display:block;height:auto;border-radius:8px;border:1px solid #e6eaf2;background:#fafbfd;user-select:none}
-.q-figure .fig-handle{position:absolute;right:-7px;bottom:-7px;width:16px;height:16px;border-radius:50%;background:#3b6ef5;border:2px solid #fff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.25);opacity:0;transition:opacity .15s;touch-action:none;z-index:22}
+.q-figure .fig-handle{position:absolute;right:-8px;bottom:-8px;width:20px;height:20px;border-radius:50%;background:#3b6ef5;border:2px solid #fff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.28);opacity:0;transition:opacity .15s;touch-action:none;z-index:22}
 .q-figure:hover .fig-handle{opacity:1}
-.q-figure .fig-tools{position:absolute;top:-36px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(17,24,39,.94);border-radius:8px;padding:3px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;z-index:25}
+.q-figure .fig-tools{position:absolute;top:-38px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(17,24,39,.95);border-radius:9px;padding:4px;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;z-index:25}
 .q-figure:hover .fig-tools{opacity:1;pointer-events:auto}
-.q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:11px;padding:4px 9px;border-radius:5px;cursor:pointer;font-family:inherit}
-.q-figure .fig-tools button:hover{background:rgba(255,255,255,.16)}
+.q-figure .fig-tools button{border:none;background:transparent;color:#fff;font-size:12px;padding:5px 10px;border-radius:5px;cursor:pointer;font-family:inherit}
+.q-figure .fig-tools button:hover{background:rgba(255,255,255,.18)}
 .fig-stage{position:relative;display:inline-block;line-height:0;user-select:none;max-width:100%;touch-action:none}
 .fig-stage canvas{display:block;max-width:100%;height:auto;border:1px solid #e3e8f0;border-radius:8px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
-.fig-region{position:absolute;border:2px solid rgba(59,130,246,.85);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s;touch-action:none}
+.fig-region{position:absolute;border:2px solid rgba(59,130,246,.9);background:rgba(59,130,246,.1);box-sizing:border-box;cursor:move;border-radius:3px;transition:background .12s,border-color .12s;touch-action:none}
 .fig-region:hover{background:rgba(59,130,246,.2)}
 .fig-region.selected{border-color:#10b981;background:rgba(16,185,129,.16);z-index:5}
-.fig-region .rg-check{position:absolute;top:-11px;left:-11px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
+.fig-region .rg-check{position:absolute;top:-12px;left:-12px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:700;color:transparent;z-index:8;line-height:1;padding:0}
 .fig-region .rg-check:hover{border-color:#3b6ef5}
 .fig-region.selected .rg-check{background:#10b981;border-color:#10b981;color:#fff}
-.fig-region .h{position:absolute;width:11px;height:11px;background:#fff;border:2px solid #3b6ef5;border-radius:50%;box-sizing:border-box;z-index:6}
+.fig-region .h{position:absolute;width:13px;height:13px;background:#fff;border:2px solid #3b6ef5;border-radius:50%;box-sizing:border-box;z-index:6;touch-action:none}
 .fig-region.selected .h{border-color:#10b981}
-.h.nw{left:-6px;top:-6px;cursor:nwse-resize}
-.h.n{left:50%;top:-6px;margin-left:-6px;cursor:ns-resize}
-.h.ne{right:-6px;top:-6px;cursor:nesw-resize}
-.h.e{right:-6px;top:50%;margin-top:-6px;cursor:ew-resize}
-.h.se{right:-6px;bottom:-6px;cursor:nwse-resize}
-.h.s{left:50%;bottom:-6px;margin-left:-6px;cursor:ns-resize}
-.h.sw{left:-6px;bottom:-6px;cursor:nesw-resize}
-.h.w{left:-6px;top:50%;margin-top:-6px;cursor:ew-resize}
+.h.nw{left:-7px;top:-7px;cursor:nwse-resize}
+.h.n{left:50%;top:-7px;margin-left:-7px;cursor:ns-resize}
+.h.ne{right:-7px;top:-7px;cursor:nesw-resize}
+.h.e{right:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
+.h.se{right:-7px;bottom:-7px;cursor:nwse-resize}
+.h.s{left:50%;bottom:-7px;margin-left:-7px;cursor:ns-resize}
+.h.sw{left:-7px;bottom:-7px;cursor:nesw-resize}
+.h.w{left:-7px;top:50%;margin-top:-7px;cursor:ew-resize}
 .fig-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px dashed #e3e8f0}
 .fig-thumb{position:relative;border:2px solid #e3e8f0;border-radius:8px;padding:4px;cursor:pointer;background:#fff;transition:border-color .12s,transform .12s;max-width:150px}
 .fig-thumb:hover{border-color:#93c5fd;transform:translateY(-2px)}
 .fig-thumb.selected{border-color:#10b981}
 .fig-thumb canvas{display:block;max-width:138px;max-height:96px;height:auto;border-radius:4px}
-.fig-thumb .thumb-tag{font-size:11px;color:#98a1b5;text-align:center;margin-top:4px}
-.fig-thumb .thumb-check{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:transparent;line-height:1;padding:0;z-index:3}
+.fig-thumb .thumb-tag{font-size:11.5px;color:#98a1b5;text-align:center;margin-top:4px}
+.fig-thumb .thumb-check{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #94a3b8;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:transparent;line-height:1;padding:0;z-index:3}
 .fig-thumb.selected .thumb-check{background:#10b981;border-color:#10b981;color:#fff}
-.fig-empty{font-size:13px;color:#f59e0b;padding:16px;text-align:center;width:100%}
+.fig-empty{font-size:13.5px;color:#f59e0b;padding:18px;text-align:center;width:100%}
 .fig-editor-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #e3e8f0;flex-wrap:wrap}
 .fig-editor-bar .left{display:flex;gap:8px;flex-wrap:wrap}
 .fig-editor-bar .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.count-badge{font-size:12px;color:#3b6ef5;background:#eff6ff;padding:4px 12px;border-radius:20px;font-weight:600}
-.assign-list{display:flex;flex-direction:column;gap:10px;max-height:56vh;overflow:auto;padding:2px;margin:12px 0}
-.assign-row{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid #e2e8f5;border-radius:10px;background:#fbfcff}
-.assign-row .fig-preview{flex-shrink:0;width:100px;height:70px;border-radius:6px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.assign-row .fig-preview img{max-width:100%;max-height:100%;display:block}
-.assign-row .arrow{color:#98a1b5;font-size:16px;flex-shrink:0}
-.assign-row select{flex:1;font-family:inherit;font-size:14px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;min-width:0}
-.assign-row select:focus{border-color:#3b6ef5}
-.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);background:#111827;color:#fff;font-size:13px;padding:10px 20px;border-radius:8px;opacity:0;pointer-events:none;transition:all .25s ease;z-index:400;max-width:80vw}
-.toast.show{opacity:1;transform:translate(-50%,0)}
+.count-badge{font-size:13px;color:#3b6ef5;background:#eff6ff;padding:5px 13px;border-radius:20px;font-weight:700}
 
 /* ================================================================
-   拖拽上传覆盖层（新）
+   ★ 图形分配弹窗（可选 主题目 / 举一反三 / 作业）
    ================================================================ */
-.drag-overlay{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(59,130,246,.12);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  border:4px dashed #3b6ef5;
-  display:none;align-items:center;justify-content:center;
-  pointer-events:none;
-}
+.assign-list{display:flex;flex-direction:column;gap:12px;max-height:60vh;overflow:auto;padding:2px;margin:14px 0}
+.assign-row{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1px solid #e2e8f5;border-radius:12px;background:#fbfcff;flex-wrap:wrap}
+.assign-row .fig-preview{flex-shrink:0;width:110px;height:78px;border-radius:8px;border:1px solid #e2e8f5;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.assign-row .fig-preview img{max-width:100%;max-height:100%;display:block}
+.assign-row .assign-fields{flex:1;min-width:0;display:flex;gap:8px;flex-wrap:wrap}
+.assign-row .af-group{display:flex;flex-direction:column;gap:4px;min-width:160px;flex:1}
+.assign-row .af-group label{font-size:12.5px;color:#7a8399;font-weight:700;padding-left:2px}
+.assign-row select{font-family:inherit;font-size:14.5px;padding:9px 12px;border:1px solid #d5dbe8;border-radius:8px;background:#fff;color:#2b3448;outline:none;cursor:pointer;width:100%}
+.assign-row select:focus{border-color:#3b6ef5}
+.assign-row .kind-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;font-weight:700}
+.assign-row .kind-badge.main{background:#e5edff;color:#3b6ef5}
+.assign-row .kind-badge.sim{background:#e9f8ee;color:#1f8a45}
+.assign-row .kind-badge.hw{background:#fff8e8;color:#a86a00}
+
+/* ================================================================
+   拖拽上传覆盖层
+   ================================================================ */
+.drag-overlay{position:fixed;inset:0;z-index:500;background:rgba(59,130,246,.12);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:4px dashed #3b6ef5;display:none;align-items:center;justify-content:center;pointer-events:none}
 .drag-overlay.show{display:flex}
-.drag-overlay .drag-inner{
-  background:#fff;border-radius:22px;padding:40px 56px;
-  text-align:center;
-  box-shadow:0 24px 70px rgba(59,110,245,.35);
-  border:1px solid #d6e2ff;
-  max-width:88vw;
-}
-.drag-overlay .drag-icon{
-  font-size:60px;line-height:1;margin-bottom:16px;
-  animation:dlBounce .9s ease-in-out infinite alternate;
-}
-@keyframes dlBounce{
-  from{transform:translateY(0)}
-  to{transform:translateY(-10px)}
-}
-.drag-overlay .drag-title{
-  font-size:22px;font-weight:800;color:#2a5ae0;margin-bottom:8px;
-  letter-spacing:.5px;
-}
-.drag-overlay .drag-sub{
-  font-size:13.5px;color:#7a8399;line-height:1.8;
-}
+.drag-overlay .drag-inner{background:#fff;border-radius:22px;padding:40px 56px;text-align:center;box-shadow:0 24px 70px rgba(59,110,245,.35);border:1px solid #d6e2ff;max-width:88vw}
+.drag-overlay .drag-icon{font-size:60px;line-height:1;margin-bottom:16px;animation:dlBounce .9s ease-in-out infinite alternate}
+@keyframes dlBounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.drag-overlay .drag-title{font-size:22px;font-weight:800;color:#2a5ae0;margin-bottom:8px;letter-spacing:.5px}
+.drag-overlay .drag-sub{font-size:13.5px;color:#7a8399;line-height:1.8}
 .drag-overlay .drag-sub b{color:#3b6ef5}
 body.dragging-file *{cursor:copy !important}
 
 /* ================================================================
-   多图选择弹窗（新）
+   多图选择弹窗
    ================================================================ */
-.multi-img-list{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-  gap:10px;max-height:56vh;overflow:auto;padding:2px;margin:12px 0;
-}
-.multi-img-item{
-  border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;
-  background:#fbfcff;transition:.15s;text-align:center;
-}
-.multi-img-item:hover{
-  border-color:#3b6ef5;transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(59,110,245,.22);
-}
-.multi-img-item img{
-  width:100%;height:110px;object-fit:cover;display:block;background:#fff;
-}
-.multi-img-item .name{
-  font-size:11.5px;color:#5a6376;padding:6px 8px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.multi-img-tip{
-  font-size:12.5px;color:#98a1b5;text-align:center;padding:4px 0;
-}
+.multi-img-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:58vh;overflow:auto;padding:2px;margin:12px 0}
+.multi-img-item{border:2px solid #e2e8f5;border-radius:10px;overflow:hidden;cursor:pointer;background:#fbfcff;transition:.15s;text-align:center}
+.multi-img-item:hover{border-color:#3b6ef5;transform:translateY(-2px);box-shadow:0 8px 20px rgba(59,110,245,.22)}
+.multi-img-item img{width:100%;height:118px;object-fit:cover;display:block;background:#fff}
+.multi-img-item .name{font-size:12px;color:#5a6376;padding:7px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.multi-img-tip{font-size:13px;color:#98a1b5;text-align:center;padding:4px 0}
 
-/* 粘贴提示芯片（在顶栏添加图像按钮旁边） */
-.paste-chip{
-  font-size:11.5px;color:#3b6ef5;background:#eff6ff;
-  border:1px solid #d6e2ff;padding:3px 9px;border-radius:20px;
-  display:inline-flex;align-items:center;gap:4px;font-weight:600;
-  white-space:nowrap;
-}
-
-/* ===== 小黑板 ===== */
-#bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column}
-#bbView.show{display:flex}
-.bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0}
-.bb-title{font-weight:700;font-size:15px;color:#e6e8ee;display:flex;align-items:center;gap:6px}
-.bb-theme{font-size:12px;padding:5px 11px;background:transparent;border:1px solid #2f3444;color:#98a1b5;border-radius:7px}
-.bb-theme.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
-.bb-bar button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
-.bb-tabs{display:flex;gap:6px;padding:8px 14px;background:#12151c;border-bottom:1px solid #262b38;overflow-x:auto;flex-shrink:0}
-.bb-tab{padding:5px 14px;border-radius:16px;font-size:13px;background:#232734;border:1px solid #2f3444;color:#98a1b5;cursor:pointer;white-space:nowrap}
-.bb-tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
-.bb-stage-wrap{flex:1;overflow:auto;padding:20px;display:flex;justify-content:center;align-items:flex-start}
-.bb-stage{position:relative;width:100%;max-width:1400px;aspect-ratio:8/5;background:#141820;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.5);overflow:hidden;border:1px solid #262b38;flex-shrink:0}
-.bb-stage.light{background:#ffffff;border-color:#cbd5e1}
-.bb-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
-
-/* 左下角浮动涂抹工具条 */
+/* ================================================================
+   左下角浮动涂抹工具条
+   ================================================================ */
 .ink-dock{
   position:fixed;left:16px;bottom:16px;z-index:120;
   display:flex;align-items:center;gap:7px;flex-wrap:wrap;
   background:rgba(255,255,255,.97);
   border:1px solid #e4eaf8;border-radius:16px;
-  padding:9px 14px;
+  padding:10px 15px;
   box-shadow:0 10px 30px rgba(30,40,70,.18);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  max-width:calc(100vw - 210px);
+  max-width:calc(100vw - 260px);
 }
-.ink-dock .dock-sep{width:1px;height:22px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
-.ink-dock .swatch{width:32px;height:32px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
+.ink-dock .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 3px;flex-shrink:0}
+.ink-dock .swatch{width:34px;height:34px;border-radius:9px;padding:0;border:2px solid #d5dbe8;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
 .ink-dock .swatch:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.12)}
 .ink-dock .swatch.active{border-color:#3b6ef5;box-shadow:0 0 0 3px rgba(59,110,245,.2)}
-.ink-dock .swatch.eraser{background:#fff;color:#6b7488;font-size:13px;display:flex;align-items:center;justify-content:center}
-.ink-dock .size-btn{width:32px;height:32px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid #d5dbe8;background:#fff;cursor:pointer;flex-shrink:0;transition:.15s}
+.ink-dock .swatch.eraser{background:#fff;color:#6b7488;font-size:13.5px;display:flex;align-items:center;justify-content:center}
+.ink-dock .size-btn{width:34px;height:34px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid #d5dbe8;background:#fff;cursor:pointer;flex-shrink:0;transition:.15s}
 .ink-dock .size-btn i{display:block;border-radius:50%;background:#5a6b8c}
 .ink-dock .size-btn.active{border-color:#3b6ef5;background:#eef3ff;box-shadow:0 0 0 3px rgba(59,110,245,.14)}
 .ink-dock .size-btn.active i{background:#3b6ef5}
-.ink-dock button.act{font-size:12.5px;padding:6px 12px;border-radius:9px;flex-shrink:0}
+.ink-dock button.act{font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600}
 
-/* 右下角浮动翻页控件 */
+/* ================================================================
+   右下角浮动翻页控件（上一题 / 下一题 / 页码）
+   ================================================================ */
 .page-nav{
   position:fixed;right:16px;bottom:16px;z-index:120;
   display:flex;align-items:center;gap:6px;
   background:rgba(255,255,255,.97);
   border:1px solid #e4eaf8;border-radius:16px;
-  padding:9px 12px;
+  padding:10px 13px;
   box-shadow:0 10px 30px rgba(30,40,70,.18);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .page-nav button{
-  min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  background:#fff;border:1px solid #d5dbe8;color:#3a4560;
+  min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;
+  border-radius:11px;display:flex;align-items:center;justify-content:center;
+  background:#fff;border:1px solid #d5dbe8;color:#3a4560;font-weight:700;
 }
 .page-nav button:hover{background:#f2f6ff;border-color:#9db6ff;color:#2a5ae0}
 .page-nav .page-ind{
-  font-size:14px;font-weight:700;color:#3a4560;
-  min-width:64px;text-align:center;user-select:none;
+  font-size:15px;font-weight:800;color:#3a4560;
+  min-width:74px;text-align:center;user-select:none;
   padding:0 4px;letter-spacing:.3px;
 }
-.page-nav .page-ind b{color:#3b6ef5;font-size:16px}
-.page-nav .dock-sep{width:1px;height:24px;background:#e4eaf8;margin:0 2px;flex-shrink:0}
+.page-nav .page-ind b{color:#3b6ef5;font-size:17px}
+.page-nav .dock-sep{width:1px;height:26px;background:#e4eaf8;margin:0 2px;flex-shrink:0}
 
 body.bb-open .ink-dock,
 body.bb-open .page-nav{display:none !important}
+body.hw-open .ink-dock,
+body.hw-open .page-nav{display:none !important}
 
-/* 小黑板内部的浮动工具条 & 翻页控件 */
+/* ================================================================
+   ★ 小黑板（全屏自适应，手机电脑都能写）
+   ================================================================ */
+#bbView{position:fixed;inset:0;z-index:150;background:#0d1017;display:none;flex-direction:column;overflow:hidden}
+#bbView.show{display:flex}
+.bb-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#171a22;border-bottom:1px solid #262b38;flex-wrap:wrap;flex-shrink:0;position:relative;z-index:5}
+.bb-title{font-weight:800;font-size:16px;color:#e6e8ee;display:flex;align-items:center;gap:6px}
+.bb-theme{font-size:13px;padding:6px 13px;background:transparent;border:1px solid #2f3444;color:#98a1b5;border-radius:8px;cursor:pointer;font-family:inherit}
+.bb-theme.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+.bb-bar button.primary{background:#3b6ef5;border-color:#3b6ef5;color:#fff;font-size:14px;padding:8px 16px}
+.bb-tabs{display:flex;gap:6px;padding:8px 14px;background:#12151c;border-bottom:1px solid #262b38;overflow-x:auto;flex-shrink:0}
+.bb-tab{padding:6px 16px;border-radius:18px;font-size:13.5px;background:#232734;border:1px solid #2f3444;color:#98a1b5;cursor:pointer;white-space:nowrap}
+.bb-tab.active{background:#3b6ef5;border-color:#3b6ef5;color:#fff}
+
+/* 舞台：自适应填满剩余空间，横竖屏都不变形 */
+.bb-stage-wrap{
+  flex:1;min-height:0;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+  overflow:hidden;
+}
+.bb-stage{
+  position:relative;
+  width:100%;height:100%;
+  max-width:100%;max-height:100%;
+  background:#141820;
+  border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+  overflow:hidden;
+  border:1px solid #262b38;
+  display:flex;align-items:center;justify-content:center;
+}
+.bb-stage.light{background:#ffffff;border-color:#cbd5e1}
+/* 画布自适应：按容器比例铺满，内部坐标仍是 1600×1000 */
+.bb-stage canvas{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  display:block;
+  touch-action:none;
+  cursor:crosshair;
+}
+
+/* 小黑板浮动工具条 */
 .bb-ink-dock{
   position:absolute;left:16px;bottom:16px;z-index:30;
-  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;
   background:rgba(23,26,34,.96);
   border:1px solid #2f3444;border-radius:16px;
-  padding:9px 14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  padding:10px 15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  max-width:calc(100vw - 210px);
+  max-width:calc(100vw - 260px);
 }
-.bb-ink-dock .dock-sep{width:1px;height:22px;background:#2f3444;margin:0 3px;flex-shrink:0}
-.bb-swatch{width:32px;height:32px;padding:0;border-radius:9px;border:2px solid #2f3444;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
+.bb-ink-dock .dock-sep{width:1px;height:24px;background:#2f3444;margin:0 3px;flex-shrink:0}
+.bb-swatch{width:34px;height:34px;padding:0;border-radius:9px;border:2px solid #2f3444;background:var(--c);cursor:pointer;flex-shrink:0;transition:.15s}
 .bb-swatch:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .bb-swatch.active{border-color:#6ea8ff;box-shadow:0 0 0 3px rgba(110,168,255,.28)}
-.bb-swatch.eraser{background:#2a2f3d;color:#98a1b5;font-size:12px;display:flex;align-items:center;justify-content:center}
-.bb-size{width:32px;height:32px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #2f3444;cursor:pointer;flex-shrink:0;transition:.15s}
+.bb-swatch.eraser{background:#2a2f3d;color:#98a1b5;font-size:13px;display:flex;align-items:center;justify-content:center}
+.bb-size{width:34px;height:34px;padding:0;border-radius:9px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid #2f3444;cursor:pointer;flex-shrink:0;transition:.15s}
 .bb-size i{display:block;border-radius:50%;background:#7a8399}
 .bb-size.active{border-color:#6ea8ff;background:rgba(110,168,255,.15)}
 .bb-size.active i{background:#6ea8ff}
 .bb-ink-dock button.act{
-  font-size:12.5px;padding:6px 12px;border-radius:9px;flex-shrink:0;
+  font-size:13.5px;padding:7px 14px;border-radius:9px;flex-shrink:0;font-weight:600;
   background:#232734;border:1px solid #2f3444;color:#e6e8ee;
 }
 .bb-ink-dock button.act:hover{background:#2a2f3d;border-color:#3d455c}
@@ -356,120 +395,135 @@ body.bb-open .page-nav{display:none !important}
   display:flex;align-items:center;gap:6px;
   background:rgba(23,26,34,.96);
   border:1px solid #2f3444;border-radius:16px;
-  padding:9px 12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  padding:10px 13px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .bb-page-nav button{
-  min-width:38px;height:38px;padding:0 11px;font-size:18px;line-height:1;
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  background:#232734;border:1px solid #2f3444;color:#e6e8ee;
+  min-width:42px;height:42px;padding:0 13px;font-size:16px;line-height:1;
+  border-radius:11px;display:flex;align-items:center;justify-content:center;
+  background:#232734;border:1px solid #2f3444;color:#e6e8ee;font-weight:700;
 }
 .bb-page-nav button:hover{background:#2a2f3d;border-color:#3d455c}
-.bb-page-nav .page-ind{
-  font-size:14px;font-weight:700;color:#e6e8ee;
-  min-width:64px;text-align:center;user-select:none;
-  padding:0 4px;letter-spacing:.3px;
-}
-.bb-page-nav .page-ind b{color:#6ea8ff;font-size:16px}
-.bb-page-nav .dock-sep{width:1px;height:24px;background:#2f3444;margin:0 2px;flex-shrink:0}
-.bb-page-nav button.act{font-size:12.5px;min-width:auto;padding:0 12px;height:38px}
+.bb-page-nav .page-ind{font-size:15px;font-weight:800;color:#e6e8ee;min-width:74px;text-align:center;user-select:none;padding:0 4px;letter-spacing:.3px}
+.bb-page-nav .page-ind b{color:#6ea8ff;font-size:17px}
+.bb-page-nav .dock-sep{width:1px;height:26px;background:#2f3444;margin:0 2px;flex-shrink:0}
+.bb-page-nav button.act{font-size:13.5px;min-width:auto;padding:0 14px;height:42px;font-weight:600}
 
-/* ===== 分享题目多选 UI ===== */
+/* ================================================================
+   分享题目多选 UI
+   ================================================================ */
 .pick-tabs{display:flex;gap:6px;margin:14px 0 4px;border-bottom:2px solid #e4eaf8;flex-wrap:wrap}
-.pick-tab{padding:9px 18px;border:none;background:transparent;color:#7a8399;font-size:14px;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;position:relative;display:inline-flex;align-items:center;gap:6px}
+.pick-tab{padding:10px 18px;border:none;background:transparent;color:#7a8399;font-size:14.5px;font-weight:700;cursor:pointer;border-radius:8px 8px 0 0;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s;display:inline-flex;align-items:center;gap:6px}
 .pick-tab:hover{background:#f4f7ff;color:#3b6ef5}
 .pick-tab.active{color:#3b6ef5;border-bottom-color:#3b6ef5;background:#f4f7ff}
-.pick-tab .cnt{display:inline-block;min-width:22px;padding:1px 7px;font-size:11.5px;font-weight:700;color:#fff;background:#3b6ef5;border-radius:10px;text-align:center;line-height:1.6}
+.pick-tab .cnt{display:inline-block;min-width:22px;padding:1px 7px;font-size:11.5px;font-weight:800;color:#fff;background:#3b6ef5;border-radius:10px;text-align:center;line-height:1.6}
 .pick-tab .cnt.zero{background:#b8c0d0}
-.pick-list{display:flex;flex-direction:column;gap:8px;margin:12px 0;max-height:42vh;overflow:auto;padding:2px}
-.pick-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff;cursor:pointer;transition:.12s}
+.pick-list{display:flex;flex-direction:column;gap:8px;margin:12px 0;max-height:44vh;overflow:auto;padding:2px}
+.pick-item{display:flex;align-items:flex-start;gap:10px;padding:12px 15px;border:1px solid #e2e8f5;border-radius:9px;background:#fbfcff;cursor:pointer;transition:.12s}
 .pick-item:hover{background:#f1f5ff;border-color:#b9caf7}
 .pick-item.selected{background:#eef3ff;border-color:#7d9bf5;box-shadow:0 0 0 2px rgba(59,110,245,.1)}
-.pick-item input[type=checkbox]{accent-color:#3b6ef5;width:18px;height:18px;flex-shrink:0;margin-top:2px;cursor:pointer}
+.pick-item input[type=checkbox]{accent-color:#3b6ef5;width:19px;height:19px;flex-shrink:0;margin-top:2px;cursor:pointer}
 .pick-item .body{flex:1;min-width:0}
-.pick-item .txt{font-size:14.5px;color:#26304a;line-height:1.7;word-break:break-word}
-.pick-item .meta{font-size:11.5px;color:#98a1b5;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
-.pick-item .badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;font-weight:600}
+.pick-item .txt{font-size:15px;color:#26304a;line-height:1.7;word-break:break-word}
+.pick-item .meta{font-size:12px;color:#98a1b5;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
+.pick-item .badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:10px;font-weight:700}
 .pick-item .badge.main{background:#e5edff;color:#3b6ef5}
 .pick-item .badge.sim{background:#e9f8ee;color:#1f8a45}
 .pick-item .badge.hw{background:#fff8e8;color:#a86a00}
 .pick-item .badge.fig{background:#f0e8ff;color:#7a3fd4}
-.pick-empty{padding:28px;text-align:center;color:#98a1b5;font-size:14px;border:1px dashed #dfe7fa;border-radius:10px;background:#fbfcff}
-.pick-stat{font-size:13px;color:#5c7cf0;font-weight:600;background:#f4f7ff;border:1px solid #dfe7fa;border-radius:8px;padding:8px 14px;display:inline-flex;align-items:center;gap:8px}
-.pick-stat b{color:#3b6ef5;font-size:16px}
+.pick-empty{padding:30px;text-align:center;color:#98a1b5;font-size:14.5px;border:1px dashed #dfe7fa;border-radius:10px;background:#fbfcff}
+.pick-stat{font-size:13.5px;color:#5c7cf0;font-weight:700;background:#f4f7ff;border:1px solid #dfe7fa;border-radius:8px;padding:8px 15px;display:inline-flex;align-items:center;gap:8px}
+.pick-stat b{color:#3b6ef5;font-size:17px}
 
-@media (max-width:720px){
-.bar-row{padding:7px 10px;gap:6px}
-.brand{font-size:14px;gap:5px}
-.paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:160px}
-button{padding:8px 11px;font-size:13px;min-height:36px}
-.tab{padding:7px 13px;font-size:13px}
-.page{margin:8px;padding:16px 13px 26px;border-radius:12px}
-.sec-title{font-size:17px;padding-left:10px;margin-bottom:15px;border-left-width:5px}
-.q{padding:15px 0;flex-direction:column;gap:12px}
-.q-figure{align-self:flex-end}
-.stem{font-size:16px;line-height:1.85;letter-spacing:0}
-.btns{gap:6px;margin-top:10px}
-.btns button{padding:7px 12px;font-size:13px}
-.panel{font-size:14.5px;padding:10px 12px;margin-top:10px;line-height:1.9}
-.subq{padding:10px 11px;margin:9px 0}
-.sub-stem{font-size:14.5px;line-height:1.9;letter-spacing:0}
-.subq button{font-size:12.5px;padding:4px 11px}
-.panel.sub-answer,.panel.sub-analysis{font-size:14.5px;padding:9px 13px}
-.similar-head,.homework-head{font-size:13.5px;margin-bottom:7px}
-.sim-nav{margin-top:10px;padding-top:10px;gap:7px}
-.sim-progress{font-size:12.5px}
-.sim-progress b{font-size:15px}
-.sim-nav button{padding:7px 12px;font-size:13px;min-height:34px}
-.modal{padding:16px 15px 14px;border-radius:12px;max-height:92vh}
-.modal h3{font-size:17px}
-.modal .hint{font-size:12.5px;padding:11px 13px}
-.modal textarea{min-height:200px;font-size:12px}
-.fig-thumb canvas{max-width:100px;max-height:70px}
-.assign-row{flex-wrap:wrap}
-.assign-row .fig-preview{width:80px;height:56px}
-#paperView{padding-bottom:120px}
-.user-chip{font-size:12px;padding:4px 10px}
-.stats-grid{grid-template-columns:1fr 1fr}
-.stat-card .num{font-size:20px}
-.hw-container{padding:0 8px}
-.hw-set-body{padding:6px 12px 14px}
-.hw-set-head{padding:12px 14px}
-.hw-set-actions{margin-left:0;width:100%}
-.pick-tab{padding:8px 12px;font-size:12.5px}
-.pick-tab .cnt{min-width:18px;font-size:10.5px}
-.pick-item{padding:9px 11px}
-.pick-item .txt{font-size:13.5px}
-.ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
-.ink-dock .dock-sep{height:18px;margin:0 1px}
-.ink-dock .swatch{width:26px;height:26px;border-radius:7px}
-.ink-dock .size-btn{width:26px;height:26px;border-radius:7px}
-.ink-dock .size-btn i{transform:scale(.8)}
-.ink-dock button.act{font-size:11px;padding:5px 8px;border-radius:7px}
-.page-nav{right:8px;bottom:8px;padding:6px 8px;gap:4px;border-radius:13px}
-.page-nav button{min-width:32px;height:32px;font-size:16px;border-radius:8px}
-.page-nav .page-ind{font-size:12px;min-width:50px}
-.page-nav .page-ind b{font-size:13.5px}
-.bb-ink-dock{left:8px;bottom:8px;padding:6px 8px;gap:5px;border-radius:13px;max-width:58vw}
-.bb-ink-dock .dock-sep{height:18px;margin:0 1px}
-.bb-swatch{width:26px;height:26px;border-radius:7px}
-.bb-size{width:26px;height:26px;border-radius:7px}
-.bb-size i{transform:scale(.8)}
-.bb-ink-dock button.act{font-size:11px;padding:5px 8px;border-radius:7px}
-.bb-page-nav{right:8px;bottom:8px;padding:6px 8px;gap:4px;border-radius:13px}
-.bb-page-nav button{min-width:32px;height:32px;font-size:16px;border-radius:8px}
-.bb-page-nav .page-ind{font-size:12px;min-width:50px}
-.bb-page-nav .page-ind b{font-size:13.5px}
-.bb-page-nav button.act{height:32px;padding:0 9px;font-size:11px}
-.drag-overlay .drag-inner{padding:26px 32px}
-.drag-overlay .drag-icon{font-size:42px;margin-bottom:10px}
-.drag-overlay .drag-title{font-size:17px}
-.drag-overlay .drag-sub{font-size:12px}
-.multi-img-list{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
-.multi-img-item img{height:86px}
-.toast{bottom:76px}
-.save-hint{bottom:76px;right:12px}
+/* ================================================================
+   响应式（手机 / 平板）
+   ================================================================ */
+@media (max-width:760px){
+  body{font-size:15px}
+  .bar-row{padding:7px 10px;gap:6px}
+  .brand{font-size:14px;gap:5px}
+  .paper-name-btn{font-size:13.5px;padding:4px 9px;max-width:150px}
+  button{padding:8px 11px;font-size:13px;min-height:36px}
+  .tab{padding:8px 14px;font-size:14px}
+  .page{margin:8px;padding:18px 15px 30px;border-radius:12px}
+  .sec-title{font-size:20px;padding-left:12px;margin-bottom:16px;border-left-width:5px}
+  .q{padding:18px 0;flex-direction:column;gap:12px}
+  .q-figure{align-self:flex-end;max-width:100%}
+  .q-figure img{max-width:100% !important}
+  .stem{font-size:18px;line-height:1.95;letter-spacing:0}
+  .btns{gap:7px;margin-top:12px}
+  .btns button{padding:8px 13px;font-size:14px;font-weight:600}
+  .panel{font-size:16.5px;padding:12px 15px;margin-top:10px;line-height:1.9}
+  .field-label{font-size:14.5px;padding:2px 10px}
+  .field-val{font-size:17px;line-height:1.9}
+  .subq{padding:12px 14px;margin:10px 0}
+  .sub-stem{font-size:17px;line-height:1.9;letter-spacing:0}
+  .subq button{font-size:13.5px;padding:6px 13px}
+  .panel.sub-answer,.panel.sub-analysis{font-size:16.5px;padding:10px 14px}
+  .similar-head,.homework-head{font-size:15px;margin-bottom:10px}
+  .sim-nav{margin-top:12px;padding-top:12px;gap:8px}
+  .sim-progress{font-size:13.5px}
+  .sim-progress b{font-size:16px}
+  .sim-nav button{padding:8px 13px;font-size:14px;min-height:36px}
+  .modal{padding:18px 16px 16px;border-radius:13px;max-height:92vh}
+  .modal h3{font-size:18px}
+  .modal .hint{font-size:13px;padding:12px 14px}
+  .modal textarea{min-height:220px;font-size:12.5px}
+  .fig-thumb canvas{max-width:100px;max-height:70px}
+  .assign-row{flex-direction:column}
+  .assign-row .fig-preview{width:100%;height:110px}
+  .assign-row .af-group{min-width:0;width:100%}
+  #paperView{padding-bottom:130px}
+  .user-chip{font-size:12px;padding:4px 10px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-card .num{font-size:22px}
+  .hw-container{padding:0 10px}
+  .hw-set-body{padding:8px 14px 16px}
+  .hw-set-head{padding:13px 15px}
+  .hw-set-actions{margin-left:0;width:100%}
+  .pick-tab{padding:9px 13px;font-size:13px}
+  .pick-tab .cnt{min-width:18px;font-size:10.5px}
+  .pick-item{padding:10px 12px}
+  .pick-item .txt{font-size:14px}
+
+  /* 左下工具条 & 右下翻页控件 —— 移动端缩小 */
+  .ink-dock{left:8px;bottom:8px;padding:7px 9px;gap:5px;border-radius:13px;max-width:56vw}
+  .ink-dock .dock-sep{height:20px;margin:0 1px}
+  .ink-dock .swatch{width:28px;height:28px;border-radius:8px}
+  .ink-dock .size-btn{width:28px;height:28px;border-radius:8px}
+  .ink-dock .size-btn i{transform:scale(.78)}
+  .ink-dock button.act{font-size:11.5px;padding:6px 9px;border-radius:7px}
+  .page-nav{right:8px;bottom:8px;padding:7px 9px;gap:4px;border-radius:13px}
+  .page-nav button{min-width:36px;height:36px;font-size:15px;border-radius:9px;padding:0 9px}
+  .page-nav .page-ind{font-size:13px;min-width:56px}
+  .page-nav .page-ind b{font-size:14.5px}
+
+  .bb-ink-dock{left:8px;bottom:8px;padding:7px 9px;gap:5px;border-radius:13px;max-width:56vw}
+  .bb-ink-dock .dock-sep{height:20px;margin:0 1px}
+  .bb-swatch{width:28px;height:28px;border-radius:8px}
+  .bb-size{width:28px;height:28px;border-radius:8px}
+  .bb-size i{transform:scale(.78)}
+  .bb-ink-dock button.act{font-size:11.5px;padding:6px 9px;border-radius:7px}
+  .bb-page-nav{right:8px;bottom:8px;padding:7px 9px;gap:4px;border-radius:13px}
+  .bb-page-nav button{min-width:36px;height:36px;font-size:15px;border-radius:9px;padding:0 9px}
+  .bb-page-nav .page-ind{font-size:13px;min-width:56px}
+  .bb-page-nav .page-ind b{font-size:14.5px}
+  .bb-page-nav button.act{height:36px;padding:0 10px;font-size:11.5px}
+
+  .bb-stage-wrap{padding:8px}
+  .bb-bar{padding:6px 10px;gap:5px}
+  .bb-title{font-size:14px}
+  .bb-bar button.primary{font-size:13px;padding:7px 13px}
+
+  .drag-overlay .drag-inner{padding:26px 32px}
+  .drag-overlay .drag-icon{font-size:42px;margin-bottom:10px}
+  .drag-overlay .drag-title{font-size:17px}
+  .drag-overlay .drag-sub{font-size:12px}
+  .multi-img-list{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .multi-img-item img{height:92px}
+  .toast{bottom:82px;font-size:13px}
+  .save-hint{bottom:82px;right:12px;font-size:13px}
 }
 </style>
 </head>
@@ -479,7 +533,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask show" id="authModal" style="z-index:300">
   <div class="modal" style="max-width:440px">
     <h3 id="authTitle">登录 / 注册</h3>
-    <div class="hint" style="padding:10px 14px;font-size:13px">
+    <div class="hint" style="padding:11px 14px;font-size:13px">
       每个账号拥有独立的试卷空间。注册后会自动分配一个唯一用户 ID，用于识别和分享。
     </div>
     <div class="form-field">
@@ -554,13 +608,14 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   <button class="act" id="btnExitInk">退出涂抹</button>
 </div>
 
-<!-- ===== 右下角浮动翻页控件（试卷页面） ===== -->
+<!-- ===== 右下角浮动翻页控件（上一题 / 下一页 / 顶部） ===== -->
 <div class="page-nav" id="pageNav">
   <button id="btnPrevPage" title="上一页">◀</button>
   <span class="page-ind"><b id="pageCur">1</b> / <span id="pageTotal">1</span></span>
   <button id="btnNextPage" title="下一页">▶</button>
   <span class="dock-sep"></span>
-  <button class="act" id="btnTopPage" title="回到顶部">↑ 顶部</button>
+  <button id="btnNextQuestion" title="跳到下一题" class="primary">下一题 ▸</button>
+  <button id="btnTopPage" title="回到顶部">↑</button>
 </div>
 
 <!-- ===== 作业管理视图 ===== -->
@@ -574,12 +629,12 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   <div class="hw-container" id="hwContainer"></div>
 </section>
 
-<!-- ===== 小黑板 ===== -->
+<!-- ===== 小黑板（全屏自适应） ===== -->
 <section id="bbView">
   <div class="bb-bar">
     <div class="bb-title">📝 电子黑板</div>
     <div style="display:flex;gap:6px;align-items:center">
-      <span style="font-size:12px;color:#7a8399;margin:0 4px 0 8px">底色</span>
+      <span style="font-size:12.5px;color:#8b94a8;margin:0 4px 0 8px">底色</span>
       <button class="bb-theme active" data-theme="dark">黑板</button>
       <button class="bb-theme" data-theme="light">白板</button>
     </div>
@@ -625,7 +680,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <!-- 隐藏的图片选择输入（支持多选） -->
 <input type="file" id="fileInput" accept="image/*" hidden multiple>
 
-<!-- 拖拽覆盖层（新） -->
+<!-- 拖拽覆盖层 -->
 <div class="drag-overlay" id="dragOverlay">
   <div class="drag-inner">
     <div class="drag-icon">🖼</div>
@@ -644,7 +699,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="papersModal">
   <div class="modal">
     <h3>我的试卷</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
       所有内容自动同步到云端。点击"分享"会生成一个链接，对方打开后会得到一份<strong>全新独立</strong>的副本。
     </div>
     <div class="modal-actions">
@@ -662,7 +717,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="shareModal">
   <div class="modal" style="max-width:600px">
     <h3>分享链接</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
       把链接发给同事或学生，对方打开后会创建一份全新的副本，从零开始存储，不会影响你的原卷。
     </div>
     <div class="share-row">
@@ -680,7 +735,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="pickQuestionModal">
   <div class="modal wide">
     <h3>选择要分享的题目</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px;margin-bottom:4px">
+    <div class="hint" style="padding:12px 15px;font-size:13.5px;margin-bottom:4px">
       按顺序选：<b>① 试卷 → ② 大题</b>，然后在下方三个分类里勾选要分享的内容。<br>
       三个分类 <b>默认全部勾选</b>，可手动取消。<b>图形会自动跟着分享，涂鸦不分享。</b>
     </div>
@@ -729,7 +784,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="receiveQuestionModal">
   <div class="modal" style="max-width:520px">
     <h3>接收分享的试题</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
       粘贴对方发来的<b>分享链接</b>，或直接贴<b>分享 ID</b>。<br>
       收到后所有题目会依次追加到当前试卷末尾（举一反三与作业会带上类型标记）。
     </div>
@@ -750,7 +805,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   <div class="modal" style="max-width:900px">
     <h3>分享管理（仅管理员可见）</h3>
     <div class="stats-grid" id="adminStats"></div>
-    <div style="font-size:14px;font-weight:700;color:#3a4560;margin-top:6px">接受分享的用户记录</div>
+    <div style="font-size:15px;font-weight:700;color:#3a4560;margin-top:6px">接受分享的用户记录</div>
     <div class="table-wrap" id="adminTableWrap">
       <table id="adminTable">
         <thead>
@@ -770,11 +825,11 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ===== 图形编辑器（新增"换图"按钮） ===== -->
+<!-- ===== 图形编辑器 ===== -->
 <div class="modal-mask" id="figEditorModal">
   <div class="modal wide">
-    <h3>选择图形区域</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <h3>选择图像区域</h3>
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
       蓝框为自动识别结果。点击左上角圆点 <b>勾选/取消</b>；拖动框内可 <b>移动</b>；拖动边角手柄可 <b>缩放</b>；在空白处拖拽可 <b>新建</b>；按 <code>Delete</code> 删除当前编辑的框。<br>
       <b>勾选多个图形后，一次批量分配到不同题目。</b>
     </div>
@@ -797,12 +852,14 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
   </div>
 </div>
 
-<!-- ===== 图形批量分配 ===== -->
+<!-- ===== 图形批量分配（★ 新增：可选主题目 / 举一反三第N题 / 作业第N题） ===== -->
 <div class="modal-mask" id="assignModal">
-  <div class="modal">
-    <h3>分配图形到题目</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
-      为每个图形选择要插入的题目。默认按顺序分配，可手动修改。
+  <div class="modal wide">
+    <h3>分配图像到题目</h3>
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
+      为每张图片选择插入位置：<br>
+      ① 选择 <b>归属题目</b>；② 选择 <b>插入类型</b>（主题目 / 举一反三第 N 题 / 作业第 N 题）。<br>
+      默认按顺序分配，可手动修改。
     </div>
     <div class="assign-list" id="assignList"></div>
     <div class="modal-actions right">
@@ -816,7 +873,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="hwModal">
   <div class="modal">
     <h3>生成新作业 · 选择题目与数量</h3>
-    <div class="hint" style="padding:10px 14px">
+    <div class="hint" style="padding:11px 15px">
       勾选要布置的题目，并选择每题生成的作业题数（1 / 2 / 3 题）。<br>
       <b>已在往期作业中用过的题目会自动跳过，不会重复出现。</b>
     </div>
@@ -836,7 +893,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 <div class="modal-mask" id="addQModal">
   <div class="modal">
     <h3>添加题目到作业单</h3>
-    <div class="hint" style="padding:10px 14px">
+    <div class="hint" style="padding:11px 15px">
       已被往期作业使用的题目默认不可选。<br>
       如需使用，请先删除对应的作业单释放题目，或从该作业单中「移出」该题。
     </div>
@@ -854,12 +911,16 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
     <h3>导入试卷（粘贴文字即可）</h3>
     <div class="hint">
       <b>大题</b>直接写 <code>一、选择题</code>、<code>二、填空题</code> 即可。<br>
-      <b>题号</b>用 <code>1.</code> <code>2.</code> 起行，答案 / 解析 / 举一反三 / 作业自动归属。
+      <b>题号</b>用 <code>1.</code> <code>2.</code> 起行，答案 / 解析 / 举一反三 / 作业自动归属。<br>
+      <b>支持字段：</b>答案、解析、计算过程、算理、知识易错点，各自独立成行。
       <span class="fmt">一、选择题
 1. 题干第一行
 题干第二行
 答案：A
 解析：解题过程......
+计算过程：......
+算理：......
+知识易错点：......
 举一反三：
 - 变式题干 | 变式答案 | 变式解析
 作业：
@@ -873,16 +934,45 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
     <div class="modal-actions right">
       <button id="btnImportCancel">取消</button>
       <button id="btnImportDemo">填入示例</button>
-      <button id="btnImportOk" class="primary">解析并生成</button>
+      <button id="btnImportOk" class="primary">下一步</button>
     </div>
   </div>
 </div>
 
-<!-- ===== 多图选择弹窗（新） ===== -->
+<!-- ===== ★ 导入方式选择（新建 / 合并） ===== -->
+<div class="modal-mask" id="importChoiceModal">
+  <div class="modal" style="max-width:560px">
+    <h3>导入方式</h3>
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
+      检测到已解析的试卷内容。请选择导入方式：
+    </div>
+    <div class="import-choice-list" style="display:flex;flex-direction:column;gap:12px;margin:14px 0">
+      <div class="import-choice-card" data-choice="new" style="border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s">
+        <div style="font-size:17px;font-weight:800;color:#2a5ae0;margin-bottom:6px">🆕 创建新试卷</div>
+        <div style="font-size:14px;color:#5a6376;line-height:1.7">
+          把导入内容作为一份全新的试卷保存，不影响当前试卷。<br>
+          试卷名称使用导入文字中的标题（<code># 标题</code>）。
+        </div>
+      </div>
+      <div class="import-choice-card" data-choice="merge" style="border:2px solid #d5dbe8;border-radius:12px;padding:18px 20px;cursor:pointer;background:#fbfcff;transition:.15s">
+        <div style="font-size:17px;font-weight:800;color:#1f8a45;margin-bottom:6px">🔗 合并到当前试卷</div>
+        <div style="font-size:14px;color:#5a6376;line-height:1.7">
+          把导入内容作为新的大题，<b>追加到当前试卷已有大题的后面</b>。<br>
+          当前试卷：「<b id="importChoicePaperName">-</b>」
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions right">
+      <button id="importChoiceCancel">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 多图选择弹窗 ===== -->
 <div class="modal-mask" id="multiImgModal">
   <div class="modal">
     <h3>选择要处理的图片</h3>
-    <div class="hint" style="padding:11px 14px;font-size:13px">
+    <div class="hint" style="padding:12px 15px;font-size:13.5px">
       检测到 <b>多张图片</b>，请选择其中一张进入图形编辑器。<br>
       处理完这张后可以再点「🖼 添加图像」继续添加其他图片。
     </div>
@@ -900,7 +990,7 @@ button{padding:8px 11px;font-size:13px;min-height:36px}
 配置：把下面两个值换成你自己的 Supabase 项目信息
 Supabase 后台 → Settings → API → 复制 Project URL 和 anon public key
 ================================================================ */
-var SUPABASE_URL = 'https://dsyhhqimtglzatfggifj.supabase.co';
+var SUPABASE_URL = 'https://dsyhqimtglzatfggifj.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzeWhocWltdGdsemF0ZmdnaWZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTQ5ODM5OSwiZXhwIjoyMTA1MDc0Mzk5fQ.0lmqARrKYbqnxov0EAY5tXWj-qGHwBjpZufA_DhDce8';
 
 var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -941,6 +1031,59 @@ function toast(msg){
 }
 
 /* ================================================================
+★ 结构化字段规范化
+   —— 每一道题/变式/作业都统一成：
+      {
+        stem:     题干
+        answer:   答案
+        analysis: 解析
+        calc:     计算过程
+        reason:   算理
+        pitfall:  知识易错点
+        similar:  [子题...]
+        homework: [子题...]
+        figure:   配图 {src,width,side}
+      }
+================================================================ */
+function normalizeQuestion(q){
+  q = q || {};
+  var o = {
+    stem:     q.stem     || '',
+    answer:   q.answer   || '',
+    analysis: q.analysis || '',
+    calc:     q.calc     || '',
+    reason:   q.reason   || '',
+    pitfall:  q.pitfall  || '',
+    similar:  Array.isArray(q.similar)  ? q.similar.map(normalizeQuestion)  : [],
+    homework: Array.isArray(q.homework) ? q.homework.map(normalizeQuestion) : [],
+    figure:   q.figure || null
+  };
+  if(q._sharedFrom) o._sharedFrom = q._sharedFrom;
+  if(q._sharedKind) o._sharedKind = q._sharedKind;
+  return o;
+}
+
+function normalizeSection(s){
+  s = s || {};
+  return {
+    name: s.name || '题目',
+    questions: Array.isArray(s.questions) ? s.questions.map(normalizeQuestion) : []
+  };
+}
+
+function normalizeExamData(e){
+  e = e || {};
+  var out = {
+    title: e.title || '试卷讲解',
+    sections: Array.isArray(e.sections) ? e.sections.map(normalizeSection) : [],
+    blackboard: e.blackboard || { pages:[{strokes:[]}], current:0, theme:'dark' },
+    homeworkSets: Array.isArray(e.homeworkSets) ? e.homeworkSets : [],
+    usedKeys: Array.isArray(e.usedKeys) ? e.usedKeys : []
+  };
+  return out;
+}
+
+/* ================================================================
 全局状态
 ================================================================ */
 var currentUser = null;
@@ -954,14 +1097,14 @@ var simMemory = {};
 var hwAllOn = false;
 var resizeObserver = null;
 var saveTimer = null;
-var exam = { title:'', sections:[] };
+var exam = { title:'', sections:[], blackboard:null, homeworkSets:[], usedKeys:[] };
 
 var addTargetId = null;
 
-/* 多图选择临时缓存（新） */
-var pendingMultiImages = [];   /* [{dataUrl, name, width, height, file}] */
+/* 多图选择临时缓存 */
+var pendingMultiImages = [];
 
-/* 黑板状态 */
+/* 小黑板状态 */
 var bbState = { color:'#ffffff', size:8, erase:false };
 var bbCanvas = null, bbCtx = null, bbCurrentStroke = null;
 var BB_W = 1600, BB_H = 1000;
@@ -1117,6 +1260,7 @@ async function handleShareLink(){
   }
 }
 
+/* 把收到的条目追加到当前试卷末尾 */
 function appendItemsToPaper(items, sourceLabel){
   if(!exam.sections) exam.sections = [];
   var targetSec;
@@ -1129,16 +1273,20 @@ function appendItemsToPaper(items, sourceLabel){
   if(!targetSec.questions) targetSec.questions = [];
 
   items.forEach(function(it){
-    var q = {
-      stem: it.stem || '',
-      answer: it.answer || '',
+    var q = normalizeQuestion({
+      stem:     it.stem     || '',
+      answer:   it.answer   || '',
       analysis: it.analysis || '',
-      similar: it.similar || [],
+      calc:     it.calc     || '',
+      reason:   it.reason   || '',
+      pitfall:  it.pitfall  || '',
+      similar:  it.similar  || [],
       homework: it.homework || [],
-      figure: it.figure || null,
-      _sharedFrom: sourceLabel || null,
-      _sharedKind: it.kind || 'main'
-    };
+      figure:   it.figure   || null
+    });
+    q._sharedFrom = sourceLabel || null;
+    q._sharedKind = it.kind || 'main';
+
     if(it.kind === 'similar'){
       q.stem = '【举一反三】' + q.stem;
     } else if(it.kind === 'homework'){
@@ -1232,10 +1380,13 @@ async function receiveShareById(shareId){
   var myId = currentUser.id;
   var finalName = paperName + '（来自 ' + ownerCode + '）';
 
+  var incoming = normalizeExamData(Object.assign({}, snapshot, { title: finalName }));
+  incoming.title = finalName;
+
   var ins = await sb.from('papers').insert({
     owner_id: myId,
     name: finalName,
-    data: Object.assign({}, snapshot, { title: finalName }),
+    data: incoming,
     saved_homework: null,
     sim_memory: {},
     current_page: 0,
@@ -1274,19 +1425,16 @@ async function loadPapers(preferId){
   papers = r.data || [];
 
   if(!papers.length){
+    var blank = normalizeExamData({
+      title: '我的第一份试卷',
+      sections: [{ name:'一、题目', questions:[{
+        stem:'（点击右上角"导入试卷"，粘贴题目文字即可自动生成）'
+      }] }]
+    });
     var ins = await sb.from('papers').insert({
       owner_id: currentUser.id,
       name: '我的第一份试卷',
-      data: {
-        title: '我的第一份试卷',
-        sections: [{ name:'一、题目', questions:[{
-          stem:'（点击右上角"导入试卷"，粘贴题目文字即可自动生成）',
-          answer:'', analysis:'', similar:[], homework:[]
-        }] }],
-        blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' },
-        homeworkSets: [],
-        usedKeys: []
-      },
+      data: blank,
       saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
     }).select().single();
     if(ins.error){ console.error(ins.error); return; }
@@ -1306,10 +1454,9 @@ async function openPaper(id){
   if(!r.data) return;
 
   currentPaper = r.data;
-  exam = currentPaper.data || { title:'', sections:[] };
-  if(!exam.sections) exam.sections = [];
-  if(!exam.homeworkSets) exam.homeworkSets = [];
-  if(!exam.usedKeys) exam.usedKeys = [];
+
+  /* 旧数据规范化：补齐 calc / reason / pitfall 等字段 */
+  exam = normalizeExamData(currentPaper.data || {});
 
   ensureBlackboard();
 
@@ -1369,8 +1516,52 @@ function scheduleSave(){
   saveTimer = setTimeout(function(){ saveTimer=null; saveCurrentPaper(); }, 900);
 }
 /* ================================================================
-渲染
+★★★ 渲染：结构化字段（答案 / 计算过程 / 算理 / 易错点 / 解析）
+    各自独立成行
 ================================================================ */
+
+/* 生成一个字段块 HTML，如果内容为空也显示占位，方便老师补全 */
+function fieldBlockHTML(labelText, labelClass, valueText, emptyTip){
+  var v = String(valueText || '').trim();
+  var isEmpty = !v;
+  return '<div class="field-block">'+
+    '<span class="field-label '+labelClass+'">'+labelText+'</span>'+
+    '<span class="field-val'+(isEmpty?' empty':'')+'">'+esc(isEmpty ? (emptyTip||'（暂未填写）') : v)+'</span>'+
+  '</div>';
+}
+
+/* 渲染一道题的完整字段区（答案 / 解析 / 计算过程 / 算理 / 易错点）
+   顺序：答案 → 计算过程 → 算理 → 知识易错点 → 解析
+*/
+function renderFieldsHTML(q, isSub){
+  var blocks = '';
+  /* 答案 */
+  if(q.answer && String(q.answer).trim()){
+    blocks += fieldBlockHTML('✅ 答案','ans', q.answer);
+  }
+  /* 计算过程 */
+  if(q.calc && String(q.calc).trim()){
+    blocks += fieldBlockHTML('📐 计算过程','calc', q.calc);
+  }
+  /* 算理 */
+  if(q.reason && String(q.reason).trim()){
+    blocks += fieldBlockHTML('💡 算理','reason', q.reason);
+  }
+  /* 知识易错点 */
+  if(q.pitfall && String(q.pitfall).trim()){
+    blocks += fieldBlockHTML('⚠️ 知识易错点','pitfall', q.pitfall);
+  }
+  /* 解析 */
+  if(q.analysis && String(q.analysis).trim()){
+    blocks += fieldBlockHTML('📝 解析','ana', q.analysis);
+  }
+  /* 如果一样都没有，显示占位 */
+  if(!blocks){
+    blocks = '<div class="field-val empty">该题暂无答案与解析</div>';
+  }
+  return blocks;
+}
+
 function renderTabs(){
   $('#tabs').innerHTML = exam.sections.map(function(s,i){
     return '<button class="tab" data-page="'+i+'">'+esc(s.name)+'</button>';
@@ -1388,9 +1579,8 @@ function buildSimilarArea(list,si,qi){
     return '<div class="subq sim-item" data-sub="'+i+'"'+(i===startIdx?'':' style="display:none"')+'>'+
       '<div class="sub-title">举一反三 · 第 '+(i+1)+' 题</div>'+
       '<div class="sub-stem">'+esc(s.stem)+'</div>'+
-      '<div class="btns"><button data-act="sub-answer">答案</button><button data-act="sub-analysis">解析</button></div>'+
-      '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
-      '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
+      '<div class="btns"><button data-act="sub-answer">答案与解析</button></div>'+
+      '<div class="panel sub-answer">'+renderFieldsHTML(s, true)+'</div>'+
     '</div>';
   }).join('');
 
@@ -1411,9 +1601,8 @@ function buildHomeworkArea(list){
     return '<div class="subq" data-sub="'+i+'">'+
       '<div class="sub-title">作业 · 第 '+(i+1)+' 题</div>'+
       '<div class="sub-stem">'+esc(s.stem)+'</div>'+
-      '<div class="btns"><button data-act="hw-answer">答案</button><button data-act="hw-analysis">解析</button></div>'+
-      '<div class="panel sub-answer">'+esc(s.answer||'暂无答案')+'</div>'+
-      '<div class="panel sub-analysis">'+esc(s.analysis||'暂无解析')+'</div>'+
+      '<div class="btns"><button data-act="hw-answer">答案与解析</button></div>'+
+      '<div class="panel sub-answer">'+renderFieldsHTML(s, true)+'</div>'+
     '</div>';
   }).join('');
 }
@@ -1440,13 +1629,12 @@ function questionHTML(q,si,qi){
     '<div class="q-main">'+
       '<div class="stem">'+(qi+1)+'. '+esc(q.stem)+'</div>'+
       '<div class="btns">'+
-        '<button data-act="answer">答案</button>'+
-        '<button data-act="analysis">解析</button>'+
+        '<button data-act="answer" class="primary">答案 / 解析</button>'+
         '<button data-act="similar">举一反三</button>'+
         '<button data-act="homework">作业</button>'+
       '</div>'+
-      '<div class="panel answer">'+esc(q.answer||'暂无答案')+'</div>'+
-      '<div class="panel analysis">'+esc(q.analysis||'暂无解析')+'</div>'+
+      /* 主面板：所有字段都在这里独立成行 */
+      '<div class="panel answer">'+renderFieldsHTML(q, false)+'</div>'+
       '<div class="panel similar"><div class="similar-head">举一反三 · 变式训练</div>'+buildSimilarArea(q.similar,si,qi)+'</div>'+
       '<div class="panel homework"><div class="homework-head">配套作业 · 课后练习</div>'+buildHomeworkArea(q.homework)+'</div>'+
     '</div>'+
@@ -1664,7 +1852,7 @@ function attachInk(page){
 }
 
 /* ================================================================
-电子黑板
+电子黑板（全屏自适应）
 ================================================================ */
 function bbInit(){
   bbCanvas = document.getElementById('bbCanvas');
@@ -1757,6 +1945,7 @@ function bbRedraw(){
 
 function bbPointerPos(e){
   var rect = bbCanvas.getBoundingClientRect();
+  if(rect.width < 1 || rect.height < 1) return { x:0, y:0 };
   return {
     x: clamp((e.clientX - rect.left) / rect.width, 0, 1),
     y: clamp((e.clientY - rect.top) / rect.height, 0, 1)
@@ -1765,7 +1954,7 @@ function bbPointerPos(e){
 
 function bbBindPointer(){
   bbCanvas.addEventListener('pointerdown', function(e){
-    if(e.button !== 0 && e.pointerType === 'mouse') return;
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
     var bb = ensureBlackboard();
     var page = bb.pages[bb.current];
@@ -1868,6 +2057,13 @@ function enterBlackboard(){
   bbApplyTheme();
   bbRenderTabs();
   bbRedraw();
+  /* 进入后触发一次 resize，让 canvas 铺满容器 */
+  setTimeout(function(){
+    if(bbCanvas){
+      var rect = bbCanvas.getBoundingClientRect();
+      if(rect.width && rect.height){ bbRedraw(); }
+    }
+  }, 60);
 }
 
 function exitBlackboard(){
@@ -1963,7 +2159,6 @@ $('#paperView').addEventListener('click', function(e){
   if(!q) return;
 
   if(act==='answer') togglePanel(q.querySelector(':scope > .q-main > .panel.answer'), btn);
-  else if(act==='analysis') togglePanel(q.querySelector(':scope > .q-main > .panel.analysis'), btn);
   else if(act==='similar'){
     var panel = q.querySelector(':scope > .q-main > .panel.similar');
     if(!panel.classList.contains('show')) simRestore(q);
@@ -1971,16 +2166,103 @@ $('#paperView').addEventListener('click', function(e){
   }
   else if(act==='homework') togglePanel(q.querySelector(':scope > .q-main > .panel.homework'), btn);
   else if(act==='sub-answer') togglePanel(sub.querySelector('.panel.sub-answer'), btn);
-  else if(act==='sub-analysis') togglePanel(sub.querySelector('.panel.sub-analysis'), btn);
   else if(act==='hw-answer') togglePanel(sub.querySelector('.panel.sub-answer'), btn);
-  else if(act==='hw-analysis') togglePanel(sub.querySelector('.panel.sub-analysis'), btn);
   else if(act==='sim-prev') simMove(q,-1);
   else if(act==='sim-next') simMove(q,+1);
   else if(act==='sim-exit') simExit(q);
 });
 
 /* ================================================================
-左下角浮动涂抹工具条（试卷） & 右下角翻页控件
+★ 左右滑动切题（触屏 + 鼠标拖拽都支持）
+================================================================ */
+(function setupSwipePage(){
+  var swipe = { startX:0, startY:0, tracking:false, moved:false, startTime:0 };
+  var SWIPE_MIN_X = 60;      /* 水平最小滑动距离 */
+  var SWIPE_MAX_Y = 50;      /* 垂直最大偏移（避免纵向滚动误触发） */
+  var SWIPE_MAX_MS = 700;    /* 滑动时间上限 */
+
+  function shouldIgnore(el){
+    if(!el) return true;
+    /* 忽略在涂抹模式下的滑动（涂抹有自己的 canvas 事件） */
+    if(document.body.classList.contains('ink-on')) return true;
+    /* 忽略在可滚动/可交互元素内的滑动 */
+    if(el.closest('.bb-ink-dock, .bb-page-nav, .ink-dock, .page-nav')) return true;
+    if(el.closest('.fig-region, .fig-stage, canvas.ink')) return true;
+    if(el.closest('input, textarea, select')) return true;
+    if(el.closest('.modal-mask.show')) return true;
+    return false;
+  }
+
+  function onStart(e){
+    if(e.touches && e.touches.length > 1) return;   /* 多指不处理 */
+    var target = e.target;
+    if(shouldIgnore(target)) return;
+    var t = e.touches ? e.touches[0] : e;
+    swipe.startX = t.clientX;
+    swipe.startY = t.clientY;
+    swipe.startTime = Date.now();
+    swipe.tracking = true;
+    swipe.moved = false;
+  }
+
+  function onMove(e){
+    if(!swipe.tracking) return;
+    var t = e.touches ? e.touches[0] : e;
+    var dx = t.clientX - swipe.startX;
+    var dy = t.clientY - swipe.startY;
+    if(Math.abs(dx) > 8 || Math.abs(dy) > 8) swipe.moved = true;
+  }
+
+  function onEnd(e){
+    if(!swipe.tracking) return;
+    swipe.tracking = false;
+
+    var t = (e.changedTouches && e.changedTouches[0]) ||
+            (e.touches && e.touches[0]) || e;
+    var dx = t.clientX - swipe.startX;
+    var dy = t.clientY - swipe.startY;
+    var dt = Date.now() - swipe.startTime;
+
+    if(dt > SWIPE_MAX_MS) return;
+    if(Math.abs(dy) > SWIPE_MAX_Y) return;
+    if(Math.abs(dx) < SWIPE_MIN_X) return;
+    if(Math.abs(dx) < Math.abs(dy) * 1.5) return;
+
+    if(dx < 0){
+      /* 左滑 → 下一页 */
+      if(state.page < exam.sections.length - 1){
+        showPage(state.page + 1);
+        window.scrollTo({top:0, behavior:'smooth'});
+        toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
+      } else {
+        toast('已经是最后一页');
+      }
+    } else {
+      /* 右滑 → 上一页 */
+      if(state.page > 0){
+        showPage(state.page - 1);
+        window.scrollTo({top:0, behavior:'smooth'});
+        toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
+      } else {
+        toast('已经是第一页');
+      }
+    }
+  }
+
+  var paperView = document.getElementById('paperView');
+  paperView.addEventListener('touchstart', onStart, {passive:true});
+  paperView.addEventListener('touchmove', onMove, {passive:true});
+  paperView.addEventListener('touchend', onEnd, {passive:true});
+  paperView.addEventListener('touchcancel', function(){ swipe.tracking = false; }, {passive:true});
+
+  /* 鼠标拖拽（桌面端） */
+  paperView.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+})();
+
+/* ================================================================
+左下角浮动涂抹工具条 & 右下角翻页控件
 ================================================================ */
 $$('#inkDock .swatch').forEach(function(b){
   b.onclick = function(){
@@ -2029,6 +2311,37 @@ $('#btnNextPage').onclick = function(){
   if(state.page >= exam.sections.length - 1) return;
   showPage(state.page + 1);
   window.scrollTo({top:0, behavior:'smooth'});
+};
+
+/* ★ 下一题按钮：在当前页内滚动到下一道题；如果已在最后一题，则翻到下一页第一题 */
+$('#btnNextQuestion').onclick = function(){
+  var curPage = document.querySelector('#paperView .page[data-page="'+state.page+'"]');
+  if(curPage){
+    var qs = $$('.q', curPage);
+    /* 找到当前视口内最上方的题，跳到它之后一题 */
+    var idx = -1;
+    for(var i=0;i<qs.length;i++){
+      var r = qs[i].getBoundingClientRect();
+      if(r.bottom > 100){ idx = i - 1; break; }
+    }
+    if(idx < -1) idx = -1;
+
+    if(idx < qs.length - 1){
+      var target = qs[idx + 1];
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        return;
+      }
+    }
+  }
+  /* 已是当前页最后一题 → 翻到下一页 */
+  if(state.page < exam.sections.length - 1){
+    showPage(state.page + 1);
+    window.scrollTo({top:0, behavior:'smooth'});
+    toast('第 ' + (state.page+1) + ' / ' + exam.sections.length + ' 页');
+  } else {
+    toast('已经是最后一题');
+  }
 };
 
 $('#btnTopPage').onclick = function(){
@@ -2172,13 +2485,10 @@ $('#btnNewPaper').onclick = async function(){
   var nn = prompt('新试卷名称：', '未命名试卷');
   if(nn===null) return; nn = nn.trim() || '未命名试卷';
 
-  var blank = {
+  var blank = normalizeExamData({
     title: nn,
-    sections: [{ name:'一、题目', questions:[{stem:'（点击"导入试卷"粘贴题目文字）', answer:'', analysis:'', similar:[], homework:[]}] }],
-    blackboard: { pages: [{strokes:[]}], current: 0, theme: 'dark' },
-    homeworkSets: [],
-    usedKeys: []
-  };
+    sections: [{ name:'一、题目', questions:[{stem:'（点击"导入试卷"粘贴题目文字）'}] }]
+  });
 
   var r = await sb.from('papers').insert({
     owner_id: currentUser.id, name: nn, data: blank,
@@ -2527,6 +2837,9 @@ $('#pickQuestionConfirm').onclick = async function(){
         stem: q.stem || '',
         answer: q.answer || '',
         analysis: q.analysis || '',
+        calc: q.calc || '',
+        reason: q.reason || '',
+        pitfall: q.pitfall || '',
         similar: q.similar || [],
         homework: q.homework || [],
         figure: q.figure || null
@@ -2539,6 +2852,9 @@ $('#pickQuestionConfirm').onclick = async function(){
           stem: s.stem || '',
           answer: s.answer || '',
           analysis: s.analysis || '',
+          calc: s.calc || '',
+          reason: s.reason || '',
+          pitfall: s.pitfall || '',
           similar: [],
           homework: [],
           figure: null,
@@ -2553,6 +2869,9 @@ $('#pickQuestionConfirm').onclick = async function(){
           stem: h.stem || '',
           answer: h.answer || '',
           analysis: h.analysis || '',
+          calc: h.calc || '',
+          reason: h.reason || '',
+          pitfall: h.pitfall || '',
           similar: [],
           homework: [],
           figure: null,
@@ -2832,7 +3151,6 @@ async function handleIncomingImages(files){
   $('#multiImgModal').classList.add('show');
 }
 
-/* 读一张图片文件为 {dataUrl, name, width, height} */
 function readImageFile(file, idx){
   return new Promise(function(resolve, reject){
     var reader = new FileReader();
@@ -2855,7 +3173,6 @@ function readImageFile(file, idx){
   });
 }
 
-/* 把单个 {dataUrl,...} 载入图形编辑器 */
 function openFigEditorFromItem(item){
   var img = new Image();
   img.onload = function(){
@@ -2868,7 +3185,6 @@ function openFigEditorFromItem(item){
   img.src = item.dataUrl;
 }
 
-/* 单个 File → 直接进编辑器 */
 async function loadOneImageIntoEditor(file){
   if(!isImageFile(file)){
     toast('请选择图片文件（PNG/JPG/GIF/WEBP/SVG）');
@@ -2883,7 +3199,6 @@ async function loadOneImageIntoEditor(file){
   }
 }
 
-/* ---------- 多图选择弹窗 ---------- */
 function renderMultiImgModal(list){
   var el = $('#multiImgList');
   el.innerHTML = list.map(function(it, i){
@@ -2913,11 +3228,10 @@ $('#multiImgCancel').onclick = function(){
 /* ================================================================
 图形识别 & 批量分配
 ================================================================ */
-/* ★ 关键修复：先显示弹窗，再等两帧后 load，确保 DOM 布局完成 */
+/* ★ 关键：先显示弹窗，再等两帧后 load，确保 canvas 布局完成 */
 function openFigEditor(sourceCanvas){
   var modal = document.getElementById('figEditorModal');
   modal.classList.add('show');
-  /* 双 rAF 保证浏览器已经完成布局，canvas 的 getBoundingClientRect 不再是 0 */
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       FigEditor.load(sourceCanvas);
@@ -2925,13 +3239,49 @@ function openFigEditor(sourceCanvas){
   });
 }
 
-function flattenQuestionList(){
+/* 收集所有「可挂图的题目位置」：
+   - 每一道主题目
+   - 每一道主题目下的举一反三第 N 题
+   - 每一道主题目下的作业第 N 题
+*/
+function collectFigureTargets(){
   var arr = [];
   exam.sections.forEach(function(sec,si){
-    sec.questions.forEach(function(q,qi){
+    (sec.questions||[]).forEach(function(q,qi){
+      var qLabel = sec.name + ' · 第 ' + (qi+1) + ' 题';
+      var qShort = String(q.stem||'').replace(/\s+/g,' ').slice(0, 26);
+
+      /* 主题目 */
       arr.push({
-        si: si, qi: qi,
-        label: sec.name + ' · 第 ' + (qi+1) + ' 题：' + String(q.stem||'').replace(/\s+/g,' ').slice(0, 32)
+        value: si+'-'+qi+'-main-0',
+        si: si, qi: qi, kind: 'main', idx: 0,
+        group: qLabel,
+        label: '【主题目】' + qShort,
+        badge: 'main'
+      });
+
+      /* 举一反三 */
+      (q.similar||[]).forEach(function(s, idx){
+        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 22);
+        arr.push({
+          value: si+'-'+qi+'-similar-'+idx,
+          si: si, qi: qi, kind: 'similar', idx: idx,
+          group: qLabel,
+          label: '【举一反三 '+(idx+1)+'】' + sShort,
+          badge: 'sim'
+        });
+      });
+
+      /* 作业 */
+      (q.homework||[]).forEach(function(h, idx){
+        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 22);
+        arr.push({
+          value: si+'-'+qi+'-homework-'+idx,
+          si: si, qi: qi, kind: 'homework', idx: idx,
+          group: qLabel,
+          label: '【作业 '+(idx+1)+'】' + hShort,
+          badge: 'hw'
+        });
       });
     });
   });
@@ -2947,14 +3297,21 @@ function showAssignModal(){
     return { dataUrl: c.toDataURL('image/png') };
   });
 
-  var qList = flattenQuestionList();
+  var targets = collectFigureTargets();
+  if(!targets.length){
+    toast('当前试卷还没有可插入的题目');
+    return;
+  }
+
   var listEl = $('#assignList');
   listEl.innerHTML = '';
 
+  /* 每张图一行：左预览 + 右归属题目下拉 + 插入位置下拉 */
   assignItems.forEach(function(item, i){
     var row = document.createElement('div');
     row.className = 'assign-row';
 
+    /* 左：预览 */
     var prev = document.createElement('div');
     prev.className = 'fig-preview';
     var img = document.createElement('img');
@@ -2962,21 +3319,86 @@ function showAssignModal(){
     prev.appendChild(img);
     row.appendChild(prev);
 
-    var arrow = document.createElement('span');
-    arrow.className = 'arrow';
-    arrow.textContent = '→';
-    row.appendChild(arrow);
+    /* 右：字段组 */
+    var fields = document.createElement('div');
+    fields.className = 'assign-fields';
 
-    var sel = document.createElement('select');
-    var defaultIdx = Math.min(i, qList.length - 1);
-    qList.forEach(function(q, idx){
-      var opt = document.createElement('option');
-      opt.value = q.si + '-' + q.qi;
-      opt.textContent = q.label;
-      if(idx === defaultIdx) opt.selected = true;
-      sel.appendChild(opt);
+    /* 归属题目组 */
+    var g1 = document.createElement('div');
+    g1.className = 'af-group';
+    var l1 = document.createElement('label');
+    l1.textContent = '① 归属题目';
+    g1.appendChild(l1);
+    var selQ = document.createElement('select');
+    selQ.className = 'assign-q';
+    /* 用分组下拉：每个大题的题目归一组 */
+    var groupsMap = {};
+    targets.forEach(function(t){
+      if(!groupsMap[t.group]) groupsMap[t.group] = [];
+      groupsMap[t.group].push(t);
     });
-    row.appendChild(sel);
+    var qOnlyValues = [];   /* 只列主题目 */
+    targets.forEach(function(t){
+      if(t.kind === 'main'){
+        qOnlyValues.push({ value: t.si+'-'+t.qi, label: t.group });
+      }
+    });
+    var defaultQ = i < qOnlyValues.length ? qOnlyValues[i].value : qOnlyValues[0].value;
+    qOnlyValues.forEach(function(o){
+      var opt = document.createElement('option');
+      opt.value = o.value;
+      opt.textContent = o.label;
+      if(o.value === defaultQ) opt.selected = true;
+      selQ.appendChild(opt);
+    });
+    g1.appendChild(selQ);
+
+    /* 插入位置组 */
+    var g2 = document.createElement('div');
+    g2.className = 'af-group';
+    var l2 = document.createElement('label');
+    l2.textContent = '② 插入位置';
+    g2.appendChild(l2);
+    var selKind = document.createElement('select');
+    selKind.className = 'assign-kind';
+    g2.appendChild(selKind);
+
+    /* 根据归属题刷新"插入位置"选项 */
+    function refreshKindOptions(){
+      selKind.innerHTML = '';
+      var parts = selQ.value.split('-');
+      var si = +parts[0], qi = +parts[1];
+      var sec = exam.sections[si];
+      var q = sec && sec.questions[qi];
+      if(!q) return;
+      /* 主题目 */
+      var optMain = document.createElement('option');
+      optMain.value = si+'-'+qi+'-main-0';
+      optMain.textContent = '主题目下方';
+      selKind.appendChild(optMain);
+      /* 举一反三 */
+      (q.similar||[]).forEach(function(s, idx){
+        var o = document.createElement('option');
+        o.value = si+'-'+qi+'-similar-'+idx;
+        var sShort = String(s.stem||'').replace(/\s+/g,' ').slice(0, 18);
+        o.textContent = '举一反三 第'+(idx+1)+'题：' + sShort;
+        selKind.appendChild(o);
+      });
+      /* 作业 */
+      (q.homework||[]).forEach(function(h, idx){
+        var o = document.createElement('option');
+        o.value = si+'-'+qi+'-homework-'+idx;
+        var hShort = String(h.stem||'').replace(/\s+/g,' ').slice(0, 18);
+        o.textContent = '作业 第'+(idx+1)+'题：' + hShort;
+        selKind.appendChild(o);
+      });
+    }
+    selQ.addEventListener('change', refreshKindOptions);
+    refreshKindOptions();
+
+    fields.appendChild(g1);
+    fields.appendChild(g2);
+    row.appendChild(fields);
 
     listEl.appendChild(row);
   });
@@ -2985,22 +3407,40 @@ function showAssignModal(){
   $('#assignModal').classList.add('show');
 }
 
+/* ★ 确认插入：按 selQ + selKind 的 value 分派到主题目 / 举一反三 / 作业 */
 function confirmAssign(){
   var rows = $$('#assignList .assign-row');
   var insertCount = 0;
 
   rows.forEach(function(row, i){
-    var sel = row.querySelector('select');
-    if(!sel) return;
-    var parts = sel.value.split('-');
+    var selKind = row.querySelector('.assign-kind');
+    if(!selKind) return;
+    var parts = selKind.value.split('-');
     var si = +parts[0], qi = +parts[1];
-    var q = exam.sections[si] && exam.sections[si].questions[qi];
+    var kind = parts[2];             /* main | similar | homework */
+    var idx = +parts[3];
+
+    var sec = exam.sections[si];
+    var q = sec && sec.questions[qi];
     if(!q) return;
-    q.figure = {
+
+    var figData = {
       src: assignItems[i].dataUrl,
       width: 180,
       side: 'right'
     };
+
+    if(kind === 'main'){
+      q.figure = figData;
+    } else if(kind === 'similar'){
+      if(q.similar && q.similar[idx]){
+        q.similar[idx].figure = figData;
+      } else { return; }
+    } else if(kind === 'homework'){
+      if(q.homework && q.homework[idx]){
+        q.homework[idx].figure = figData;
+      } else { return; }
+    }
     insertCount++;
   });
 
@@ -3013,7 +3453,7 @@ function confirmAssign(){
     });
   });
   scheduleSave();
-  toast('已插入 ' + insertCount + ' 个图形');
+  toast('已插入 ' + insertCount + ' 张图像');
   assignItems = [];
 }
 
@@ -3187,11 +3627,10 @@ function imageToCanvas(img, maxSide){
 1) this.canvasEl 指向 DOM 中的 #figCanvas 元素，坐标计算用它
 2) toImageCoords 加保护，rect 为 0 时返回 {0,0}
 3) finish 只在「新建」时检查选区大小，移动/缩放不检查
-4) 触摸/笔事件不因 button 判断被跳过
 ================================================================ */
 var FigEditor = {
-  canvas: null,        /* 离屏 canvas（用于裁剪/检测） */
-  canvasEl: null,      /* DOM 中的 #figCanvas（用于坐标计算） */
+  canvas: null,
+  canvasEl: null,
   regions: [],
   activeId: null,
   nextId: 1,
@@ -3206,13 +3645,11 @@ var FigEditor = {
     this.nextId = 1;
     this.drag = null;
 
-    /* 关键：拿到 DOM 元素并设置尺寸 */
     this.canvasEl = document.getElementById('figCanvas');
     this.canvasEl.width = sourceCanvas.width;
     this.canvasEl.height = sourceCanvas.height;
     this.canvasEl.getContext('2d').drawImage(sourceCanvas, 0, 0);
 
-    /* 自动检测图形 */
     var detected = detectRegions(sourceCanvas);
     this.regions = detected.map(function(r){
       return { id: self.nextId++, x:r.x, y:r.y, w:r.w, h:r.h, selected:false };
@@ -3223,7 +3660,6 @@ var FigEditor = {
     this.updateUI();
   },
 
-  /* ★ 关键修复：用 canvasEl 计算坐标，加除零保护 */
   toImageCoords: function(clientX, clientY){
     if(!this.canvasEl) return { x:0, y:0 };
     var rect = this.canvasEl.getBoundingClientRect();
@@ -3339,13 +3775,11 @@ var FigEditor = {
     var stage = document.getElementById('figStage');
     var self = this;
 
-    /* 阻止浏览器原生拖拽和右键菜单 */
     stage.addEventListener('dragstart', function(e){ e.preventDefault(); });
     stage.addEventListener('contextmenu', function(e){ e.preventDefault(); });
 
     stage.addEventListener('pointerdown', function(e){
       if(!self.canvasEl) return;
-      /* 鼠标左键才响应；触摸/笔始终响应 */
       if(e.pointerType === 'mouse' && e.button !== 0) return;
 
       e.preventDefault();
@@ -3353,14 +3787,12 @@ var FigEditor = {
 
       var pt = self.toImageCoords(e.clientX, e.clientY);
 
-      /* 1) 点击勾选圆点 */
       if(e.target.classList.contains('rg-check')){
         var regEl = e.target.closest('.fig-region');
         if(regEl){ self.toggleSelect(+regEl.dataset.id); }
         return;
       }
 
-      /* 2) 点击缩放手柄 —— 优先级最高 */
       var handleEl = e.target.closest('.h');
       if(handleEl){
         var rEl1 = handleEl.closest('.fig-region');
@@ -3379,7 +3811,6 @@ var FigEditor = {
         }
       }
 
-      /* 3) 点击已有框体（非手柄） → 移动 */
       var rEl2 = e.target.closest('.fig-region');
       if(rEl2){
         var id2 = +rEl2.dataset.id;
@@ -3395,7 +3826,6 @@ var FigEditor = {
         return;
       }
 
-      /* 4) 空白处拖拽 → 新建选区 */
       var newId = self.nextId++;
       self.regions.push({ id:newId, x:pt.x, y:pt.y, w:0, h:0, selected:false });
       self.activeId = newId;
@@ -3453,7 +3883,6 @@ var FigEditor = {
       if(!self.drag) return;
       var r = self.regions.find(function(x){ return x.id === self.drag.id; });
       var isCreate = (self.drag.type === 'create');
-      /* ★ 只有「新建」才检查大小；移动/缩放一律保留 */
       if(r && isCreate && (r.w < 15 || r.h < 15)){
         self.regions = self.regions.filter(function(x){ return x.id !== r.id; });
         if(self.activeId === r.id) self.activeId = null;
@@ -3492,7 +3921,7 @@ var FigEditor = {
   }
 };
 
-/* ===== 图形编辑器按钮事件 ===== */
+/* 图形编辑器按钮事件 */
 $('#figEditorCancel').onclick = function(){
   $('#figEditorModal').classList.remove('show');
   FigEditor.clearAll();
@@ -3578,7 +4007,11 @@ function keyToItem(key){
     var si = +a[1], qi = +a[2];
     var q = exam.sections[si] && exam.sections[si].questions[qi];
     if(!q) return null;
-    return { key:key, si:si, qi:qi, hi:-1, stem:q.stem, answer:q.answer, analysis:q.analysis };
+    return {
+      key:key, si:si, qi:qi, hi:-1,
+      stem:q.stem, answer:q.answer, analysis:q.analysis,
+      calc:q.calc, reason:q.reason, pitfall:q.pitfall
+    };
   }
   var b = key.split("-");
   var si2 = +b[0], qi2 = +b[1], hi2 = +b[2];
@@ -3586,7 +4019,11 @@ function keyToItem(key){
   if(!q2) return null;
   var h = (q2.homework||[])[hi2];
   if(!h) return null;
-  return { key:key, si:si2, qi:qi2, hi:hi2, stem:h.stem, answer:h.answer, analysis:h.analysis };
+  return {
+    key:key, si:si2, qi:qi2, hi:hi2,
+    stem:h.stem, answer:h.answer, analysis:h.analysis,
+    calc:h.calc, reason:h.reason, pitfall:h.pitfall
+  };
 }
 
 function renderHomeworkList(){
@@ -3625,13 +4062,10 @@ function hwItemHTML(it,i){
   return '<div class="hw-q" data-key="'+esc(it.key)+'">'+
     '<div class="stem">'+(i+1)+'. '+esc(it.stem)+'</div>'+
     '<div class="btns">'+
-      '<button data-hwq="toggle">讲解</button>'+
+      '<button data-hwq="toggle" class="primary">讲解</button>'+
       '<button data-hwq="remove" class="danger">移出</button>'+
     '</div>'+
-    '<div class="panel hw-explain">'+
-      '<div class="line"><b>答案：</b>'+esc(it.answer||'---')+'</div>'+
-      '<div class="line"><b>解析：</b>'+esc(it.analysis||'---')+'</div>'+
-    '</div>'+
+    '<div class="panel hw-explain">'+renderFieldsHTML(it, true)+'</div>'+
   '</div>';
 }
 
@@ -3684,7 +4118,8 @@ function doGenerateHomework(){
       if(exam.usedKeys.indexOf(k) >= 0) continue;
       avail.push({
         key:k, si:p.si, qi:p.qi, hi:i,
-        stem:pool[i].stem, answer:pool[i].answer, analysis:pool[i].analysis
+        stem:pool[i].stem, answer:pool[i].answer, analysis:pool[i].analysis,
+        calc:pool[i].calc, reason:pool[i].reason, pitfall:pool[i].pitfall
       });
     }
 
@@ -3693,7 +4128,8 @@ function doGenerateHomework(){
       if(exam.usedKeys.indexOf(qk) < 0){
         avail.push({
           key:qk, si:p.si, qi:p.qi, hi:-1,
-          stem:q.stem, answer:q.answer, analysis:q.analysis
+          stem:q.stem, answer:q.answer, analysis:q.analysis,
+          calc:q.calc, reason:q.reason, pitfall:q.pitfall
         });
       }
     }
@@ -3813,7 +4249,7 @@ function openAddQModal(setId){
 }
 
 /* ================================================================
-导入解析
+★★★ 导入解析（支持答案 / 计算过程 / 算理 / 知识易错点） ★★★
 ================================================================ */
 function parsePaperText(text){
   var result = { title:'试卷讲解', sections:[] };
@@ -3826,17 +4262,24 @@ function parsePaperText(text){
   }
   function startQ(stem){
     ensureSec();
-    curQ = { stem:(stem||'').trim(), answer:'', analysis:'', similar:[], homework:[] };
+    curQ = {
+      stem:(stem||'').trim(),
+      answer:'', analysis:'', calc:'', reason:'', pitfall:'',
+      similar:[], homework:[]
+    };
     curSec.questions.push(curQ);
     block=null; lastField='stem';
   }
 
   var RE_NUM = /^(?:第\s*(\d{1,3})\s*[题问]|[(（]\s*(\d{1,3})\s*[)）]|(\d{1,3})\s*[.、．)）]\s*)([\s\S]*)$/;
   var RE_ANS = /^[【\[]?\s*(?:答案|参考答案|答)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
-  var RE_ANA = /^[【\[]?\s*(?:解析|分析|解答|解)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_ANA = /^[【\[]?\s*(?:解析|分析|解答)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_CALC = /^[【\[]?\s*(?:计算过程|计算|步骤|推导过程|过程)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_REASON = /^[【\[]?\s*(?:算理|道理|原理|依据)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
+  var RE_PIT = /^[【\[]?\s*(?:知识易错点|易错点|易错|注意点|注意事项|错点)\s*[】\]]?\s*[:：]\s*([\s\S]*)$/;
   var RE_SIM = /^[-*·•]?\s*(?:举一反三|变式训练|变式练习|变式)\s*[:：]?\s*$/;
   var RE_HW  = /^[-*·•]?\s*(?:作业|课后作业|配套作业|练习)\s*[:：]?\s*$/;
-  var RE_SP  = /^(?:##|###|[【\[]?\s*(?:答案|参考答案|解析|分析|解答|答|解|举一反三|变式|作业|练习)\s*[】\]]?\s*[:：]|第\s*\d+\s*[题问]|[(（]\s*\d+\s*[)）]|\d{1,3}\s*[.、．)）])/;
+  var RE_SP  = /^(?:##|###|[【\[]?\s*(?:答案|参考答案|解析|分析|解答|答|计算过程|计算|步骤|推导过程|过程|算理|道理|原理|依据|知识易错点|易错点|易错|注意点|注意事项|错点|举一反三|变式|作业|练习)\s*[】\]]?\s*[:：]|第\s*\d+\s*[题问]|[(（]\s*\d+\s*[)）]|\d{1,3}\s*[.、．)）])/;
 
   for(var i=0;i<lines.length;i++){
     var line = lines[i].trim(); if(!line) continue;
@@ -3867,6 +4310,7 @@ function parsePaperText(text){
     if(RE_SIM.test(line)){ if(curQ) block='similar'; lastField=null; continue; }
     if(RE_HW.test(line)){ if(curQ) block='homework'; lastField=null; continue; }
 
+    /* 举一反三 / 作业块里的每一行：题干 | 答案 | 解析 | 计算过程 | 算理 | 易错点 */
     if(block && curQ){
       if(!RE_SP.test(line)){
         var body = line.replace(/^[-*·•]\s*/,'').trim();
@@ -3874,8 +4318,12 @@ function parsePaperText(text){
           var parts = body.split('|').map(function(s){ return s.trim(); });
           var item = {
             stem: parts[0].replace(/^(?:变式|举一反三|作业|练习)\s*\d*\s*[:：]?\s*/,''),
-            answer: parts[1]||'',
-            analysis: parts.slice(2).join(' | ')||''
+            answer:   parts[1]||'',
+            analysis: parts[2]||'',
+            calc:     parts[3]||'',
+            reason:   parts[4]||'',
+            pitfall:  parts[5]||'',
+            similar: [], homework: []
           };
           if(block==='similar') curQ.similar.push(item);
           else curQ.homework.push(item);
@@ -3887,6 +4335,15 @@ function parsePaperText(text){
 
     var mA = line.match(RE_ANS);
     if(mA){ if(!curQ) startQ(''); curQ.answer = mA[1].trim(); lastField='answer'; block=null; continue; }
+
+    var mC = line.match(RE_CALC);
+    if(mC){ if(!curQ) startQ(''); curQ.calc = mC[1].trim(); lastField='calc'; block=null; continue; }
+
+    var mR = line.match(RE_REASON);
+    if(mR){ if(!curQ) startQ(''); curQ.reason = mR[1].trim(); lastField='reason'; block=null; continue; }
+
+    var mP = line.match(RE_PIT);
+    if(mP){ if(!curQ) startQ(''); curQ.pitfall = mP[1].trim(); lastField='pitfall'; block=null; continue; }
 
     var mAn = line.match(RE_ANA);
     if(mAn){ if(!curQ) startQ(''); curQ.analysis = mAn[1].trim(); lastField='analysis'; block=null; continue; }
@@ -3904,12 +4361,16 @@ function parsePaperText(text){
     if(!curQ){ startQ(line); continue; }
     if(lastField==='answer') curQ.answer += '\n'+line;
     else if(lastField==='analysis') curQ.analysis += '\n'+line;
+    else if(lastField==='calc') curQ.calc += '\n'+line;
+    else if(lastField==='reason') curQ.reason += '\n'+line;
+    else if(lastField==='pitfall') curQ.pitfall += '\n'+line;
     else curQ.stem += '\n'+line;
   }
 
   result.sections.forEach(function(s){
     s.questions = s.questions.filter(function(q){
-      return q.stem||q.answer||q.analysis||(q.similar&&q.similar.length)||(q.homework&&q.homework.length);
+      return q.stem||q.answer||q.analysis||q.calc||q.reason||q.pitfall
+          || (q.similar&&q.similar.length)||(q.homework&&q.homework.length);
     });
   });
   result.sections = result.sections.filter(function(s){ return s.questions.length>0; });
@@ -3922,6 +4383,103 @@ function parsePaperText(text){
 }
 
 /* ================================================================
+★★★ 导入方式选择（新建试卷 / 合并到当前试卷） ★★★
+================================================================ */
+var pendingImportData = null;   /* 暂存已解析的导入内容 */
+
+$('#btnImportOk').onclick = function(){
+  var txt = $('#importText').value.trim();
+  if(!txt){ alert('请先粘贴试卷文字内容'); return; }
+  var parsed = parsePaperText(txt);
+  if(!parsed.sections.length){ alert('没有识别到题目，请检查格式'); return; }
+
+  pendingImportData = parsed;
+
+  /* 显示选择弹窗 */
+  $('#importChoicePaperName').textContent = currentPaper ? currentPaper.name : '（未打开试卷）';
+  $('#importModal').classList.remove('show');
+  $('#importChoiceModal').classList.add('show');
+};
+
+/* 取消导入 */
+$('#importChoiceCancel').onclick = function(){
+  pendingImportData = null;
+  $('#importChoiceModal').classList.remove('show');
+};
+
+/* 点击两张卡片 */
+$('#importChoiceModal').addEventListener('click', function(e){
+  var card = e.target.closest('.import-choice-card');
+  if(!card) return;
+  var choice = card.dataset.choice;
+  if(choice === 'new')     doImportAsNewPaper();
+  else if(choice === 'merge') doImportAsMerge();
+});
+
+/* --------- 方式1：创建新试卷 --------- */
+async function doImportAsNewPaper(){
+  if(!pendingImportData) return;
+  var parsed = pendingImportData;
+  pendingImportData = null;
+  $('#importChoiceModal').classList.remove('show');
+
+  var newTitle = parsed.title || ('新试卷 ' + fmtDate(new Date()));
+  var newExam = normalizeExamData({
+    title: newTitle,
+    sections: parsed.sections,
+    homeworkSets: [],
+    usedKeys: []
+  });
+  newExam.blackboard = { pages: [{strokes:[]}], current: 0, theme: 'dark' };
+
+  var r = await sb.from('papers').insert({
+    owner_id: currentUser.id,
+    name: newTitle,
+    data: newExam,
+    saved_homework: null, sim_memory:{}, current_page:0, strokes:{}
+  }).select().single();
+  if(r.error){ alert('创建失败：'+r.error.message); return; }
+
+  papers.unshift(r.data);
+  await openPaper(r.data.id);
+  renderPapersList();
+  window.scrollTo(0,0);
+  toast('已生成新试卷「'+newTitle+'」，共 '+newExam.sections.length+' 个大题');
+}
+
+/* --------- 方式2：合并到当前试卷（追加到已有大题后面） --------- */
+async function doImportAsMerge(){
+  if(!pendingImportData) return;
+  var parsed = pendingImportData;
+  pendingImportData = null;
+  $('#importChoiceModal').classList.remove('show');
+
+  if(!currentPaper){
+    alert('当前没有打开的试卷，请先打开一份试卷再合并。');
+    return;
+  }
+
+  /* 追加新大题（不覆盖已有内容） */
+  if(!exam.sections) exam.sections = [];
+  parsed.sections.forEach(function(sec){
+    exam.sections.push(normalizeSection(sec));
+  });
+
+  /* 保留黑板 */
+  ensureBlackboard();
+
+  /* 切换到最后一个大题，方便看到新内容 */
+  state.page = exam.sections.length - 1;
+
+  renderTabs();
+  renderPaper();
+  showPageInternal(state.page);
+  await saveCurrentPaper();
+  window.scrollTo(0,0);
+  toast('已合并 '+parsed.sections.length+' 个大题到「'+currentPaper.name+'」');
+}
+
+/* ================================================================
 事件绑定 & 启动
 ================================================================ */
 (function init(){
@@ -3930,7 +4488,7 @@ function parsePaperText(text){
   /* ===== 电子黑板入口 ===== */
   $('#btnBlackboard').onclick = enterBlackboard;
 
-  /* ===== 添加图像（新：支持多选 / 拖拽 / 粘贴） ===== */
+  /* ===== 添加图像 ===== */
   $('#btnAddFigure').onclick = pickImageFiles;
   fileInput.onchange = onFileInputChange;
   bindDragAndDrop();
@@ -4008,7 +4566,7 @@ function parsePaperText(text){
         var p = hwq.querySelector('.panel');
         var on = p.classList.toggle('show');
         qBtn.classList.toggle('active', on);
-        qBtn.textContent = on ? '收起' : '讲解';
+        qBtn.textContent = on ? '收起讲解' : '讲解';
       } else if(qBtn.dataset.hwq === 'remove'){
         removeItemFromSet(id, key);
       }
@@ -4031,53 +4589,26 @@ function parsePaperText(text){
       '1. 计算 (-3) + (-5) 的结果是（　　）',
       'A. -8　　B. -2　　C. 2　　D. 8',
       '答案：A',
-      '解析：同号两数相加，取相同的符号，并把绝对值相加。',
+      '计算过程：(-3) + (-5) = -(3 + 5) = -8',
+      '算理：同号两数相加，取相同的符号，并把绝对值相加。',
+      '知识易错点：忘记保留负号；绝对值相加前误把 -3 与 -5 看成异号。',
+      '解析：-3 与 -5 同为负数，取相同的符号"负"，把绝对值 3 和 5 相加得 8，所以结果是 -8。',
       '举一反三：',
-      '- 计算 (-7) + (-4) 的结果 | -11 | 同号相加，取负号，绝对值相加。',
-      '- 计算 (-6) + 9 的结果 | 3 | 异号相加，取绝对值较大的加数的符号。',
+      '- 计算 (-7) + (-4) 的结果 | -11 | 同号相加，取负号，绝对值相加。 | (-7)+(-4) = -(7+4) = -11 | 同号相加法则 | 忘记加负号',
+      '- 计算 (-6) + 9 的结果 | 3 | 异号相加，取绝对值较大的加数的符号。 | 9-6=3 | 异号相加取大数符号 | 符号判断错误',
       '作业：',
-      '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。',
-      '- 计算 (-4) + 7 的结果 | 3 | 异号相加，取正号。',
-      '- 计算 12 + (-20) 的结果 | -8 | 异号相加，取绝对值较大数的符号。',
+      '- 计算 (-8) + (-2) 的结果 | -10 | 同号相加，取负号。 | -(8+2) = -10 | 同号相加法则 | 遗漏负号',
+      '- 计算 (-4) + 7 的结果 | 3 | 异号相加，取正号。 | 7-4=3 | 异号相加取大数符号 | 符号判断错误',
+      '- 计算 12 + (-20) 的结果 | -8 | 异号相加，取绝对值较大数的符号。 | 20-12=8，取负号 | 异号相加法则 | 忘记取负号',
       '',
       '二、填空题',
       '',
       '1. -5 的相反数是 ______，绝对值是 ______。',
       '答案：5；5',
-      '解析：只有符号不同的两个数互为相反数；绝对值表示数轴上该点到原点的距离。',
-      '作业：',
-      '- 0 的相反数是 ______，绝对值是 ______ | 0；0 | 0 的相反数和绝对值都是 0。',
-      '- -|-7| = ______ | -7 | 先算绝对值 |-7|=7，再取相反数得 -7。'
+      '算理：只有符号不同的两个数互为相反数；绝对值表示数轴上该点到原点的距离。',
+      '知识易错点：把相反数与绝对值搞混；认为 -5 的绝对值也是 -5。',
+      '解析：-5 的相反数是 5；|-5| = 5。'
     ].join('\n');
-  };
-
-  $('#btnImportOk').onclick = async function(){
-    var txt = $('#importText').value.trim();
-    if(!txt){ alert('请先粘贴试卷文字内容'); return; }
-    var parsed = parsePaperText(txt);
-    if(!parsed.sections.length){ alert('没有识别到题目，请检查格式'); return; }
-
-    var bb = ensureBlackboard();
-    var oldHwSets = exam.homeworkSets || [];
-    var oldUsed = exam.usedKeys || [];
-
-    exam = parsed;
-    exam.blackboard = bb;
-    exam.homeworkSets = oldHwSets;
-    exam.usedKeys = oldUsed;
-
-    simMemory = {};
-    strokes.clear();
-    state.page = 0;
-    currentPaper.name = exam.title || currentPaper.name;
-
-    $('#importModal').classList.remove('show');
-    renderTabs(); renderPaper(); showPageInternal(0);
-
-    await saveCurrentPaper();
-    await loadPapers(currentPaper.id);
-    window.scrollTo(0,0);
-    toast('导入成功，共 ' + parsed.sections.length + ' 个大题');
   };
 
   /* ===== 点击遮罩关闭弹窗 ===== */
@@ -4085,6 +4616,7 @@ function parsePaperText(text){
     m.addEventListener('click', function(e){
       if(e.target === m){
         if(m.id === 'authModal') return;
+        if(m.id === 'importChoiceModal') return;
         m.classList.remove('show');
         if(m.id === 'figEditorModal') FigEditor.clearAll();
         if(m.id === 'multiImgModal') pendingMultiImages = [];
@@ -4092,11 +4624,15 @@ function parsePaperText(text){
     });
   });
 
-  /* ===== 窗口尺寸变化：重绘涂鸦画布 ===== */
+  /* ===== 窗口尺寸变化：重绘涂鸦画布 & 黑板重绘 ===== */
   window.addEventListener('resize', function(){
     $$('#paperView .page').forEach(function(p){
       if(p.style.display!=='none') fitCanvas(p);
     });
+    /* 黑板在展示时重绘（尺寸自适应） */
+    if(document.getElementById('bbView').classList.contains('show')){
+      bbRedraw();
+    }
   });
 
   /* ===== Esc 退出小黑板 ===== */
